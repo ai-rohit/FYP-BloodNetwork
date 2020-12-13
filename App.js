@@ -5,10 +5,12 @@ import HomeScreen from './app/screens/HomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import Constants from 'expo-constants';
 import {createStackNavigator} from "@react-navigation/stack";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationContainer} from "@react-navigation/native";
 import FindDonorScreen from './app/screens/FindDonorScreen';
 import BecomeDonor from './app/screens/BecomeDonor';
 import BloodBanks from './app/screens/BloodBanks';
+import Requests from './app/screens/Requests';
 
 const Stack = createStackNavigator();
 const StackNavigator = ()=>(
@@ -21,10 +23,19 @@ const StackNavigator = ()=>(
   </Stack.Navigator>
 )
 
+const Tab = createBottomTabNavigator();
+const TabNavigator = ()=> (
+  <Tab.Navigator>
+    <Tab.Screen name="Feed" component={HomeScreen}/>
+    <Tab.Screen name="Request" component={Requests}/>
+  </Tab.Navigator>
+  
+)
+
 export default function App() {
   return (
         <NavigationContainer>
-          <StackNavigator />
+          <StackNavigator/>
         </NavigationContainer>
   );
 }

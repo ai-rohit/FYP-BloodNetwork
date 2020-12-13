@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "BloodNetwork",
+    "name": "Blood Network",
     "slug": "BloodNetwork",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
-    }
+    },
+    "description": "Final Year Project"
   }
 }

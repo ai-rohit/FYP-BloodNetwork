@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableHighlight, TouchableOpacity, Linking, Platform } from 'react-native';
 import Constants from "expo-constants";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {  } from 'react-native-gesture-handler';
@@ -25,7 +25,15 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                 </View>
 
                 <View style={{ alignItems:'center', justifyContent:'center', backgroundColor: "#dc143c", width:"100%", flexDirection: 'row', height: 45, borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
-                        <TouchableOpacity style={styles.callBtn}>
+                        <TouchableOpacity style={styles.callBtn} onPress={
+                            ()=>{
+                                if(contact==="Contact Hidden"){
+                                    alert("Cannot Call!! Contact is hidden. You can only make requests to donor like this")
+                                }else{
+                                Platform.OS==="ios"?Linking.openURL(`telprompt:${contact}`):Linking.openURL(`tel:${contact}`)
+                            }
+                        }
+                        }>
                             <Text style={{fontSize: 15, fontWeight: "600", color: "#f5f5f5", marginLeft: 15}}>Call</Text>
                             <MaterialCommunityIcons name={"phone"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 2}}/>
                         </TouchableOpacity>

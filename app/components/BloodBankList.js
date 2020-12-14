@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Platform, Linking } from 'react-native';
 import Constants from "expo-constants";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import colors from "../config/colors"
@@ -29,7 +29,11 @@ function BloodBankList({items}) {
                             </View>
                             <Text style={styles.bloodText}>{item.label}</Text>
                             </View>
-                            <TouchableOpacity style={{flexDirection: 'row', marginLeft: 60}}>
+                            <TouchableOpacity style={{flexDirection: 'row', marginLeft: 60}} onPress={
+                                ()=>{
+                                    Platform.OS==="ios"?Linking.openURL(`telprompt:${item.contact}`):Linking.openURL(`tel:${item.contact}`)
+                                }
+                            }>
                                 <Text style={styles.bloodText}>{item.contact}</Text>
                                 <MaterialCommunityIcons name={"phone"} size={25} style={{marginLeft: 9}} color={colors.success}/>
                             </TouchableOpacity>

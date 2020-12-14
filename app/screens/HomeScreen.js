@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import ProfileComponent from '../components/ProfileComponent'
-import { ScrollView } from 'react-native-gesture-handler';
+import {MaterialCommunityIcons} from "@expo/vector-icons"
+import colors from '../config/colors';
 function HomeScreen(props) {
     return (
         <View style={styles.homeContainer}>
@@ -27,6 +28,11 @@ function HomeScreen(props) {
                             donation for
                             the blood you need.
                         </Text>
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 10, marginLeft: 170}}>
+                            <Text style={{fontSize: 16, fontWeight: "500", color: colors.blood}}>Find Now</Text>
+                            <MaterialCommunityIcons name={"chevron-right"} size={20} color={colors.blood}/>
+                        </View>
+                        
                     </View>
                 </View>
             </TouchableOpacity>
@@ -40,6 +46,11 @@ function HomeScreen(props) {
                          required details and you are all ready to
                           help and donate blood around you.
                         </Text>
+
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 10, marginLeft: 130}}>
+                            <Text style={{fontSize: 16, fontWeight: "500", color: colors.blood}}>Become Donor</Text>
+                            <MaterialCommunityIcons name={"chevron-right"} size={20} color={colors.blood}/>
+                        </View>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -53,6 +64,12 @@ function HomeScreen(props) {
                         Lookfor the blood banks near
                          you and help them by donating blood.
                         </Text>
+
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 10, marginLeft: 150}}>
+                            <Text style={{fontSize: 16, fontWeight: "500", color: colors.blood}}>Find Banks</Text>
+                            <MaterialCommunityIcons name={"chevron-right"} size={20} color={colors.blood}/>
+                        </View>
+
                     </View>
                 </View>
             </TouchableOpacity>

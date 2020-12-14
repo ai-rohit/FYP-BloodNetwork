@@ -5,6 +5,7 @@ import PickerComponent from '../components/PickerComponent';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
 import Constants from "expo-constants";
 import DonorListComponent from '../components/DonorListComponent';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const locations = [
     {label: "Kavrepalanchok", value: "loc1"},
@@ -32,7 +33,7 @@ const bloods = [
 
 const registeredDonors = [
     {name: "Rohit Shrestha", id: "bd1", bloodType: "A+", location: "Kaski", address: "Newroad, Pokhara", age: 20, contact:"9866014624", displayContact: "true"},
-    {name: "Bikram Bahadur Dhakal Thapa Magar", id: "bd2", bloodType: "B+", location: "Kaski", address: "Sisuwa, Lekhnath", age: 21, contact:"9866014624", displayContact: "false"},
+    {name: "Bikram Bahadur Dhakal Thapa Magar", id: "bd2", bloodType: "B+", location: "Kaski", address: "Sisuwa, Lekhnath", age: 21, contact:"9846857433", displayContact: "false"},
     {name: "Amit Shrestha", id: "bd3", bloodType: "O+", location: "Kaski", address: "Arghauchowk, Lekhnath", age: 21, contact:"9866014624", displayContact: "true"}
 ]
 
@@ -40,18 +41,20 @@ function FindDonorScreen(props) {
     const [location, setLocation] = useState();
     const [blood, setBlood] = useState();
     const [donors, setDonors] = useState();
+    const [isResultVisible, setIsResultVisible] = useState(false);
 
     return (
         <View style={styles.container}>
             <View style={styles.topTab}>
                 <View style={{flexDirection: 'row', borderTopColor: "#fff", borderTopWidth: 1, marginTop: 20}}>
+                    
                     <PickerComponent selectedItem={location} 
                     onSelectedItem={item=> setLocation(item)} 
                     title= "Location" 
                     items={locations} 
                     style = {styles.locationPicker}
                     textStyle= {{fontSize: 18, color: "#fff", fontWeight: "700"}}/>
-
+                    
                     <PickerComponent selectedItem={blood} 
                     onSelectedItem={item=> setBlood(item)} 
                     title= "Blood Group" 
@@ -63,7 +66,7 @@ function FindDonorScreen(props) {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={{flexDirection: 'row', marginLeft: 20}}>
+                    <TouchableOpacity style={{flexDirection: 'row', marginLeft: 20}} onPress={()=> setIsResultVisible(true)}>
                     <Text style={styles.buttonText}>Find Donor</Text>
                     <MaterialCommunityIcons name ={"arrow-right"} size={30} style={{
                         color: "#dc143c",
@@ -76,11 +79,18 @@ function FindDonorScreen(props) {
 
                
             </View>
-            <ScrollView style={{width: "100%", marginTop: 50, paddingBottom: 30}}>
+
+            <View style={{width: "100%", marginTop: 50,}}>            
                 <View style={{height: 80, backgroundColor: "#dc143c", justifyContent: 'center'}}>
-                <Text style={{marginLeft: 80, fontSize: 30, fontWeight: "bold", fontFamily: Platform.OS === 'ios'? "Avenir": "Roboto", color: "white",}}>Search Results</Text> 
+                <Text style={{marginLeft: 80, 
+                    fontSize: 30, 
+                    fontWeight: "bold", 
+                    fontFamily: Platform.OS === 'ios'? "Avenir": "Roboto", 
+                    color: "white",}}>Search Results</Text> 
                 </View>
-                <DonorListComponent items={registeredDonors}/> 
+            </View>
+            <ScrollView >
+                <DonorListComponent items={registeredDonors} showResults={isResultVisible} location={location} bloodGroup={blood}/> 
             </ScrollView>
              
         </View>

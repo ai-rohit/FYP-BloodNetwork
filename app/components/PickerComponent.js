@@ -4,7 +4,7 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import Constants from "expo-constants";
 
 
-function PickerComponent({title, items, onSelectedItem, selectedItem}) {
+function PickerComponent({title, items, onSelectedItem, selectedItem, style, textStyle}) {
 
     
    
@@ -15,8 +15,8 @@ function PickerComponent({title, items, onSelectedItem, selectedItem}) {
        <>
 
             <TouchableWithoutFeedback onPress={()=> setModalVisible(true)}>  
-                <View style={styles.container}>
-                    <Text style={{fontSize:18}}>{selectedItem ? selectedItem.label: title}</Text>
+                <View style={[styles.container, style]}>
+                    <Text style={[{fontSize:18}, textStyle]}>{selectedItem ? selectedItem.label: title}</Text>
                     <View>
                     <MaterialCommunityIcons name={"chevron-down"} size={25}/>
                     </View>

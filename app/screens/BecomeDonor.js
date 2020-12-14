@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TextInput, Switch, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity, ScrollView,Platform } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TextInput, Modal, Button, FlatList, Switch, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity, ScrollView,Platform, KeyboardAvoidingView } from 'react-native';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import Constants from "expo-constants";
 import {RadioButton} from "react-native-paper";
 import {  } from 'react-native-gesture-handler';
 import PickerComponent from '../components/PickerComponent';
@@ -8,7 +9,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AppButton from '../components/AppButton';
 
-//dummy data for districts (picker)
 const districts = [
     {label: "Kathmandu", value: "dist1"},
     {label: "Kaski", value: "dist2"},
@@ -28,7 +28,6 @@ const districts = [
     {label: "Tanahu", value: "dist16"},
 ];
 
-//dummmy data for provinces(picker)
 const provinces = [
     
         {label: "Bagmati", value:"prov1"},
@@ -36,8 +35,6 @@ const provinces = [
     
 ];
 
-//dummy data for bloodgroups
-//each data have label which is actual data or value and id as value needed for flatlist to work
 const bloodGroups = [
     
     {label: "O+", value:"bld1"},
@@ -45,36 +42,43 @@ const bloodGroups = [
 
 ];
 
-//function component
-function BecomeDonor(props) {
-    const [district, setDistrict] = useState(); //state district which stores data of selected district
-    const [province, setProvince] = useState(); //state province which stores data of selected province
-    const [bloodGroup, setBloodGroup] = useState(); //state group which stores data of selected blood group
-    const [checkedGender, setCheckedGender] = useState(); //state checkedGender which stores data of checked radiobutton i.e male or female or others
-    const [date, setDate] = useState(); //date state which stores the picked date
-    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false); //controls the visibility of picker, default value = false
-    const [displayContact, setDisplayContact] = useState(false); //controls the initial status of switch, default value = false
+
+function BecomeDonor({title}) {
+    const [district, setDistrict] = useState();
+    const [province, setProvince] = useState();
+    const [bloodGroup, setBloodGroup] = useState();
+    const [checkedGender, setCheckedGender] = useState();
+    const [date, setDate] = useState();
+    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+    const [displayContact, setDisplayContact] = useState(false);
     
 //    console.log(district);
 //    console.log(province);
-    const handleContactToggle= ()=> setDisplayContact(!displayContact); //handles the switch toggle, uses set function to update the state, iF state is false it becomes true and vice versa
+    const handleContactToggle= ()=> setDisplayContact(!displayContact);
     // console.log(province)
-   const handleConfirm=(date)=>{ // handles confirm button of date picker, it is called by onConfirm(required) props of DateTimePickerModal
-       setDate(date); //sets date state to selected date
+   const handleConfirm=(date)=>{
+       setDate(date);
        hideDatePicker();
    }
 
-   const hideDatePicker= ()=>{ //function helps to hide date picker by updating state as false
+   const hideDatePicker= ()=>{
        setIsDatePickerVisible(false)
    }
 
-   const handleDateTimePicker = ()=> //shows date picker by updating state as true
+   const handleDateTimePicker = ()=>
    {
        setIsDatePickerVisible(true)
    }
 
     return (
         
+      
+            // {/* <Text>Hello</Text>
+            // <Switch
+            //     value={displayContact}
+            //     onValueChange={handleToggleSwitch}
+            // />
+
             // <Picker selectedValue={province} style={{height: 50, width: "100%"}}
             //         onValueChange={(value)=> setProvince(value)}
             // >
@@ -82,19 +86,14 @@ function BecomeDonor(props) {
             //     <Picker.Item label="JavaScript" value="js"/>
             // </Picker> */}
 
-             //ScrollView is implented to make the view scrollable
-            <ScrollView style={{width: "100%", backgroundColor: "#f2f2f2"}}> 
-
-                {/* Top view for details of page */}
-                <View style={styles.try}> 
+             
+            <ScrollView style={{width: "100%", backgroundColor: "#f2f2f2"}}>
+                <View style={styles.try}>
                    <Text>Helloasdhasdasdlkansdlnasldaskjd</Text>
                 </View>
-
-                {/* View to contain all the form components */}
                 <View style={{width: "100%", justifyContent: "center", alignItems: "center", marginVertical: 20}}>
-                    
                     <View style={styles.inputContainer}>
-                        <Text style={styles.label}>First Name</Text> asdas
+                        <Text style={styles.label}>First Name</Text>
                         <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always"/>
                     </View> 
 
@@ -173,7 +172,7 @@ function BecomeDonor(props) {
                     </View>
 
                     <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Date of Birth </Text>
+                        <Text style={styles.label}>Date of Birth</Text>
                         <TouchableWithoutFeedback onPress={handleDateTimePicker} >
                             <View style={styles.dateTimePicker}>
                             <Text style={{fontSize: 18,}}>{date ? moment(date).format('MMMM Do YYYY'): "Select a Date" }</Text>
@@ -199,7 +198,7 @@ function BecomeDonor(props) {
                         
                     </View>
 
-                    <AppButton title="Register as donor" color="blood"/>
+                    <AppButton title="Register as Donor" color="blood"/>
                 </View>
             </ScrollView>
                
@@ -207,7 +206,8 @@ function BecomeDonor(props) {
             
         
     );
-}
+        }
+
 const styles = StyleSheet.create({
     container:{
         backgroundColor: "#dc143c",
@@ -259,5 +259,6 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     }
 })
+
 
 export default BecomeDonor;

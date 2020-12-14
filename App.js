@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, Platform, LogBox } from 'react-native';
 import HomeScreen from './app/screens/HomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import Constants from 'expo-constants';
@@ -33,6 +33,9 @@ const TabNavigator = ()=> (
 )
 
 export default function App() {
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+}, [])
   return (
         <NavigationContainer>
           <StackNavigator/>

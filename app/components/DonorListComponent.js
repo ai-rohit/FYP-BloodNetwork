@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import Constants from "expo-constants";
 import RenderDonorList from './RenderDonorList';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons, Fontisto} from '@expo/vector-icons';
 import {  } from 'react-native-gesture-handler';
+import colors from "../config/colors"
 
 function DonorListComponent({items, showResults, location, bloodGroup}) {
         console.log(showResults)
@@ -11,7 +12,7 @@ function DonorListComponent({items, showResults, location, bloodGroup}) {
                 return(
                         <ScrollView>
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <MaterialCommunityIcons name={"account-search"} size={300} color={"#a9a9a9"} style={{opacity: 0.5, marginTop: 100}}/>
+                                <MaterialCommunityIcons name={"account-search"} size={300} color={"#a9a9a9"} style={{opacity: 0.5, marginTop: 50}}/>
                                 <Text style={{fontSize: 20, fontWeight: "bold", color:"#a9a9a9"}}>Your results will be shown here</Text>
                         </View>
                         </ScrollView>
@@ -31,13 +32,16 @@ function DonorListComponent({items, showResults, location, bloodGroup}) {
                       
                 );
                         }
-        else{
+        else if(items.length<1 && showResults===true){
                 
-                console.log(showResults);
-                console.log(items.length);
                 return(
                         <View>
-                                <Text>No results found</Text>
+                                <View style={{flexDirection: 'row', marginTop: 80}}>
+                                        <MaterialCommunityIcons name={"emoticon-cry-outline"} size={200} color={colors.blood}/>   
+                                </View>
+                                
+                                <Text style={{color: "#a9a9a9", fontSize:20, opacity: 1, fontWeight: "500", marginTop: 20, marginLeft: 20}}>No results found....</Text>
+                               
                         </View>
                 );
         }

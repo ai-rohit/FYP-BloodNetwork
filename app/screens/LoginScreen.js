@@ -4,11 +4,18 @@ import Constants from "expo-constants";
 import {MaterialCommunityIcons, Entypo} from "@expo/vector-icons";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
+import { set } from 'react-native-reanimated';
 
 function LoginScreen({navigation}) {
     const [forgotPasswordModal, setForgotPassWordModal]= useState(false)
     const [passwordCodeModal, setPasswordCodeModal] = useState(false)
     const [passwordResetModal, setPasswordResetModal] = useState(false)
+    const [signupModalVisible, setSignupModalVisible] = useState(false)
+    const [finalSetup, setFinalSetup] = useState(false)
+
+    const handleSignup = ()=>{
+        setSignupModalVisible(!signupModalVisible);
+    }
     return (
         <>
        <SafeAreaView style={styles.container}>
@@ -44,7 +51,7 @@ function LoginScreen({navigation}) {
             </View>
 
             <View style={styles.signup}>
-                        <Text>Don't have a account? </Text><TouchableOpacity><Text style={{color: "#000", fontWeight: "bold"}}>Sign Up</Text></TouchableOpacity> 
+                        <Text>Don't have a account? </Text><TouchableOpacity onPress={handleSignup}><Text style={{color: "#000", fontWeight: "bold"}}>Sign Up</Text></TouchableOpacity> 
             </View>
 
             </View>            
@@ -180,8 +187,9 @@ function LoginScreen({navigation}) {
                             <TouchableOpacity style={{flexDirection: 'row', marginLeft: "20%", marginTop: 10}} onPress={()=> {
                                                                                                                             Alert.alert("Password Changed",
                                                                                                                             "Password has been changed sucessfully", 
-                                                                                                                            [{text: "OK", onPress: ()=>{setPasswordCodeModal(false);
+                                                                                                                            [{text: "OK", onPress: ()=>{
                                                                                                                                 setForgotPassWordModal(false);
+                                                                                                                                setPasswordCodeModal(false);
                                                                                                                                 setPasswordResetModal(false);}}])
                                                                                                                             
                                                                                                                            }}>
@@ -193,6 +201,157 @@ function LoginScreen({navigation}) {
                         </View>
                     </Modal>
                 </Modal>
+
+            </Modal>
+
+            <Modal visible={signupModalVisible} animationType="slide">
+                    <View style={{backgroundColor: "#ffffff", flex: 1}}>
+                        <View style={styles.passwordModal}>
+                            <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10, marginBottom: 5}}>
+                                <Text style={{fontSize: 25, fontWeight: "bold", color: colors.blood}}>Sign Up</Text>
+                                <Text onPress={()=> {setSignupModalVisible(false);
+                                                   }} style={{ fontSize: 20,
+                                                    fontWeight: "bold",
+                                                    color: colors.blood,
+                                                    marginLeft: "65%"}}>X</Text>
+                            </View>
+                            <View style={{width: "100%", backgroundColor: colors.blood, height: 2, marginVertical: 10 }}/> 
+                            
+                        </View>
+
+                        <View style={{paddingTop: 20}}>
+                            <Text style={{alignSelf: 'center', color: colors.blood,
+                                        fontSize: 18, fontWeight: "700"}}>What's Your Name?</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingTop: 5}}>
+                                <TextInput placeholder="First name"  placeholderTextColor= "#a9a9a9" clearButtonMode="always" autoCapitalize="none"
+                                style={{
+                                    width:"40%",
+                                    borderWidth: 1,
+                                    height: 40,
+                                    borderRadius: 10,
+                                    padding: 5,
+                                   
+                                }}/>
+                                <TextInput placeholder="Last name" clearButtonMode="always" autoCapitalize="none"
+                                style={{
+                                    width:"40%",
+                                    borderWidth: 1,
+                                    height: 40,
+                                    borderRadius: 10,
+                                    padding: 5
+                                }}/>
+                            </View>
+
+                            <View>
+                            <Text style={{alignSelf: 'center', color: colors.blood,
+                                        fontSize: 18, fontWeight: "700", marginTop: 20}}>What's Your Address?</Text>
+                            <TextInput placeholder="Address" clearButtonMode="always" autoCapitalize="none"
+                                style={{
+                                    alignSelf: 'center',
+                                    width:"90%",
+                                    borderWidth: 1,
+                                    height: 40,
+                                    borderRadius: 10,
+                                    padding: 5,
+                                    marginVertical: 10
+                                }}/>
+                            <AppButton title="Next" style={{backgroundColor: colors.blood, alignSelf: "center", borderRadius: 10}}
+                             onPress={()=> setFinalSetup(true)
+                                            }/>
+                            <View style={{flexDirection: "row", marginLeft: "17%"}}>
+                                <Text style={{fontSize: 16, fontWeight: "400"}}>Already have an account?</Text>
+                                <Text style={{fontSize: 16, fontWeight: "bold", marginLeft: 10}}
+                                onPress={()=> setSignupModalVisible(!signupModalVisible)}>Log In</Text>
+                            </View>
+                            </View>
+                        </View>
+                    </View>
+
+                    <Modal visible={finalSetup} animationType="fade">
+                            <View style={{backgroundColor: "#fff", flex: 1}}>
+                                <View style={styles.passwordModal}>
+                                
+                                <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10, marginBottom: 5}}>
+                                    <MaterialCommunityIcons name={"chevron-left"} size={30} color={colors.blood} style={{alignSelf: 'center'}}
+                                    onPress={()=> setFinalSetup(false)}/>
+                                    <Text style={{fontSize: 25, fontWeight: "bold", color: colors.blood}}>Sign Up</Text>
+                                    <Text onPress={()=> {setSignupModalVisible(false);
+                                                        setFinalSetup(false);
+                                                    }} style={{ fontSize: 20,
+                                                        fontWeight: "bold",
+                                                        color: colors.blood,
+                                                        marginLeft: "58%"}}>X</Text>
+                                </View>
+                            <View style={{width: "100%", backgroundColor: colors.blood, height: 2, marginVertical: 10 }}/> 
+                                <Text style={{alignSelf: 'center', color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 20}}>What's Your Email Address?</Text>
+                                <TextInput placeholder="Email Address"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none" 
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/>
+
+                                <Text style={{alignSelf: 'center', color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10}}>Set Password</Text>
+                                <TextInput placeholder="Password"
+                                        placeholderTextColor="#a9a9a9" 
+                                        keyboardType="email-address"
+                                        autoCapitalize="none" 
+                                        secureTextEntry={true}
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/>
+
+                                <Text style={{alignSelf: 'center', color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10}}>Confirm Password</Text>
+                                <TextInput placeholder="Confirm Password"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none" 
+                                        secureTextEntry={true} 
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/>
+
+                                <AppButton title="Register & Get Started" style={{backgroundColor: colors.blood, alignSelf: "center"}} onPress={()=>
+                                                                                                                                    {Alert.alert("Registration Complete", 
+                                                                                                                                    "You are successfully registered",
+                                                                                                                                    [{text: "OK", onPress:()=>{
+                                                                                                                                        setFinalSetup(false);
+                                                                                                                                    setSignupModalVisible(false);
+                                                                                                                                    }}]);
+                                                                                                                                    }}/>
+                                <View style={{flexDirection: "row", marginLeft: "17%"}}>
+                                <Text style={{fontSize: 16, fontWeight: "400"}}>Already have an account?</Text>
+                                <Text style={{fontSize: 16, fontWeight: "bold", marginLeft: 10}}
+                                onPress={()=> {setSignupModalVisible(!signupModalVisible);
+                                                setFinalSetup(!finalSetup)}}>Log In</Text>
+                                </View>
+                            
+                             </View>
+
+                            </View>
+                    </Modal>
 
             </Modal>
 

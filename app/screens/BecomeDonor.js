@@ -8,6 +8,7 @@ import PickerComponent from '../components/PickerComponent';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AppButton from '../components/AppButton';
+import colors from '../config/colors';
 
 const districts = [
     {label: "Kathmandu", value: "dist1"},
@@ -198,7 +199,7 @@ function BecomeDonor({title}) {
                         
                     </View>
 
-                    <AppButton title="Register as Donor" color="blood"/>
+                    <AppButton title="Register as Donor" style={{backgroundColor: colors.blood}}/>
                 </View>
             </ScrollView>
                

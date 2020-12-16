@@ -337,8 +337,8 @@ function LoginScreen({navigation}) {
                                                                                                                                     {Alert.alert("Registration Complete", 
                                                                                                                                     "You are successfully registered",
                                                                                                                                     [{text: "OK", onPress:()=>{
+                                                                                                                                        setSignupModalVisible(false);
                                                                                                                                         setFinalSetup(false);
-                                                                                                                                    setSignupModalVisible(false);
                                                                                                                                     }}]);
                                                                                                                                     }}/>
                                 <View style={{flexDirection: "row", marginLeft: "17%"}}>

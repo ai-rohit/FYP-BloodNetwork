@@ -1,11 +1,48 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableHighlight, TouchableOpacity, Linking, Platform } from 'react-native';
+import React, {useState} from 'react';
+import {ScrollView, SafeAreaView, View, StyleSheet, Text, Image, TouchableHighlight, TouchableOpacity, Linking, Platform, Modal, TextInput, KeyboardAvoidingView, Alert } from 'react-native';
+
 import Constants from "expo-constants";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {  } from 'react-native-gesture-handler';
+import colors from "../config/colors"
+import PickerComponent from './PickerComponent';
+import AppButton from './AppButton';
+
+const donationTypes = [
+    {
+        label:"Whole Blood", value:"dt1"
+    },
+    {
+        label:"Red Cells", value:"dt2"
+    },
+    {
+        label:"Plasma", value:"dt3"
+    },
+    {
+        label:"Platelets", value:"dt4"
+    },
+]
+
+const bloodTypes = [
+    {
+        label:"O+", value:"bt1"
+    },
+    {
+        label:"A+", value:"bt2"
+    },
+    {
+        label:"B+", value:"bt3"
+    },
+    {
+        label:"B-", value:"bt4"
+    },
+]
+
 
 function RenderDonorList({name, age, bloodGroup, address, contact, displayContact}) {
 
+    const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
+    const [donationType, setDonationType] = useState();
+    const [bloodType, setBloodType] = useState();
     return (
        <View style={styles.donorContainer}>
            <View style= {styles.donor}>
@@ -38,13 +75,125 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                             <MaterialCommunityIcons name={"phone"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 2}}/>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.reqBtn}>
+                        <TouchableOpacity style={styles.reqBtn} onPress={()=> setIsRequestModalVisible(true)}>
                             <Text style={{fontSize: 15, fontWeight: "600", color: "#f5f5f5", marginLeft: 30}}>Request Donation</Text>
                             <MaterialCommunityIcons name={"hand-heart"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 6}}/>
                             
                         </TouchableOpacity>
                 </View>
                 </View>
+
+                <Modal visible={isRequestModalVisible} transparent={true} animationType="slide">
+                        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={{justifyContent: 'center', alignSelf: 'center', height: "100%", width: "90%"}}>
+                        <SafeAreaView style={{backgroundColor:"#f2f2f2", borderRadius: 20, borderWidth: 3, borderColor: "gray"}}>
+                                <View style={styles.passwordModal}>
+                                
+                                <View style={{flexDirection: 'row', marginLeft: 10, marginTop: -20}}>
+                                    <Text style={{fontSize: 25, fontWeight: "bold", color: colors.blood}}>Request Form</Text>
+                                    <Text onPress={()=> {setIsRequestModalVisible(false); 
+                                                    }} style={{ fontSize: 20,
+                                                        fontWeight: "bold",
+                                                        color: colors.blood,
+                                                        marginLeft: "40%"}}>X</Text>
+                                </View>
+                                <View style={{width: "100%", backgroundColor: colors.blood, height: 2, marginVertical: 10 }}/>
+
+                                <ScrollView>
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Receiver's full name</Text>
+                                <TextInput placeholder="Full name"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="default"
+                                        autoCapitalize="none" 
+                                        maxLength = {25}
+                                        clearButtonMode = "always"
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/> 
+
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Receiver's address</Text>
+                                <TextInput placeholder="Address"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="default"
+                                        autoCapitalize="none" 
+                                        maxLength = {35}
+                                        clearButtonMode = "always"
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/>
+
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Requirement days</Text>
+                                <TextInput placeholder="Value can be 'Emergency' or days"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="default"
+                                        autoCapitalize="none" 
+                                        maxLength = {35}
+                                        clearButtonMode = "always"
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/>  
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Describe the detail for donation</Text>
+                                <TextInput placeholder="Write about reason for receiving blood"
+                                        multiline={true}
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="default"
+                                        autoCapitalize="none" 
+                                        maxLength = {35}
+                                        clearButtonMode = "always"
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 70,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 10
+                                }}/> 
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Type of donation</Text>
+                                <PickerComponent title="Choose Donation Type" items={donationTypes} 
+                                selectedItem={donationType} 
+                                onSelectedItem={item=> setDonationType(item)}
+                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 10}}/>
+
+                                <Text style={{color: colors.blood,
+                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Required Blood Group</Text>
+                                <PickerComponent title="Choose Blood Group" items={bloodTypes} 
+                                selectedItem={bloodType} 
+                                onSelectedItem={item=> setBloodType(item)}
+                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 10}}/>
+                                <AppButton title="Next" style={{backgroundColor:colors.blood, alignSelf: "center", borderRadius: 15}}
+                                onPress={()=> Alert.alert("Blood Request", "The request is being sent",
+                                            [{text: "OK", onPress: ()=>{
+                                                setIsRequestModalVisible(false);
+                                            } }])}/>
+                                 </ScrollView>
+                                </View>    
+                        </SafeAreaView>
+                        </KeyboardAvoidingView>
+                        
+                </Modal>
        </View>
     );
 }
@@ -92,7 +241,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderLeftColor: "#fff",
         borderLeftWidth: 1,
+    },
+    passwordModal:{
+        paddingTop: Constants.statusBarHeight,
+        width: "100%",
+        
+
+    },
+    closeIcon:{
+        fontSize: 20,
+        fontWeight: "bold",
+        color: colors.blood,
+        marginLeft: 120
     }
+        
 })
 
 export default RenderDonorList;

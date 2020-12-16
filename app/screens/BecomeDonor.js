@@ -53,10 +53,8 @@ function BecomeDonor({title}) {
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const [displayContact, setDisplayContact] = useState(false);
     
-//    console.log(district);
-//    console.log(province);
     const handleContactToggle= ()=> setDisplayContact(!displayContact);
-    // console.log(province)
+    
    const handleConfirm=(date)=>{
        setDate(date);
        hideDatePicker();

@@ -7,7 +7,7 @@ import {  } from 'react-native-gesture-handler';
 import colors from "../config/colors"
 
 function DonorListComponent({items, showResults, location, bloodGroup}) {
-        console.log(showResults)
+        
         if (showResults===false){
                 return(
                         <ScrollView>

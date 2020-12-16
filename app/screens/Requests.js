@@ -5,7 +5,11 @@ import colors from "../config/colors"
 
 const request = [
     
-        {name: "Rohit Shrestha", id: "bd1", bloodType: "A+", location: "Kaski", address: "Newroad, Pokhara", age: 20, contact:"9866014624", displayContact: "true"}
+        {name: "Rohit Shrestha", reqId: "bd1", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
+        details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"},
+        {name: "Rohit Shrestha", reqId: "bd2", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
+        details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"}
+
     
 ]
 

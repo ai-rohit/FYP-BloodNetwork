@@ -85,8 +85,8 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
 
                 <Modal visible={isRequestModalVisible} transparent={true} animationType="slide">
                         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={{justifyContent: 'center', alignSelf: 'center', height: "100%", width: "90%"}}>
-                        <SafeAreaView style={{backgroundColor:"#f2f2f2", borderRadius: 20, borderWidth: 3, borderColor: "gray"}}>
-                                <View style={styles.passwordModal}>
+                        <SafeAreaView style={{backgroundColor:"#f2f2f2", borderRadius: 20, borderWidth: 3, borderColor: "gray",}}>
+                                <View style={styles.requestFormModal}>
                                 
                                 <View style={{flexDirection: 'row', marginLeft: 10, marginTop: -20}}>
                                     <Text style={{fontSize: 25, fontWeight: "bold", color: colors.blood}}>Request Form</Text>
@@ -96,11 +96,11 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                                         color: colors.blood,
                                                         marginLeft: "40%"}}>X</Text>
                                 </View>
-                                <View style={{width: "100%", backgroundColor: colors.blood, height: 2, marginVertical: 10 }}/>
+                                <View style={{width: "100%", backgroundColor: colors.blood, height: 2, marginVertical: 5 }}/>
 
                                 <ScrollView>
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Receiver's full name</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Receiver's full name</Text>
                                 <TextInput placeholder="Full name"
                                         placeholderTextColor="#a9a9a9"
                                         keyboardType="default"
@@ -114,11 +114,11 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         height: 40,
                                         borderRadius: 10,
                                         padding: 5,
-                                        marginVertical: 10
+                                        marginVertical: 5
                                 }}/> 
 
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Receiver's address</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Receiver's address</Text>
                                 <TextInput placeholder="Address"
                                         placeholderTextColor="#a9a9a9"
                                         keyboardType="default"
@@ -132,11 +132,11 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         height: 40,
                                         borderRadius: 10,
                                         padding: 5,
-                                        marginVertical: 10
+                                        marginVertical: 5
                                 }}/>
 
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Requirement days</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Requirement days</Text>
                                 <TextInput placeholder="Value can be 'Emergency' or days"
                                         placeholderTextColor="#a9a9a9"
                                         keyboardType="default"
@@ -150,10 +150,27 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         height: 40,
                                         borderRadius: 10,
                                         padding: 5,
-                                        marginVertical: 10
-                                }}/>  
+                                        marginVertical: 5
+                                }}/>
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Describe the detail for donation</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Mobile number</Text>
+                                <TextInput placeholder="Mobile Number"
+                                        placeholderTextColor="#a9a9a9"
+                                        keyboardType="numeric"
+                                        autoCapitalize="none" 
+                                        maxLength = {10}
+                                        clearButtonMode = "always"
+                                    style={{
+                                        alignSelf: 'center',
+                                        width:"90%",
+                                        borderWidth: 1,
+                                        height: 40,
+                                        borderRadius: 10,
+                                        padding: 5,
+                                        marginVertical: 5                                }}/> 
+
+                                <Text style={{color: colors.blood,
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Describe the detail for donation</Text>
                                 <TextInput placeholder="Write about reason for receiving blood"
                                         multiline={true}
                                         placeholderTextColor="#a9a9a9"
@@ -168,21 +185,22 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         height: 70,
                                         borderRadius: 10,
                                         padding: 5,
-                                        marginVertical: 10
+                                        marginVertical: 5
                                 }}/> 
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Type of donation</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Type of donation</Text>
                                 <PickerComponent title="Choose Donation Type" items={donationTypes} 
                                 selectedItem={donationType} 
                                 onSelectedItem={item=> setDonationType(item)}
-                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 10}}/>
+                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 5}}/>
 
                                 <Text style={{color: colors.blood,
-                                            fontSize: 18, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Required Blood Group</Text>
+                                            fontSize: 16, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Required Blood Group</Text>
                                 <PickerComponent title="Choose Blood Group" items={bloodTypes} 
                                 selectedItem={bloodType} 
                                 onSelectedItem={item=> setBloodType(item)}
-                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 10}}/>
+                                style={{height: 50, alignSelf: "center", width: "90%", marginTop: 5}}/>
+
                                 <AppButton title="Next" style={{backgroundColor:colors.blood, alignSelf: "center", borderRadius: 15}}
                                 onPress={()=> Alert.alert("Blood Request", "The request is being sent",
                                             [{text: "OK", onPress: ()=>{
@@ -242,9 +260,10 @@ const styles = StyleSheet.create({
         borderLeftColor: "#fff",
         borderLeftWidth: 1,
     },
-    passwordModal:{
+    requestFormModal:{
         paddingTop: Constants.statusBarHeight,
         width: "100%",
+        paddingBottom: 18,
         
 
     },

@@ -8,9 +8,10 @@ function RequestList({items}) {
         <View>
             <FlatList
                 data={items}
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => item.reqId.toString()}
                 renderItem={({item})=>
-                        <RequestComponent name={item.name} bloodGroup={item.bloodType} address={item.address}/>
+                        <RequestComponent name={item.name} bloodGroup={item.bloodType} address={item.address} donationDetails={item.details}
+                                        contact={item.contact} donationType={item.donationType} requiredDay={item.reqDay}/>
                 }
             />
         </View>

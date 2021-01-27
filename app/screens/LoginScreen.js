@@ -61,7 +61,7 @@ function LoginScreen({navigation}) {
                                             setFinalSetup(false);
                                                 }}]);
                      
-    }
+        }
 
     const handleLogin=()=>{
         fetch(`http://77696cc0533d.ngrok.io/api/login_auth`,{
@@ -73,7 +73,6 @@ function LoginScreen({navigation}) {
             })
         }).then(response=>response.json())
         .then(responseJson=>{
-            console.log(responseJson);
             if(responseJson.status===true){
                 navigation.navigate("Home");
             }else if (responseJson.status===false){

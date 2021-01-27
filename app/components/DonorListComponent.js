@@ -3,7 +3,6 @@ import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedbac
 import Constants from "expo-constants";
 import RenderDonorList from './RenderDonorList';
 import {MaterialCommunityIcons, Fontisto} from '@expo/vector-icons';
-import {  } from 'react-native-gesture-handler';
 import colors from "../config/colors"
 
 function DonorListComponent({items, showResults, location, bloodGroup}) {

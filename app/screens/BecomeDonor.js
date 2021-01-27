@@ -45,8 +45,12 @@ const bloodGroups = [
 
 
 function BecomeDonor({title}) {
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+    const [address, setAddress] = useState();
     const [district, setDistrict] = useState();
     const [province, setProvince] = useState();
+    const [contact, setContact] = useState();
     const [bloodGroup, setBloodGroup] = useState();
     const [checkedGender, setCheckedGender] = useState();
     const [date, setDate] = useState();
@@ -68,7 +72,50 @@ function BecomeDonor({title}) {
    {
        setIsDatePickerVisible(true)
    }
+   const clearState = ()=>{
+       setFirstName("");
+       setLastName("");
+       setAddress("");
+       setDistrict("");
+       setProvince("");
+       setContact("");
+       setBloodGroup("");
+       setCheckedGender("");
+       setDate("");
+       setDisplayContact("");
+   }
 
+   const handleRegisterDonor = ()=>{
+       console.log(firstName,lastName,address,district,province,contact,bloodGroup,checkedGender,date,displayContact);
+       fetch("https://77696cc0533d.ngrok.io/api/register/donor", {
+        method: "POST",
+        headers: {Accept:'application/json', 'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            "firstName": firstName,
+            "lastName":lastName,
+            "address":address,
+            "district":district,
+            "province":province,
+            "mobileNum":contact,
+            "bloodType": bloodGroup,
+            "gender":checkedGender,
+            "dob":date,
+            "showContact":displayContact
+        })
+    }).then((response)=>response.json()
+                        )
+    .then((responseJson)=>{
+        if(responseJson.status===true){
+            
+            alert("User has been registered as donor successfully");
+        }else if(responseJson.status===false){
+            alert(responseJson.message);
+        }else{
+            alert("Something went wrong"+ responseJson.status);
+        }
+    })
+    clearState();
+   }
     return (
         
              
@@ -80,37 +127,37 @@ function BecomeDonor({title}) {
                 <View style={{width: "100%", justifyContent: "center", alignItems: "center", marginVertical: 20}}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>First Name</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always"/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always" onChangeText= {(value)=>{setFirstName(value)}}/>
                     </View> 
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Last Name</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Last Name" secureTextEntry={false} clearButtonMode="always"/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Last Name" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setLastName(value)}}/>
                     </View>
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Address</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Last Name" secureTextEntry={false} clearButtonMode="always"/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Address" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setAddress(value)}}/>
                     </View>
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>District</Text>
-                        <PickerComponent selectedItem={district} onSelectedItem={item=> setDistrict(item)} title= "Choose a District" items={districts}/>
+                        <PickerComponent selectedItem={district} onSelectedItem={item=> setDistrict(item.label)} title= "Choose a District" items={districts}/>
                     </View>
                     
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Province</Text>
-                        <PickerComponent selectedItem={province} onSelectedItem={item=> setProvince(item)} title= "Choose a Province" items={provinces}/>
+                        <PickerComponent selectedItem={province} onSelectedItem={item=> setProvince(item.label)} title= "Choose a Province" items={provinces}/>
                     </View>
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Mobile number</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Mobile num." keyboardType="numeric" secureTextEntry={false} clearButtonMode="always"/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Mobile num." keyboardType="numeric" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setContact(value)}}/>
                     </View>
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Your Blood Group</Text>
-                        <PickerComponent selectedItem={bloodGroup} onSelectedItem={item=> setBloodGroup(item)} title= "Choose a Blood Group" items={bloodGroups}/>
+                        <PickerComponent selectedItem={bloodGroup} onSelectedItem={item=> setBloodGroup(item.label)} title= "Choose a Blood Group" items={bloodGroups}/>
                     </View>
 
                     <View style={styles.inputContainer}>
@@ -184,7 +231,7 @@ function BecomeDonor({title}) {
                         
                     </View>
 
-                    <AppButton title="Register as Donor" style={{backgroundColor: colors.blood}}/>
+                    <AppButton title="Register as Donor" style={{backgroundColor: colors.blood}} onPress={handleRegisterDonor}/>
                 </View>
             </ScrollView>
                

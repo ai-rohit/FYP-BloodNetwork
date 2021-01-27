@@ -6,17 +6,13 @@ import Constants from "expo-constants";
 
 function PickerComponent({title, items, onSelectedItem, selectedItem, style, textStyle}) {
 
-    
-   
     const [modalVisible, setModalVisible]= useState(false);   
-    
-
     return (
        <>
 
             <TouchableWithoutFeedback onPress={()=> setModalVisible(true)}>  
                 <View style={[styles.container, style]}>
-                    <Text style={[{fontSize:18}, textStyle]}>{selectedItem ? selectedItem.label: title}</Text>
+                    <Text style={[{fontSize:18}, textStyle]}>{selectedItem ? selectedItem: title}</Text>
                     <View>
                     <MaterialCommunityIcons name={"chevron-down"} size={25}/>
                     </View>
@@ -34,8 +30,6 @@ function PickerComponent({title, items, onSelectedItem, selectedItem, style, tex
                     keyExtractor = {item=> item.value.toString()}
                     renderItem={({item}) => ( <TouchableOpacity onPress={()=> {
                         setModalVisible(false);
-                        // setDistrict(item.label);
-                        // setProvince(item.label);
                         onSelectedItem(item);
                         
 

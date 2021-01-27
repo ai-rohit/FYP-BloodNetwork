@@ -4,18 +4,88 @@ import Constants from "expo-constants";
 import {MaterialCommunityIcons, Entypo} from "@expo/vector-icons";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
-import { set } from 'react-native-reanimated';
+
+
 
 function LoginScreen({navigation}) {
-    const [forgotPasswordModal, setForgotPassWordModal]= useState(false)
-    const [passwordCodeModal, setPasswordCodeModal] = useState(false)
-    const [passwordResetModal, setPasswordResetModal] = useState(false)
-    const [signupModalVisible, setSignupModalVisible] = useState(false)
-    const [finalSetup, setFinalSetup] = useState(false)
+    const [userAddress, setUserAddress] = useState("");
+    const [userPassword, setUserPassword] = useState("");
+    const [forgotPasswordModal, setForgotPassWordModal]= useState(false);
+    const [passwordCodeModal, setPasswordCodeModal] = useState(false);
+    const [passwordResetModal, setPasswordResetModal] = useState(false);
+    const [signupModalVisible, setSignupModalVisible] = useState(false);
+    const [finalSetup, setFinalSetup] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [address, setAddress] = useState("");
+    const [emailAddress, setEmailAddress] = useState("");
+    const [password, setPassword] = useState("");
+
+    const clearTextState = ()=>{
+        setFirstName("");
+        setLastName("");
+        setAddress("");
+        setEmailAddress("");
+        setPassword("");
+    }
 
     const handleSignup = ()=>{
         setSignupModalVisible(!signupModalVisible);
     }
+
+    const handleRegister = ()=>{
+
+            fetch(`http://77696cc0533d.ngrok.io/api/register`,{
+                method: "post",
+                headers: {Accept:'application/json', 'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "address": address,
+                    "emailAddress": emailAddress,
+                    "password": password
+                })
+                }
+            )
+            .then(response=> response.json())
+            .then(responseJson=>{
+                if(responseJson.status==="true"){
+                    alert(JSON.stringify(responseJson.message));
+                }
+            })
+            clearTextState();
+             Alert.alert("Registration Complete", 
+               "You are successfully registered",
+                [{text: "OK", onPress:()=>{
+                                            setSignupModalVisible(false);
+                                            setFinalSetup(false);
+                                                }}]);
+                     
+    }
+
+    const handleLogin=()=>{
+        fetch(`http://77696cc0533d.ngrok.io/api/login_auth`,{
+            method: "POST",
+            headers: {Accept:'application/json', 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                emailAddress: userAddress,
+                password: userPassword,
+            })
+        }).then(response=>response.json())
+        .then(responseJson=>{
+            console.log(responseJson);
+            if(responseJson.status===true){
+                navigation.navigate("Home");
+            }else if (responseJson.status===false){
+                Alert.alert("Incorrect email or Password");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    };
+                
+
     return (
         <>
        <SafeAreaView style={styles.container}>
@@ -32,12 +102,15 @@ function LoginScreen({navigation}) {
             <View style={{width: "100%", justifyContent: "center", alignItems: "center", marginVertical: 80}}>
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Username, Email</Text>
-                    <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Email, Username or number" keyboardType="email-address" clearButtonMode="always"/>
+                    <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Email, Username or number" keyboardType="email-address" clearButtonMode="always"
+                     onChangeText={(userAddress)=> setUserAddress(userAddress)}
+                    />
                 </View> 
 
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Password</Text>
-                    <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Password" maxLength={16} secureTextEntry={true}/>
+                    <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Password" maxLength={16} secureTextEntry={true}
+                                onChangeText={(userPassword)=> setUserPassword(userPassword)} />
                 </View>
             </View>
 
@@ -47,7 +120,7 @@ function LoginScreen({navigation}) {
                </View>           
 
             <View style={{width: "100%", justifyContent:"center", alignItems:"center", marginTop: -10}}>
-                <AppButton title="Login" onPress={()=> navigation.navigate('Home')}/>
+                <AppButton title="Login" onPress={handleLogin}/>
             </View>
 
             <View style={styles.signup}>
@@ -224,6 +297,7 @@ function LoginScreen({navigation}) {
                                         fontSize: 18, fontWeight: "700"}}>What's Your Name?</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', paddingTop: 5}}>
                                 <TextInput placeholder="First name"  placeholderTextColor= "#a9a9a9" clearButtonMode="always" autoCapitalize="none"
+                                onChangeText = {(firstName)=> setFirstName(firstName)}
                                 style={{
                                     width:"40%",
                                     borderWidth: 1,
@@ -233,6 +307,7 @@ function LoginScreen({navigation}) {
                                    
                                 }}/>
                                 <TextInput placeholder="Last name" clearButtonMode="always" autoCapitalize="none"
+                                onChangeText = {(lastName)=> setLastName(lastName)}
                                 style={{
                                     width:"40%",
                                     borderWidth: 1,
@@ -246,6 +321,7 @@ function LoginScreen({navigation}) {
                             <Text style={{alignSelf: 'center', color: colors.blood,
                                         fontSize: 18, fontWeight: "700", marginTop: 20}}>What's Your Address?</Text>
                             <TextInput placeholder="Address" clearButtonMode="always" autoCapitalize="none"
+                                onChangeText = {(address)=> setAddress(address)}
                                 style={{
                                     alignSelf: 'center',
                                     width:"90%",
@@ -289,6 +365,7 @@ function LoginScreen({navigation}) {
                                         placeholderTextColor="#a9a9a9"
                                         keyboardType="email-address"
                                         autoCapitalize="none" 
+                                        onChangeText = {(emailAddress)=> setEmailAddress(emailAddress)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -306,6 +383,7 @@ function LoginScreen({navigation}) {
                                         keyboardType="email-address"
                                         autoCapitalize="none" 
                                         secureTextEntry={true}
+                                        onChangeText = {(password)=> setPassword(password)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -333,14 +411,7 @@ function LoginScreen({navigation}) {
                                         marginVertical: 10
                                 }}/>
 
-                                <AppButton title="Register & Get Started" style={{backgroundColor: colors.blood, alignSelf: "center"}} onPress={()=>
-                                                                                                                                    {Alert.alert("Registration Complete", 
-                                                                                                                                    "You are successfully registered",
-                                                                                                                                    [{text: "OK", onPress:()=>{
-                                                                                                                                        setSignupModalVisible(false);
-                                                                                                                                        setFinalSetup(false);
-                                                                                                                                    }}]);
-                                                                                                                                    }}/>
+                                <AppButton title="Register & Get Started" style={{backgroundColor: colors.blood, alignSelf: "center"}} onPress={handleRegister}/>
                                 <View style={{flexDirection: "row", marginLeft: "17%"}}>
                                 <Text style={{fontSize: 16, fontWeight: "400"}}>Already have an account?</Text>
                                 <Text style={{fontSize: 16, fontWeight: "bold", marginLeft: 10}}

@@ -1,8 +1,21 @@
 import React from 'react';
+import {useEffect, useState} from "react";
 import { View, Text, StyleSheet, Image, ScrollView, Platform } from 'react-native';
 import colors from '../config/colors';
 
 function MyProfileScreen(props) {
+    const[userDetails, setUserDetails] = useState([])
+
+    useEffect(()=>{
+        fetch("http://77696cc0533d.ngrok.io/api/profile/me")
+        .then((response)=>response.json())
+        .then((json)=> {
+                    setUserDetails(json)})
+        .catch((error)=> console.error(error))
+    
+    }, []);
+   
+
     return (
         <View style={styles.container}>
             <ScrollView style={{ paddingBottom: 20}}>
@@ -11,15 +24,15 @@ function MyProfileScreen(props) {
                  position: 'absolute',
                  top: 110}}>
                 <Image source={require("../assets/chair.jpg")} style={styles.imageProfile}/>
-                <Text style={{fontWeight: "bold", fontSize: 25}}>Rohit Shrestha</Text>
+                <Text style={{fontWeight: "bold", fontSize: 25}}>{`${userDetails.firstName} ${userDetails.lastName}`}</Text>
                 </View>
             </View>
             
 
             <View style={styles.profileDetails}>  
-                <Text style={styles.textDetails}>Lives at Newroad, Pokhara</Text>
-                <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text>
-                <Text style={styles.textDetails}>Email: shrestharohit553@gmail.com</Text>
+                <Text style={styles.textDetails}>{`Lives at ${userDetails.address}`}</Text>
+                {/* <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text> */}
+                <Text style={styles.textDetails}>Email: {userDetails.emailAddress}</Text>
             </View>
             <View style={styles.donorDetails}>  
                 <Text>Donor details</Text>

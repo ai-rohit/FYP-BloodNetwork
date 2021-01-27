@@ -1,23 +1,23 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import BloodBankList from '../components/BloodBankList';
 import colors from "../config/colors"
 
-const nearbyBloodBanks = [
-    {label: "ABCDEFGH Blood bank", contact: "1234567890", id: "bdb1"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb2"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb3"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb4"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb5"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb6"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb7"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb8"},
-    {label: "ABC Blood bank", contact: "1234567890", id: "bdb9"},
-];
-
 function BloodBanks(props) {
+    const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
+    
+    useEffect(()=>{
+        fetch("http://77696cc0533d.ngrok.io/api/blood_banks")
+        .then((response)=>response.json())
+        .then((json)=> {
+                    setNearByBloodBanks(json)})
+        .catch((error)=> console.error(error))
+    
+    }, []);
+    
     return (
         <View style={styles.container}>
             <MapView style={styles.map} initialRegion={{latitude: 28.216816, longitude: 83.985873,

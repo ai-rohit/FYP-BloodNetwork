@@ -1,18 +1,28 @@
-import React from 'react';
+import  React, {useEffect, useState} from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import ProfileComponent from '../components/ProfileComponent'
 import {MaterialCommunityIcons} from "@expo/vector-icons"
 import colors from '../config/colors';
 function HomeScreen(props) {
+
+    const[userProfile, setUserProfile] = useState([]);
+    
+    useEffect(()=>{
+        fetch("http://77696cc0533d.ngrok.io/api/profile/me")
+        .then((response)=> response.json())
+        .then((json)=> setUserProfile(json))
+        .catch((error)=> console.error(error))
+    });
+
     return (
         <View style={styles.homeContainer}>
             <ScrollView style={{width:"100%"}}>
 
             <View style={styles.homeProfile}>
                 <ProfileComponent image={require("../assets/chair.jpg")}
-                title="Rohit Shrestha"
-                subTitle="Newroad-8, Pokhara"
+                title={`${userProfile.firstName} ${userProfile.lastName}`}
+                subTitle={userProfile.address}
                 // icon={require("../assets/chair.jpg")}
                 />
             </View>

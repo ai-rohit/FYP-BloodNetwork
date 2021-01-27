@@ -71,24 +71,11 @@ function BecomeDonor({title}) {
 
     return (
         
-      
-            // {/* <Text>Hello</Text>
-            // <Switch
-            //     value={displayContact}
-            //     onValueChange={handleToggleSwitch}
-            // />
-
-            // <Picker selectedValue={province} style={{height: 50, width: "100%"}}
-            //         onValueChange={(value)=> setProvince(value)}
-            // >
-            //     <Picker.Item label="Java" value="java"/>
-            //     <Picker.Item label="JavaScript" value="js"/>
-            // </Picker> */}
-
              
             <ScrollView style={{width: "100%", backgroundColor: "#f2f2f2"}}>
                 <View style={styles.try}>
-                   <Text>Helloasdhasdasdlkansdlnasldaskjd</Text>
+                    <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 25, marginBottom: 20, marginLeft: 10, fontWeight: "bold"}}>Become a Donor now!</Text>
+                   <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 16, marginBottom: 30, marginLeft: 20, fontWeight: "500"}}>Registering yourself as Donor will make you available as blood donor when blood recievers will search for donors of your blood group</Text>
                 </View>
                 <View style={{width: "100%", justifyContent: "center", alignItems: "center", marginVertical: 20}}>
                     <View style={styles.inputContainer}>
@@ -175,7 +162,7 @@ function BecomeDonor({title}) {
                         <TouchableWithoutFeedback onPress={handleDateTimePicker} >
                             <View style={styles.dateTimePicker}>
                             <Text style={{fontSize: 18,}}>{date ? moment(date).format('MMMM Do YYYY'): "Select a Date" }</Text>
-                            <MaterialCommunityIcons name="calendar" size={20} style={{marginLeft: 20}}/>
+                            <MaterialCommunityIcons name="calendar" size={20} style={{marginLeft: 20, alignSelf: 'center'}}/>
                             </View>
                             
                         </TouchableWithoutFeedback>

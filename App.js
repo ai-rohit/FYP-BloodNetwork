@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, Platform, LogBox } from 'react-native';
 import {MaterialCommunityIcons, Fontisto, MaterialIcons} from "@expo/vector-icons";
@@ -40,7 +39,7 @@ const TabNavigator = ()=> (
   }>
     <Tab.Screen name="Home" component={HomeScreen}
     options={{tabBarIcon: ()=> (<MaterialCommunityIcons name="home" size={35} color= {colors.blood}/>)}}/>
-    <Tab.Screen name="Request" component={Requests}
+    <Tab.Screen name="Requests" component={Requests}
     options={{tabBarIcon: ({size, color})=> (<Fontisto name="blood" size={30} color= {colors.blood}/>)}}/>
     <Tab.Screen name="Campaign" component= {CampaignScreen}
     options={{tabBarIcon: ({size, color})=> (<MaterialIcons name="campaign" size={35} color= {colors.blood}/>)}}/>
@@ -62,6 +61,7 @@ export default function App() {
           <StackNavigator/>
           {/* <TabNavigator/> */}
         </NavigationContainer>
+        //<FindDonorScreen />
   );
 }
 

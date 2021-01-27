@@ -41,23 +41,67 @@ const bloodTypes = [
 function RenderDonorList({name, age, bloodGroup, address, contact, displayContact}) {
 
     const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
-    const [donationType, setDonationType] = useState();
-    const [bloodType, setBloodType] = useState();
+    const [receiverName, setReceiverName] = useState("");
+    const [receiverAddress, setReceiverAddress] = useState("");
+    const [requirementDays, setRequirementDays] = useState("");
+    const [receiverNumber, setReceiverNumber] = useState("");
+    const [donationDetails, setDonationDetails] = useState("");
+    const [donationType, setDonationType] = useState("");
+    const [bloodType, setBloodType] = useState("");
+
+    const clearAllState= ()=>{
+        setReceiverNumber("");
+        setReceiverAddress("");
+        setRequirementDays("");
+        setReceiverNumber("");
+        setDonationDetails("");
+        setDonationType("");
+        setBloodType("");
+    }
+
+    const handleRequestButton = ()=> 
+    {
+    fetch(`http://77696cc0533d.ngrok.io/api/bloodRequest`,{
+                method: "post",
+                headers: {Accept:'application/json', 'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    receiverName : receiverName,
+                    receiverAddress : receiverAddress,
+                    requirementDays : requirementDays,
+                    receiverNumber : receiverNumber,
+                    donationDetails : donationDetails,
+                    donationType : donationType.label,
+                    bloodType : bloodType.label
+                })
+                }
+            )
+            .then(response=> response.json())
+            .then(responseJson=>{
+                if(responseJson.status==="true"){
+                    alert(JSON.stringify(responseJson.message));
+                }
+            })
+    clearAllState();
+    Alert.alert("Blood Request", "The request is being sent",
+    [{text: "OK", onPress: ()=>{
+        setIsRequestModalVisible(false);
+    } }])
+    }
     return (
        <View style={styles.donorContainer}>
            <View style= {styles.donor}>
                <View style={{flexDirection: 'row'}}>
-                <TouchableHighlight>
-                    <Image style={styles.donorImage} source={require("../assets/chair.jpg")}/>
-                </TouchableHighlight>
-                <View style={styles.detailContainer}>
-                    <Text style={styles.txt}>Name: {name}</Text>
-                    <Text style={styles.txt}>Blood Group: {bloodGroup}</Text>
-                    <Text style={styles.txt}>Address: {address}</Text>
-                    <Text style={styles.txt}>Age: {age}</Text>
-                    
-                    <Text style={styles.txt}>Contact: {contact}</Text>
-                </View>
+                    <TouchableHighlight>
+                        <Image style={styles.donorImage} source={require("../assets/chair.jpg")}/>
+                    </TouchableHighlight>
+                    <View style={styles.detailContainer}>
+                        <Text style={styles.txt}>Name: {name}</Text>
+                        <Text style={styles.txt}>Blood Group: {bloodGroup}</Text>
+                        <Text style={styles.txt}>Address: {address}</Text>
+                        <Text style={styles.txt}>Age: {age}</Text>
+                        
+                        <Text style={styles.txt}>Contact: {contact}</Text>
+                    </View>
 
                 </View>
 
@@ -107,6 +151,7 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         autoCapitalize="none" 
                                         maxLength = {25}
                                         clearButtonMode = "always"
+                                        onChangeText = {(receiverName)=> setReceiverName(receiverName)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -125,6 +170,7 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         autoCapitalize="none" 
                                         maxLength = {35}
                                         clearButtonMode = "always"
+                                        onChangeText = {(receiverAddress)=> setReceiverAddress(receiverAddress)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -143,6 +189,7 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         autoCapitalize="none" 
                                         maxLength = {35}
                                         clearButtonMode = "always"
+                                        onChangeText = {(requirementDays)=> setRequirementDays(requirementDays)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -160,6 +207,8 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         autoCapitalize="none" 
                                         maxLength = {10}
                                         clearButtonMode = "always"
+                                        onChangeText = {(receiverNumber)=> setReceiverNumber(receiverNumber)}
+
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -167,7 +216,8 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         height: 40,
                                         borderRadius: 10,
                                         padding: 5,
-                                        marginVertical: 5                                }}/> 
+                                        marginVertical: 5                                
+                                    }}/> 
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Describe the detail for donation</Text>
@@ -178,6 +228,7 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                         autoCapitalize="none" 
                                         maxLength = {35}
                                         clearButtonMode = "always"
+                                        onChangeText = {(donationDetails)=> setDonationDetails(donationDetails)}
                                     style={{
                                         alignSelf: 'center',
                                         width:"90%",
@@ -201,11 +252,8 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                                 onSelectedItem={item=> setBloodType(item)}
                                 style={{height: 50, alignSelf: "center", width: "90%", marginTop: 5}}/>
 
-                                <AppButton title="Next" style={{backgroundColor:colors.blood, alignSelf: "center", borderRadius: 15}}
-                                onPress={()=> Alert.alert("Blood Request", "The request is being sent",
-                                            [{text: "OK", onPress: ()=>{
-                                                setIsRequestModalVisible(false);
-                                            } }])}/>
+                                <AppButton title="Request" style={{backgroundColor:colors.blood, alignSelf: "center", borderRadius: 15}}
+                                onPress={handleRequestButton}/>
                                  </ScrollView>
                                 </View>    
                         </SafeAreaView>
@@ -220,7 +268,6 @@ const styles = StyleSheet.create({
     donorContainer: {
         paddingTop: 20,
         backgroundColor: "#f2f2f2",
-        
         alignItems: 'center',
     },
     donor:{

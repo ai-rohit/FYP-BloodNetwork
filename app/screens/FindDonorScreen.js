@@ -5,9 +5,8 @@ import PickerComponent from '../components/PickerComponent';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
 import Constants from "expo-constants";
 import DonorListComponent from '../components/DonorListComponent';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-const locations = [
+export const locations = [
     {label: "Kavrepalanchok", value: "loc1"},
     {label: "Kaski", value: "loc2"},
     {label: "Chitwan", value: "loc3"},
@@ -28,20 +27,36 @@ const locations = [
 
 const bloods = [
     {label: "O+", value: "bd1"},
-    {label: "O-", value: "bd2"}
-]
-
-const registeredDonors = [
-    {name: "Rohit Shrestha", id: "bd1", bloodType: "A+", location: "Kaski", address: "Newroad, Pokhara", age: 20, contact:"9866014624", displayContact: "true"},
-    {name: "Bikram Bahadur Dhakal Thapa Magar", id: "bd2", bloodType: "B+", location: "Kaski", address: "Sisuwa, Lekhnath", age: 21, contact:"9846857433", displayContact: "false"},
-    {name: "Amit Shrestha", id: "bd3", bloodType: "O+", location: "Kaski", address: "Arghauchowk, Lekhnath", age: 21, contact:"9866014624", displayContact: "true"}
+    {label: "O-", value: "bd2"},
+    {label: "A+", value: "bd3"}
 ]
 
 function FindDonorScreen(props) {
-    const [location, setLocation] = useState();
-    const [blood, setBlood] = useState();
-    const [donors, setDonors] = useState();
-    const [isResultVisible, setIsResultVisible] = useState(false);
+    const [location, setLocation] = useState("");
+    const [blood, setBlood] = useState("");
+    const [donors, setDonors] = useState([]);
+    const [isResultVisible, setIsResultVisible] = useState("default");
+
+    const handleDonorSearch = ()=>{  
+            if(location==="" || blood===""){
+                alert("Please select location or blood group properly");
+                return;
+            }else{
+            fetch(`http://77696cc0533d.ngrok.io/api/donor/${location}/${blood}`)
+            .then((response)=>response.json())
+            .then((json)=> {
+                    if(json.status===false){
+                        
+                        setIsResultVisible(false);
+                    }else{
+                        setDonors(json)
+                        setIsResultVisible(true);
+                    }
+                        })
+            .catch((error)=> console.error(error))
+        }
+            
+    }
 
     return (
         <View style={styles.container}>
@@ -49,14 +64,14 @@ function FindDonorScreen(props) {
                 <View style={{flexDirection: 'row', borderTopColor: "#fff", borderTopWidth: 1, marginTop: 20}}>
                     
                     <PickerComponent selectedItem={location} 
-                    onSelectedItem={item=> setLocation(item)} 
+                    onSelectedItem={item=> setLocation(item.label)} 
                     title= "Location" 
                     items={locations} 
                     style = {styles.locationPicker}
                     textStyle= {{fontSize: 18, color: "#fff", fontWeight: "700"}}/>
                     
                     <PickerComponent selectedItem={blood} 
-                    onSelectedItem={item=> setBlood(item)} 
+                    onSelectedItem={item=> setBlood(item.label)} 
                     title= "Blood Group" 
                     items={bloods} 
                     style = {styles.bloodPicker}
@@ -66,13 +81,16 @@ function FindDonorScreen(props) {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={{flexDirection: 'row', marginLeft: 20}} onPress={()=> setIsResultVisible(true)}>
+                    <TouchableOpacity style={{flexDirection: 'row', marginLeft: 20}} onPress={handleDonorSearch}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', height: 40}}>
                     <Text style={styles.buttonText}>Find Donor</Text>
                     <MaterialCommunityIcons name ={"arrow-right"} size={30} style={{
                         color: "#dc143c",
                         marginLeft: 5,
                         
                     }}/>
+                    </View>
+                    
                     </TouchableOpacity> 
 
                 </View>
@@ -90,7 +108,7 @@ function FindDonorScreen(props) {
                 </View>
             </View>
             <ScrollView >
-                <DonorListComponent items={registeredDonors} showResults={isResultVisible} location={location} bloodGroup={blood}/> 
+                <DonorListComponent items={donors} showResults={isResultVisible} location={location} bloodGroup={blood}/> 
             </ScrollView>
              
         </View>
@@ -114,7 +132,7 @@ const styles = StyleSheet.create({
         
     },
     locationPicker:{
-        borderRadius:10, 
+        borderRadius:0, 
         width: "50%",
         backgroundColor: "#dc143c",
        

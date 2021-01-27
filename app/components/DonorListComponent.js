@@ -8,7 +8,8 @@ import colors from "../config/colors"
 
 function DonorListComponent({items, showResults, location, bloodGroup}) {
         
-        if (showResults===false){
+        if (showResults==="default"){
+                
                 return(
                         <ScrollView>
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -24,15 +25,15 @@ function DonorListComponent({items, showResults, location, bloodGroup}) {
                         
                         <FlatList
                         data={items}
-                        keyExtractor = {item=> item.id.toString()}
-                        renderItem={({item}) => ( <RenderDonorList name={item.name} bloodGroup={item.bloodType} address={item.address} age={item.age}
-                                contact={item.displayContact==="true"?item.contact:"Contact Hidden"} displayContact={item.displayContact}/>
+                        keyExtractor = {item=> item.donorId.toString()}
+                        renderItem={({item}) => ( <RenderDonorList name={item.firstName} bloodGroup={item.bloodType} address={item.address} age={item.gender}
+                                contact={item.showContact==="0"?item.contact:"Contact Hidden"} displayContact={item.showContact}/>
                         )}
                         /> 
                       
                 );
                         }
-        else if(items.length<1 && showResults===true){
+        else if(showResults===false){
                 
                 return(
                         <View>

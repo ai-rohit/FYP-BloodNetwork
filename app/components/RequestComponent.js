@@ -30,7 +30,7 @@ function RequestComponent({name, bloodGroup, address, contact, donationType, req
 
                         <TouchableOpacity style={{flexDirection: 'row', borderLeftWidth:1, borderLeftColor:"#fff"}} onPress={()=> alert("Hello")}>
                             <Text style={{fontSize: 15, fontWeight: "600", color: "#f5f5f5", marginLeft: 20, marginTop: 5}}>Reject</Text>
-                            <MaterialCommunityIcons name={"alpha-x-circle-outline"} color={colors.white} size={25} style={{marginLeft: 10, marginBottom: 6}}/>
+                            <MaterialCommunityIcons name={"alpha-x-circle-outline"} color={colors.white} size={25} style={{marginLeft: 5, alignSelf: 'center'}}/>
                             
                         </TouchableOpacity>
             </View>

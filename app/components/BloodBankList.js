@@ -15,11 +15,11 @@ function BloodBankList({items}) {
             </View>
         );
     }else{
-       
+        console.log(items);
         return(
                 <FlatList
                     data={items}
-                    keyExtractor = {item=> item.id.toString()}
+                    keyExtractor = {item=> item.bankId.toString()}
                     renderItem={({item}) => ( 
                         <View style={{flexDirection: 'row', padding: 10, alignItems: 'center'}}>
                             
@@ -27,14 +27,14 @@ function BloodBankList({items}) {
                             <View>
                             <MaterialCommunityIcons name={"hospital-marker"} size={25} style={styles.icon} color={colors.blood}/>
                             </View>
-                            <Text style={styles.bloodText}>{item.label}</Text>
+                            <Text style={styles.bloodText}>{item.hospitalName}</Text>
                             </View>
                             <TouchableOpacity style={{flexDirection: 'row', marginLeft: 60}} onPress={
                                 ()=>{
-                                    Platform.OS==="ios"?Linking.openURL(`telprompt:${item.contact}`):Linking.openURL(`tel:${item.contact}`)
+                                    Platform.OS==="ios"?Linking.openURL(`telprompt:${item.hospitalContact}`):Linking.openURL(`tel:${item.contact}`)
                                 }
                             }>
-                                <Text style={styles.bloodText}>{item.contact}</Text>
+                                <Text style={styles.bloodText}>{item.hospitalContact}</Text>
                                 <MaterialCommunityIcons name={"phone"} size={25} style={{marginLeft: 9}} color={colors.success}/>
                             </TouchableOpacity>
                         </View>

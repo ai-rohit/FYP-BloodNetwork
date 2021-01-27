@@ -5,7 +5,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationContainer} from "@react-navigation/native";
 
-
 import HomeScreen from './app/screens/HomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import Constants from 'expo-constants';
@@ -16,7 +15,6 @@ import Requests from './app/screens/Requests';
 import CampaignScreen from './app/screens/CampaignScreen';
 import MyProfileScreen from './app/screens/MyProfileScreen';
 import colors from './app/config/colors';
-
 
 const Stack = createStackNavigator();
 const StackNavigator = ()=>(

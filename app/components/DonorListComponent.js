@@ -18,15 +18,14 @@ function DonorListComponent({items, showResults, location, bloodGroup}) {
                         </ScrollView>
                 );
         }else if(items.length>=1 && showResults===true){
-
-        
+                
                 return(
                         
                         <FlatList
                         data={items}
                         keyExtractor = {item=> item.donorId.toString()}
-                        renderItem={({item}) => ( <RenderDonorList name={item.firstName} bloodGroup={item.bloodType} address={item.address} age={item.gender}
-                                contact={item.showContact==="0"?item.contact:"Contact Hidden"} displayContact={item.showContact}/>
+                        renderItem={({item}) => ( <RenderDonorList donorId={item.donorId} firstName={item.firstName} lastName={item.lastName} bloodGroup={item.bloodType} address={item.address} age={item.gender}
+                                contact={item.showContact===1?item.donorContact:"Contact Hidden"} displayContact={item.showContact}/>
                         )}
                         /> 
                       

@@ -38,8 +38,8 @@ const bloodTypes = [
 ]
 
 
-function RenderDonorList({name, age, bloodGroup, address, contact, displayContact}) {
-
+function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address, contact, displayContact}) {
+    const [donorNum, setDonorNum] = useState("");
     const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
     const [receiverName, setReceiverName] = useState("");
     const [receiverAddress, setReceiverAddress] = useState("");
@@ -89,13 +89,13 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
     }
     return (
        <View style={styles.donorContainer}>
-           <View style= {styles.donor}>
-               <View style={{flexDirection: 'row'}}>
+           {/* <View style= {styles.donor}> */}
+               <View style={{flexDirection: 'row', backgroundColor: "#fff", width:"100%", borderTopRightRadius:20, borderTopLeftRadius:20}}>
                     <TouchableHighlight>
                         <Image style={styles.donorImage} source={require("../assets/chair.jpg")}/>
                     </TouchableHighlight>
                     <View style={styles.detailContainer}>
-                        <Text style={styles.txt}>Name: {name}</Text>
+                        <Text style={styles.txt}>Name: {firstName} {lastName}</Text>
                         <Text style={styles.txt}>Blood Group: {bloodGroup}</Text>
                         <Text style={styles.txt}>Address: {address}</Text>
                         <Text style={styles.txt}>Age: {age}</Text>
@@ -119,13 +119,15 @@ function RenderDonorList({name, age, bloodGroup, address, contact, displayContac
                             <MaterialCommunityIcons name={"phone"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 2}}/>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.reqBtn} onPress={()=> setIsRequestModalVisible(true)}>
+                        <TouchableOpacity style={styles.reqBtn} onPress={()=> {setIsRequestModalVisible(true);
+                                                                                setDonorNum(donorId);
+                                                                                console.log(donorNum);}}>
                             <Text style={{fontSize: 15, fontWeight: "600", color: "#f5f5f5", marginLeft: 30}}>Request Donation</Text>
                             <MaterialCommunityIcons name={"hand-heart"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 6}}/>
                             
                         </TouchableOpacity>
                 </View>
-                </View>
+            
 
                 <Modal visible={isRequestModalVisible} transparent={true} animationType="slide">
                         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={{justifyContent: 'center', alignSelf: 'center', height: "100%", width: "90%"}}>

@@ -42,7 +42,7 @@ function FindDonorScreen(props) {
                 alert("Please select location or blood group properly");
                 return;
             }else{
-            fetch(`http://77696cc0533d.ngrok.io/api/donor/${location}/${blood}`)
+            fetch(`http://cd1135ab6a96.ngrok.io/api/donor/${location}/${blood}`)
             .then((response)=>response.json())
             .then((json)=> {
                     if(json.status===false){

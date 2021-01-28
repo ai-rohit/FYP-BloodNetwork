@@ -9,7 +9,7 @@ function HomeScreen(props) {
     const[userProfile, setUserProfile] = useState([]);
     
     useEffect(()=>{
-        fetch("http://77696cc0533d.ngrok.io/api/profile/me")
+        fetch("http://cd1135ab6a96.ngrok.io/api/profile/me")
         .then((response)=> response.json())
         .then((json)=> setUserProfile(json))
         .catch((error)=> console.error(error))

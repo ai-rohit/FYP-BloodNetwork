@@ -87,7 +87,7 @@ function BecomeDonor({title}) {
 
    const handleRegisterDonor = ()=>{
        console.log(firstName,lastName,address,district,province,contact,bloodGroup,checkedGender,date,displayContact);
-       fetch("https://77696cc0533d.ngrok.io/api/register/donor", {
+       fetch("http://cd1135ab6a96.ngrok.io/api/register/donor", {
         method: "POST",
         headers: {Accept:'application/json', 'Content-Type': 'application/json'},
         body: JSON.stringify({

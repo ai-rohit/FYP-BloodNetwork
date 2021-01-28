@@ -57,11 +57,12 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
         setDonationDetails("");
         setDonationType("");
         setBloodType("");
+        setDonorNum("");
     }
 
     const handleRequestButton = ()=> 
     {
-    fetch(`http://77696cc0533d.ngrok.io/api/bloodRequest`,{
+    fetch(`http://cd1135ab6a96.ngrok.io/api/bloodRequest`,{
                 method: "post",
                 headers: {Accept:'application/json', 'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -70,8 +71,10 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                     requirementDays : requirementDays,
                     receiverNumber : receiverNumber,
                     donationDetails : donationDetails,
-                    donationType : donationType.label,
-                    bloodType : bloodType.label
+                    donationType : donationType,
+                    bloodType : bloodType,
+                    donorId: donorNum
+                    
                 })
                 }
             )
@@ -121,7 +124,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
 
                         <TouchableOpacity style={styles.reqBtn} onPress={()=> {setIsRequestModalVisible(true);
                                                                                 setDonorNum(donorId);
-                                                                                console.log(donorNum);}}>
+                                                                                }}>
                             <Text style={{fontSize: 15, fontWeight: "600", color: "#f5f5f5", marginLeft: 30}}>Request Donation</Text>
                             <MaterialCommunityIcons name={"hand-heart"} color={"#fff"} size={25} style={{marginLeft: 10, marginBottom: 6}}/>
                             
@@ -244,14 +247,14 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Type of donation</Text>
                                 <PickerComponent title="Choose Donation Type" items={donationTypes} 
                                 selectedItem={donationType} 
-                                onSelectedItem={item=> setDonationType(item)}
+                                onSelectedItem={item=> setDonationType(item.label)}
                                 style={{height: 50, alignSelf: "center", width: "90%", marginTop: 5}}/>
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 10, marginLeft: 20}}>Required Blood Group</Text>
                                 <PickerComponent title="Choose Blood Group" items={bloodTypes} 
                                 selectedItem={bloodType} 
-                                onSelectedItem={item=> setBloodType(item)}
+                                onSelectedItem={item=> setBloodType(item.label)}
                                 style={{height: 50, alignSelf: "center", width: "90%", marginTop: 5}}/>
 
                                 <AppButton title="Request" style={{backgroundColor:colors.blood, alignSelf: "center", borderRadius: 15}}

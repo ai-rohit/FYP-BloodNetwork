@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Platform } from '
 import { useState } from 'react/cjs/react.development';
 import PickerComponent from '../components/PickerComponent';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
-import Constants from "expo-constants";
 import DonorListComponent from '../components/DonorListComponent';
 
 export const locations = [
@@ -42,7 +41,7 @@ function FindDonorScreen(props) {
                 alert("Please select location or blood group properly");
                 return;
             }else{
-            fetch(`http://cd1135ab6a96.ngrok.io/api/donor/${location}/${blood}`)
+            fetch(`http://ca946d24a8f1.ngrok.io/api/donor/${location}/${blood}`)
             .then((response)=>response.json())
             .then((json)=> {
                     if(json.status===false){

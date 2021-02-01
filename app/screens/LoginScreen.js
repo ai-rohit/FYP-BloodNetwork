@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, TextInput, Text, View, Platform, TouchableOpacity, Modal, Alert } from 'react-native';
+import { SafeAreaView, StyleSheet, TextInput, Text, View, Platform, TouchableOpacity, Modal, Alert, BackHandler} from 'react-native';
 import Constants from "expo-constants";
 import {MaterialCommunityIcons, Entypo} from "@expo/vector-icons";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
-
 
 
 function LoginScreen({navigation}) {
@@ -21,6 +20,11 @@ function LoginScreen({navigation}) {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
 
+    // const disableBackButton=()=>{
+    //     BackHandler.exitApp();
+    //     return true;
+    // }
+
     const clearTextState = ()=>{
         setFirstName("");
         setLastName("");
@@ -35,8 +39,8 @@ function LoginScreen({navigation}) {
 
     const handleRegister = ()=>{
 
-            fetch(`http://cd1135ab6a96.ngrok.io/api/register`,{
-                method: "post",
+            fetch(`http://ca946d24a8f1.ngrok.io/api/register`,{
+                method: "POST",
                 headers: {Accept:'application/json', 'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     "firstName": firstName,
@@ -64,7 +68,7 @@ function LoginScreen({navigation}) {
         }
 
     const handleLogin=()=>{
-        fetch(`http://cd1135ab6a96.ngrok.io/api/login_auth`,{
+        fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth`,{
             method: "POST",
             headers: {Accept:'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -76,7 +80,7 @@ function LoginScreen({navigation}) {
             if(responseJson.status===true){
                 navigation.navigate("Home");
             }else if (responseJson.status===false){
-                Alert.alert("Incorrect email or Password");
+                Alert.alert(responseJson.message);
             }
         })
         .catch(error => {

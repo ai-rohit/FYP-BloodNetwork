@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TextInput, Modal, Button, FlatList, Switch, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity, ScrollView,Platform, KeyboardAvoidingView } from 'react-native';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import Constants from "expo-constants";
+
 import {RadioButton} from "react-native-paper";
 import {  } from 'react-native-gesture-handler';
 import PickerComponent from '../components/PickerComponent';
@@ -86,8 +86,8 @@ function BecomeDonor({title}) {
    }
 
    const handleRegisterDonor = ()=>{
-       console.log(firstName,lastName,address,district,province,contact,bloodGroup,checkedGender,date,displayContact);
-       fetch("http://cd1135ab6a96.ngrok.io/api/register/donor", {
+      
+       fetch(`http://ca946d24a8f1.ngrok.io/api/register/donor`, {
         method: "POST",
         headers: {Accept:'application/json', 'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -116,9 +116,7 @@ function BecomeDonor({title}) {
     })
     clearState();
    }
-    return (
-        
-             
+    return (         
             <ScrollView style={{width: "100%", backgroundColor: "#f2f2f2"}}>
                 <View style={styles.try}>
                     <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 25, marginBottom: 20, marginLeft: 10, fontWeight: "bold"}}>Become a Donor now!</Text>

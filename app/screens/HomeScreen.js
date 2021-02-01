@@ -9,7 +9,7 @@ function HomeScreen(props) {
     const[userProfile, setUserProfile] = useState([]);
     
     useEffect(()=>{
-        fetch("http://cd1135ab6a96.ngrok.io/api/profile/me")
+        fetch(`http://ca946d24a8f1.ngrok.io/api/profile/me`)
         .then((response)=> response.json())
         .then((json)=> setUserProfile(json))
         .catch((error)=> console.error(error))
@@ -22,9 +22,10 @@ function HomeScreen(props) {
             <View style={styles.homeProfile}>
                 <ProfileComponent image={require("../assets/chair.jpg")}
                 title={`${userProfile.firstName} ${userProfile.lastName}`}
-                subTitle={userProfile.address}
+                subTitle={userProfile.address} navigation={props.navigation}
                 // icon={require("../assets/chair.jpg")}
                 />
+                
             </View>
             
             <View style={{justifyContent: "center", alignItems: "center"}}>

@@ -10,7 +10,7 @@ function BloodBanks(props) {
     const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
     
     useEffect(()=>{
-        fetch("http://cd1135ab6a96.ngrok.io/api/blood_banks")
+        fetch("http://ca946d24a8f1.ngrok.io/api/blood_banks")
         .then((response)=>response.json())
         .then((json)=> {
                     setNearByBloodBanks(json)})

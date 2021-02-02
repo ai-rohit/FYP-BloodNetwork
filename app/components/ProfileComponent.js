@@ -1,26 +1,28 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
 import colors from '../config/colors';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import LoginScreen from "../screens/LoginScreen";
 import { useLinkProps } from '@react-navigation/native';
+import AuthContext from '../auth/context';
 
 function HomeComponent({image, title, subTitle, icon, navigation}) {
 
+    const {setUser} = useContext(AuthContext);
+    
     const handleLogOut = ()=>{
         console.log("Logging out");
-        // fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth/out`,{method: 'GET'})
-        // .then((response)=> 
-        //     response.json())
-        // .then((responseJson)=>{
-        //     console.log(responseJson);
-        //     if(responseJson.status===true){
-        //         navigation.navigate("Login");
-        //     }else{
-        //         alert("Something went wrong!");
-        //     }
-        // })
-        // .catch((error)=> console.error(error))
+        fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth/out`,{method: 'GET'})
+        .then((response)=> 
+            response.json())
+        .then((responseJson)=>{
+            if(responseJson.status===true){
+                setUser(null);   
+            }else{
+                alert("Something went wrong!");
+            }
+        })
+        .catch((error)=> console.error(error))
         }
        
     return (

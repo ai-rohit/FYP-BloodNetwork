@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { SafeAreaView, StyleSheet, TextInput, Text, View, Platform, TouchableOpacity, Modal, Alert, BackHandler} from 'react-native';
 import Constants from "expo-constants";
 import {MaterialCommunityIcons, Entypo} from "@expo/vector-icons";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
+import AuthContext from '../auth/context';
 
 
 function LoginScreen({navigation}) {
@@ -19,7 +20,7 @@ function LoginScreen({navigation}) {
     const [address, setAddress] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
-
+    const authContext = useContext(AuthContext);
     // const disableBackButton=()=>{
     //     BackHandler.exitApp();
     //     return true;
@@ -68,6 +69,7 @@ function LoginScreen({navigation}) {
         }
 
     const handleLogin=()=>{
+        
         fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth`,{
             method: "POST",
             headers: {Accept:'application/json', 'Content-Type': 'application/json'},
@@ -78,7 +80,8 @@ function LoginScreen({navigation}) {
         }).then(response=>response.json())
         .then(responseJson=>{
             if(responseJson.status===true){
-                navigation.navigate("Home");
+                const user = responseJson.user;
+                authContext.setUser(user)
             }else if (responseJson.status===false){
                 Alert.alert(responseJson.message);
             }

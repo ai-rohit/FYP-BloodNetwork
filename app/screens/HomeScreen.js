@@ -9,11 +9,19 @@ function HomeScreen(props) {
     const[userProfile, setUserProfile] = useState([]);
     
     useEffect(()=>{
+        let unmounted = false;
+
         fetch(`http://ca946d24a8f1.ngrok.io/api/profile/me`)
         .then((response)=> response.json())
-        .then((json)=> setUserProfile(json))
-        .catch((error)=> console.error(error))
-    });
+        .then((json)=>{ 
+                if(!unmounted){
+                    setUserProfile(json)}})
+        .catch((error)=> console.error(error));
+
+        return ()=>{
+            unmounted = true;
+        };
+    }, []);
 
     return (
         <View style={styles.homeContainer}>
@@ -23,7 +31,6 @@ function HomeScreen(props) {
                 <ProfileComponent image={require("../assets/chair.jpg")}
                 title={`${userProfile.firstName} ${userProfile.lastName}`}
                 subTitle={userProfile.address} navigation={props.navigation}
-                // icon={require("../assets/chair.jpg")}
                 />
                 
             </View>

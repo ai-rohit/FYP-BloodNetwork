@@ -2,21 +2,31 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as Location from "expo-location";
 import MapView, { Marker } from 'react-native-maps';
 import BloodBankList from '../components/BloodBankList';
-import colors from "../config/colors"
+import colors from "../config/colors";
 
 function BloodBanks(props) {
     const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
     
-    useEffect(()=>{
-        fetch("http://ea3bfb99c16d.ngrok.io/api/blood_banks")
-        .then((response)=>response.json())
-        .then((json)=> {
-                    setNearByBloodBanks(json)})
-        .catch((error)=> console.error(error))
+    // const getUserLocation = async ()=>{
+    //     const {granted} = await Location.requestPermissionsAsync();
+    //     if(!granted) return;
+
+    //     const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync();
+    //     setLocation({latitude, longitude});
+
+    // }
+
+    // useEffect(()=>{
+    //     fetch("http://ea3bfb99c16d.ngrok.io/api/blood_banks")
+    //     .then((response)=>response.json())
+    //     .then((json)=> {
+    //                 setNearByBloodBanks(json)})
+    //     .catch((error)=> console.error(error))
     
-    }, []);
+    // }, []);
     
     return (
         <View style={styles.container}>
@@ -36,7 +46,7 @@ function BloodBanks(props) {
                 <Text style={{fontSize:25, fontWeight: "bold", color: "#fff", }}>Blood Banks in Your Area</Text>
                 </View>
                 
-                <BloodBankList items={nearbyBloodBanks}/>
+                {/* <BloodBankList items={nearbyBloodBanks}/> */}
             </ScrollView>
         </View>
     );

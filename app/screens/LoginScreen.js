@@ -54,17 +54,16 @@ function LoginScreen({navigation}) {
             )
             .then(response=> response.json())
             .then(responseJson=>{
-                if(responseJson.status==="true"){
+                if(responseJson.status===false){
                     alert(JSON.stringify(responseJson.message));
+                }else if(responseJson.status===true){
+                    clearTextState();
+                    setSignupModalVisible(false);
+                    setFinalSetup(false);
+                    // alert(JSON.stringify(responseJson.message));                          
                 }
             })
-            clearTextState();
-             Alert.alert("Registration Complete", 
-               "You are successfully registered",
-                [{text: "OK", onPress:()=>{
-                                            setSignupModalVisible(false);
-                                            setFinalSetup(false);
-                                                }}]);
+            
                      
         }
 

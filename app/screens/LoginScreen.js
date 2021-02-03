@@ -60,7 +60,7 @@ function LoginScreen({navigation}) {
                     clearTextState();
                     setSignupModalVisible(false);
                     setFinalSetup(false);
-                    // alert(JSON.stringify(responseJson.message));                          
+                    alert(JSON.stringify(responseJson.message));                          
                 }
             })
             

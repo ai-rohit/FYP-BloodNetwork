@@ -7,7 +7,7 @@ function MyProfileScreen(props) {
     const[userDetails, setUserDetails] = useState([])
 
     useEffect(()=>{
-        fetch(`http://ca946d24a8f1.ngrok.io/api/profile/me`)
+        fetch(`http://ea3bfb99c16d.ngrok.io/api/profile/me`)
         .then((response)=>response.json())
         .then((json)=> {
                     setUserDetails(json)})

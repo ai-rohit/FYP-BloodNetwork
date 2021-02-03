@@ -86,8 +86,8 @@ function BecomeDonor({title}) {
    }
 
    const handleRegisterDonor = ()=>{
-      
-       fetch(`http://ca946d24a8f1.ngrok.io/api/register/donor`, {
+       console.log(firstName, lastName, address, district, province, contact, bloodGroup, checkedGender, date, displayContact);
+       fetch(`http://ea3bfb99c16d.ngrok.io/api/register/donor`, {
         method: "POST",
         headers: {Accept:'application/json', 'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -231,10 +231,7 @@ function BecomeDonor({title}) {
 
                     <AppButton title="Register as Donor" style={{backgroundColor: colors.blood}} onPress={handleRegisterDonor}/>
                 </View>
-            </ScrollView>
-               
-          
-            
+            </ScrollView>      
         
     );
         }

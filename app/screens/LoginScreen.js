@@ -40,7 +40,7 @@ function LoginScreen({navigation}) {
 
     const handleRegister = ()=>{
 
-            fetch(`http://ca946d24a8f1.ngrok.io/api/register`,{
+            fetch(`http://ea3bfb99c16d.ngrok.io/api/register`,{
                 method: "POST",
                 headers: {Accept:'application/json', 'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -70,7 +70,7 @@ function LoginScreen({navigation}) {
 
     const handleLogin=()=>{
         
-        fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth`,{
+        fetch(`http://ea3bfb99c16d.ngrok.io/api/login_auth`,{
             method: "POST",
             headers: {Accept:'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify({

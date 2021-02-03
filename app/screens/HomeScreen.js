@@ -11,7 +11,7 @@ function HomeScreen(props) {
     useEffect(()=>{
         let unmounted = false;
 
-        fetch(`http://ca946d24a8f1.ngrok.io/api/profile/me`)
+        fetch(`http://ea3bfb99c16d.ngrok.io/api/profile/me`)
         .then((response)=> response.json())
         .then((json)=>{ 
                 if(!unmounted){

@@ -12,7 +12,7 @@ function HomeComponent({image, title, subTitle, icon, navigation}) {
     
     const handleLogOut = ()=>{
         console.log("Logging out");
-        fetch(`http://ca946d24a8f1.ngrok.io/api/login_auth/out`,{method: 'GET'})
+        fetch(`http://ea3bfb99c16d.ngrok.io/api/login_auth/out`,{method: 'GET'})
         .then((response)=> 
             response.json())
         .then((responseJson)=>{

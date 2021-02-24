@@ -4,6 +4,7 @@ import { useState } from 'react/cjs/react.development';
 import RequestList from '../components/RequestList';
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
+import ActivityIndicator from '../components/ActivityIndicator';
 
 
 // const request = [
@@ -18,7 +19,7 @@ import baseUrl from "../config/baseUrl";
 
 function Requests(props) {
     const[request, setRequest] = useState();
-    const[loading, setLoading] = useState("");
+    const[loading, setLoading] = useState(true);
 
     useEffect(()=>{
         fetch(`${baseUrl.url}/api/bloodRequest`,{method: 'GET'})
@@ -27,7 +28,8 @@ function Requests(props) {
         .then((responseJson)=>{
             console.log(responseJson);
             if(responseJson.status===true){
-                setRequest(responseJson.results);   
+                setRequest(responseJson.results);
+                setLoading(false);   
             }else{
                 alert("Something went wrong!");
             }
@@ -36,22 +38,30 @@ function Requests(props) {
         }, []
     );
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.topView}>
-                <Text style={{
-                    color: "#fff",
-                    fontSize: 30,
-                    fontWeight: "bold",
-                    alignSelf: 'center',
-                    marginLeft: 20
-
-                }}>Blood Requests</Text>
+    if(loading===true){
+        return(
+            <ActivityIndicator/>
+        );
+    }else{
+        return (
+        
+            <View style={styles.container}>
+                <View style={styles.topView}>
+                    <Text style={{
+                        color: "#fff",
+                        fontSize: 30,
+                        fontWeight: "bold",
+                        alignSelf: 'center',
+                        marginLeft: 20
+    
+                    }}>Blood Requests</Text>
+                </View>
+    
+                <RequestList items={request} navigation={props.navigation}/>
             </View>
+        );
+    }
 
-            <RequestList items={request} navigation={props.navigation}/>
-        </View>
-    );
 }
 const styles = StyleSheet.create({
     container:{

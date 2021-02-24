@@ -115,7 +115,7 @@ function HomeScreen(props) {
 
 const styles = StyleSheet.create({
     homeContainer:{
-        backgroundColor: "#D3D3D3",
+        backgroundColor: "#f9f9f9",
         flex: 1,
         alignItems: 'center',
         paddingTop: Constants.statusBarHeight,
@@ -125,6 +125,13 @@ const styles = StyleSheet.create({
     homeButton:{
         marginVertical: 10,
         width: "90%",
+        shadowColor: "grey",
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        shadowOffset: {
+        height: -10,
+        width: -10
+        },
 
     },
     home:{

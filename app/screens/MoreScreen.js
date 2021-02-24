@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     iconText:{
+        marginTop: 5,
         fontWeight: "600",
         fontSize: 17
     }    

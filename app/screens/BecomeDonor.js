@@ -9,6 +9,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
+import baseUrl from '../config/baseUrl';
 
 const districts = [
     {label: "Kathmandu", value: "dist1"},
@@ -86,8 +87,7 @@ function BecomeDonor({title}) {
    }
 
    const handleRegisterDonor = ()=>{
-       console.log(firstName, lastName, address, district, province, contact, bloodGroup, checkedGender, date, displayContact);
-       fetch(`http://ea3bfb99c16d.ngrok.io/api/register/donor`, {
+       fetch(`${baseUrl.url}/api/register/donor`, {
         method: "POST",
         headers: {Accept:'application/json', 'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -117,12 +117,12 @@ function BecomeDonor({title}) {
     clearState();
    }
     return (         
-            <ScrollView style={{width: "100%", backgroundColor: "#f2f2f2"}}>
+            <ScrollView style={{width: "100%", backgroundColor: colors.blood}} showsVerticalScrollIndicator={false}>
                 <View style={styles.try}>
                     <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 25, marginBottom: 20, marginLeft: 10, fontWeight: "bold"}}>Become a Donor now!</Text>
-                   <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 16, marginBottom: 30, marginLeft: 20, fontWeight: "500"}}>Registering yourself as Donor will make you available as blood donor when blood recievers will search for donors of your blood group</Text>
+                   <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 16, marginBottom: 30, marginLeft: 10, fontWeight: "500"}}>Registering yourself as Donor will make you available as blood donor when blood recievers will search for donors of your blood group</Text>
                 </View>
-                <View style={{width: "100%", justifyContent: "center", alignItems: "center", marginVertical: 20}}>
+                <View style={{width: "100%", justifyContent: "center", alignItems: "center", borderTopRightRadius: 30,borderTopLeftRadius: 30, flex: 1, backgroundColor: "#ffffff"}}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>First Name</Text>
                         <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always" onChangeText= {(value)=>{setFirstName(value)}}/>
@@ -242,12 +242,10 @@ const styles = StyleSheet.create({
         width: "100%",
     }, 
     try:{
-        flex: 1,
+        
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#dc143c",
-        borderBottomEndRadius: 20,
-        borderBottomLeftRadius: 20,
         height:200
     },
     textInput:{

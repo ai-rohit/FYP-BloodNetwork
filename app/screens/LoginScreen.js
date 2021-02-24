@@ -5,6 +5,7 @@ import {MaterialCommunityIcons, Entypo} from "@expo/vector-icons";
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import AuthContext from '../auth/context';
+import baseUrl from '../config/baseUrl';
 
 
 function LoginScreen({navigation}) {
@@ -40,7 +41,7 @@ function LoginScreen({navigation}) {
 
     const handleRegister = ()=>{
 
-            fetch(`http://ea3bfb99c16d.ngrok.io/api/register`,{
+            fetch(`${baseUrl.url}/api/register`,{
                 method: "POST",
                 headers: {Accept:'application/json', 'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -69,7 +70,7 @@ function LoginScreen({navigation}) {
 
     const handleLogin=()=>{
         
-        fetch(`http://ea3bfb99c16d.ngrok.io/api/login_auth`,{
+        fetch(`${baseUrl.url}/api/login_auth`,{
             method: "POST",
             headers: {Accept:'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify({

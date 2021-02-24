@@ -5,13 +5,12 @@ import RequestComponent from './RequestComponent';
 
 function RequestList({items}) {
     return (
-        <View>
+        <View style={{flex: 1}}>
             <FlatList
                 data={items}
-                keyExtractor={item => item.reqId.toString()}
+                keyExtractor={item => item.requestId.toString()}
                 renderItem={({item})=>
-                        <RequestComponent name={item.name} bloodGroup={item.bloodType} address={item.address} donationDetails={item.details}
-                                        contact={item.contact} donationType={item.donationType} requiredDay={item.reqDay}/>
+                        <RequestComponent name={item.receiverName} requestId={item.requestId}/>
                 }
             />
         </View>

@@ -1,20 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useState } from 'react/cjs/react.development';
 import RequestList from '../components/RequestList';
-import colors from "../config/colors"
+import colors from "../config/colors";
+import baseUrl from "../config/baseUrl";
 
 
-const request = [
+// const request = [
     
-        {name: "Rohit Shrestha", reqId: "bd1", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
-        details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"},
-        {name: "Rohit Shrestha", reqId: "bd2", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
-        details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"}
+//         {name: "Rohit Shrestha", reqId: "bd1", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
+//         details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"},
+//         {name: "Rohit Shrestha", reqId: "bd2", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
+//         details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"}
 
     
-]
+// ]
 
 function Requests(props) {
+    const[request, setRequest] = useState();
+    const[loading, setLoading] = useState("");
+
+    useEffect(()=>{
+        fetch(`${baseUrl.url}/api/bloodRequest`,{method: 'GET'})
+        .then((response)=> 
+            response.json())
+        .then((responseJson)=>{
+            console.log(responseJson);
+            if(responseJson.status===true){
+                setRequest(responseJson.results);   
+            }else{
+                alert("Something went wrong!");
+            }
+        })
+        .catch((error)=> console.error(error))
+        }, []
+    );
+
     return (
         <View style={styles.container}>
             <View style={styles.topView}>

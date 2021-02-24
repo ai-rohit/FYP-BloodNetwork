@@ -3,8 +3,8 @@ import { Text, View, StyleSheet, Image } from 'react-native';
 import colors from '../config/colors';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import LoginScreen from "../screens/LoginScreen";
-import { useLinkProps } from '@react-navigation/native';
 import AuthContext from '../auth/context';
+import baseUrl from '../config/baseUrl';
 
 function HomeComponent({image, title, subTitle, icon, navigation}) {
 
@@ -12,7 +12,7 @@ function HomeComponent({image, title, subTitle, icon, navigation}) {
     
     const handleLogOut = ()=>{
         console.log("Logging out");
-        fetch(`http://ea3bfb99c16d.ngrok.io/api/login_auth/out`,{method: 'GET'})
+        fetch(`${baseUrl.url}/api/login_auth/out`,{method: 'GET'})
         .then((response)=> 
             response.json())
         .then((responseJson)=>{

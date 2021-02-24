@@ -6,9 +6,10 @@ import * as Location from "expo-location";
 import MapView, { Marker } from 'react-native-maps';
 import BloodBankList from '../components/BloodBankList';
 import colors from "../config/colors";
+import baseUrl from '../config/baseUrl';
 
 function BloodBanks(props) {
-    const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
+    //const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
     
     // const getUserLocation = async ()=>{
     //     const {granted} = await Location.requestPermissionsAsync();
@@ -27,10 +28,14 @@ function BloodBanks(props) {
     //     .catch((error)=> console.error(error))
     
     // }, []);
-    
+    const nearbyBloodBanks = [{bankId: "bd1", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
+     {bankId: "bd2", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
+     {bankId: "bd3", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"}]
     return (
         <View style={styles.container}>
-            <MapView style={styles.map} initialRegion={{latitude: 28.216816, longitude: 83.985873,
+            <MapView style={styles.map} 
+            provider="google"
+            initialRegion={{latitude: 28.216816, longitude: 83.985873,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,}}>
                
@@ -41,13 +46,14 @@ function BloodBanks(props) {
                 />
             </MapView>
 
-            <ScrollView>
+            <View style={{flex: 1}}>
                 <View style={{backgroundColor: colors.blood, width: "100%", height: 50, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{fontSize:25, fontWeight: "bold", color: "#fff", }}>Blood Banks in Your Area</Text>
                 </View>
                 
-                {/* <BloodBankList items={nearbyBloodBanks}/> */}
-            </ScrollView>
+                    <BloodBankList items={nearbyBloodBanks}/>
+                
+            </View> 
         </View>
     );
 }
@@ -62,6 +68,7 @@ const styles = StyleSheet.create({
     map:{
         width: "100%",
         height: "50%",
+        flex: 1
     }
 })
 export default BloodBanks;

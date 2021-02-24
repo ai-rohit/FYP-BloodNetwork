@@ -4,6 +4,7 @@ import { useState } from 'react/cjs/react.development';
 import PickerComponent from '../components/PickerComponent';
 import {MaterialCommunityIcons} from "@expo/vector-icons"
 import DonorListComponent from '../components/DonorListComponent';
+import baseUrl from '../config/baseUrl';
 
 export const locations = [
     {label: "Kavrepalanchok", value: "loc1"},
@@ -41,7 +42,7 @@ function FindDonorScreen(props) {
                 alert("Please select location or blood group properly");
                 return;
             }else{
-            fetch(`http://ea3bfb99c16d.ngrok.io/api/donor/${location}/${blood}`)
+            fetch(`${baseUrl.url}/api/donor/${location}/${blood}`)
             .then((response)=>response.json())
             .then((json)=> {
                     if(json.status===false){

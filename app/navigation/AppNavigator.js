@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import colors from '../config/colors';
-import {MaterialCommunityIcons, Fontisto, MaterialIcons} from "@expo/vector-icons";
+import {MaterialCommunityIcons, Fontisto, MaterialIcons, Feather} from "@expo/vector-icons";
 import HomeScreen from '../screens/HomeScreen';
 import Requests from '../screens/Requests';
 import CampaignScreen from '../screens/CampaignScreen';
@@ -9,6 +9,7 @@ import BecomeDonor from '../screens/BecomeDonor';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import HomeStack from './HomeStack';
 import { createStackNavigator } from '@react-navigation/stack';
+import MoreScreen from '../screens/MoreScreen';
 
 
 const Stack = createStackNavigator();
@@ -49,12 +50,10 @@ const AppNavigator = ()=> (
     options={{tabBarIcon: ()=> (<MaterialCommunityIcons name="home" size={35} color= {colors.blood}/>)}}/>
     <Tab.Screen name="Requests" component={RequestList}
     options={{tabBarIcon: ({size, color})=> (<Fontisto name="blood" size={30} color= {colors.blood}/>)}}/>
-    <Tab.Screen name="Campaign" component= {Campaign}
-    options={{tabBarIcon: ({size, color})=> (<MaterialIcons name="campaign" size={35} color= {colors.blood}/>)}}/>
     <Tab.Screen name="Become Donor" component= {BecomingDonor}
      options={{tabBarIcon: ({size, color})=> (<MaterialCommunityIcons name="hand-heart" size={30} color= {colors.blood}/>)}}/>
-    <Tab.Screen name="Profile" component= {ProfileView}
-     options={{tabBarIcon: ({size, color})=> (<MaterialIcons name="person" size={35} color= {colors.blood}/>)}}/>
+    <Tab.Screen name="More" component= {MoreScreen}
+     options={{tabBarIcon: ({size, color})=> (<Feather name="more-horizontal" size={35} color= {colors.blood}/>)}}/>
 
   </Tab.Navigator>
   

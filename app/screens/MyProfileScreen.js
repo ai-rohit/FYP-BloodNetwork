@@ -1,52 +1,63 @@
 import React from 'react';
 import {useEffect, useState} from "react";
 import { View, Text, StyleSheet, Image, ScrollView, Platform } from 'react-native';
+import ActivityIndicator from '../components/ActivityIndicator';
+import baseUrl from '../config/baseUrl';
 import colors from '../config/colors';
 
 function MyProfileScreen(props) {
-    const[userDetails, setUserDetails] = useState([])
+    const[userDetails, setUserDetails] = useState([]);
+    const[loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        fetch(`http://ea3bfb99c16d.ngrok.io/api/profile/me`)
+        fetch(`${baseUrl.url}/api/profile/me`)
         .then((response)=>response.json())
         .then((json)=> {
-                    setUserDetails(json)})
+                    setUserDetails(json);
+                    setLoading(false);})
         .catch((error)=> console.error(error))
     
     }, []);
    
-
-    return (
-        <View style={styles.container}>
-            <ScrollView style={{ paddingBottom: 20}}>
-            <View style={styles.topView}>
-                <View style={{justifyContent: 'center', alignItems: 'center',
-                 position: 'absolute',
-                 top: 110}}>
-                <Image source={require("../assets/chair.jpg")} style={styles.imageProfile}/>
-                <Text style={{fontWeight: "bold", fontSize: 25}}>{`${userDetails.firstName} ${userDetails.lastName}`}</Text>
+    if(loading===true){
+        return(
+            <ActivityIndicator/>
+        );
+    }
+    else{
+        return (
+            <View style={styles.container}>
+                <ScrollView style={{ paddingBottom: 20}}>
+                <View style={styles.topView}>
+                    <View style={{justifyContent: 'center', alignItems: 'center',
+                    position: 'absolute',
+                    top: 110}}>
+                    <Image source={require("../assets/chair.jpg")} style={styles.imageProfile}/>
+                    <Text style={{fontWeight: "bold", fontSize: 25}}>{`${userDetails.firstName} ${userDetails.lastName}`}</Text>
+                    </View>
                 </View>
-            </View>
-            
+                
 
-            <View style={styles.profileDetails}>  
-                <Text style={styles.textDetails}>{`Lives at ${userDetails.address}`}</Text>
-                {/* <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text> */}
-                <Text style={styles.textDetails}>Email: {userDetails.emailAddress}</Text>
-            </View>
-            <View style={styles.donorDetails}>  
-                <Text>Donor details</Text>
-                <Text style={styles.textDetails}>2 blood donations made till now</Text>
-                <Text style={styles.textDetails}>Can sonate around Kaski area</Text>
-                <Text style={styles.textDetails}>Blood type is A+</Text>
-                <Text style={styles.textDetails}>Born on September 30, 2000</Text>
-                <Text style={styles.textDetails}>Registered Donor in Blood Network</Text>
+                <View style={styles.profileDetails}>  
+                    <Text style={styles.textDetails}>{`Lives at ${userDetails.address}`}</Text>
+                    {/* <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text> */}
+                    <Text style={styles.textDetails}>Email: {userDetails.emailAddress}</Text>
+                </View>
+                <View style={styles.donorDetails}>  
+                    <Text>Donor details</Text>
+                    <Text style={styles.textDetails}>2 blood donations made till now</Text>
+                    <Text style={styles.textDetails}>Can sonate around Kaski area</Text>
+                    <Text style={styles.textDetails}>Blood type is A+</Text>
+                    <Text style={styles.textDetails}>Born on September 30, 2000</Text>
+                    <Text style={styles.textDetails}>Registered Donor in Blood Network</Text>
 
+                </View>
+                </ScrollView>
+                
             </View>
-            </ScrollView>
-            
-        </View>
-    );
+
+             );
+        }
 }
 const styles = StyleSheet.create({
     container: {

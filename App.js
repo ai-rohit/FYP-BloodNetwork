@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Platform, LogBox } from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import Constants from 'expo-constants';
-
+import Requests from "./app/screens/Requests";
 import AuthNav from "./app/navigation/AuthNav";
 import AppNavigator from './app/navigation/AppNavigator';
 import AuthContext from './app/auth/context';
+import MoreScreen from './app/screens/MoreScreen';
+import BloodBanks from './app/screens/BloodBanks';
 
 
 export default function App() {
@@ -19,7 +21,10 @@ export default function App() {
          <NavigationContainer>
           
           {user? <AppNavigator/> : <AuthNav/>}
-          
+          {/* <Requests/> */}
+          {/* <AppNavigator/> */}
+          {/* <MoreScreen/> */}
+          {/* <BloodBanks/> */}
         </NavigationContainer>
         
       </AuthContext.Provider>

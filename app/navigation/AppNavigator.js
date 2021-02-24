@@ -10,15 +10,17 @@ import MyProfileScreen from '../screens/MyProfileScreen';
 import HomeStack from './HomeStack';
 import { createStackNavigator } from '@react-navigation/stack';
 import MoreScreen from '../screens/MoreScreen';
+import RequestDetailScreen from '../screens/RequestDetailScreen';
+import RequestStack from './RequestStack';
 
 
 const Stack = createStackNavigator();
 
-const RequestList = ()=>(
-  <Stack.Navigator>
-    <Stack.Screen name="Requests" component={Requests}/>
-  </Stack.Navigator>
-)
+// const RequestList = ()=>(
+//   <Stack.Navigator>
+//     <Stack.Screen name="Requests" component={Requests}/>
+//   </Stack.Navigator>
+// )
 
 const Campaign = ()=>(
   <Stack.Navigator>
@@ -48,7 +50,7 @@ const AppNavigator = ()=> (
   }>
     <Tab.Screen name="Home" component={HomeStack}
     options={{tabBarIcon: ()=> (<MaterialCommunityIcons name="home" size={35} color= {colors.blood}/>)}}/>
-    <Tab.Screen name="Requests" component={RequestList}
+    <Tab.Screen name="Requests" component={RequestStack}
     options={{tabBarIcon: ({size, color})=> (<Fontisto name="blood" size={30} color= {colors.blood}/>)}}/>
     <Tab.Screen name="Become Donor" component= {BecomingDonor}
      options={{tabBarIcon: ({size, color})=> (<MaterialCommunityIcons name="hand-heart" size={30} color= {colors.blood}/>)}}/>

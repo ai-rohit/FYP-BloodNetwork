@@ -49,7 +49,7 @@ function Requests(props) {
                 }}>Blood Requests</Text>
             </View>
 
-            <RequestList items={request}/>
+            <RequestList items={request} navigation={props.navigation}/>
         </View>
     );
 }

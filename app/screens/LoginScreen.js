@@ -22,11 +22,7 @@ function LoginScreen({navigation}) {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const authContext = useContext(AuthContext);
-    // const disableBackButton=()=>{
-    //     BackHandler.exitApp();
-    //     return true;
-    // }
-
+    
     const clearTextState = ()=>{
         setFirstName("");
         setLastName("");

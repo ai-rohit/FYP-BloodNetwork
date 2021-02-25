@@ -28,7 +28,7 @@ function BloodBanks(props) {
     //     .catch((error)=> console.error(error))
     
     // }, []);
-    const nearbyBloodBanks = [{bankId: "bd1", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
+    const nearbyBloodBanks = [{bankId: "bd1", hospitalName: "ABCasdasdasdasdaasdasdasdD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
      {bankId: "bd2", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
      {bankId: "bd3", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"}]
     return (
@@ -46,7 +46,7 @@ function BloodBanks(props) {
                 />
             </MapView>
 
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor:"f7f7f7"}}>
                 <View style={{backgroundColor: colors.blood, width: "100%", height: 50, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{fontSize:25, fontWeight: "bold", color: "#fff", }}>Blood Banks in Your Area</Text>
                 </View>
@@ -60,15 +60,14 @@ function BloodBanks(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: '#f9f9f9',
         paddingBottom: 20
-        
-        
+    
       },
     map:{
         width: "100%",
-        height: "50%",
-        flex: 1
+        height: "40%",
+        //flex: 1
     }
 })
 export default BloodBanks;

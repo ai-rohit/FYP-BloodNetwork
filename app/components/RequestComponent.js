@@ -59,16 +59,21 @@ function RequestComponent({requestId, name, bloodGroup, address, contact, donati
 const styles = StyleSheet.create({
     requestContainer: {
         paddingTop: 20,
-        backgroundColor: "#f2f2f2",
-        
+        backgroundColor: "#f7f7f7",
         alignItems: 'center',
+       
     },
     request:{
         backgroundColor: "#fff",
         width: "90%",
         borderRadius: 10,
-        
-        
+        shadowColor: "grey",
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        shadowOffset:{
+            height: -5,
+            width: 5
+        }
     },
 
     requesterImage:{

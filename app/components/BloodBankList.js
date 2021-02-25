@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Platform, Linking, Dimensions } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Platform, Linking, Dimensions, Image, ScrollView } from 'react-native';
 import Constants from "expo-constants";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import colors from "../config/colors"
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { color } from 'react-native-reanimated';
 
 
-
+var width = Dimensions.get("window").width;
 function BloodBankList({items}) {
-    var width = Dimensions.get("window").width;
+    
     if(items.length<1 || items == undefined){
         return(
             <View>
@@ -18,7 +19,7 @@ function BloodBankList({items}) {
     }else{
         console.log(items);
         return(
-            <View style={{ width: "100%", height: "100%", justifyContent: 'center', alignItems: 'center', marginTop: 30}}>                
+            <View style={{ width: "100%", justifyContent: 'center', alignItems: 'center', marginTop: 15, flex:1}}>                
                 <FlatList
                     data={items}
                     horizontal={true}
@@ -28,34 +29,30 @@ function BloodBankList({items}) {
                     decelerationRate={0}
                     bounces={false}
                     renderItem={({item}) => ( 
-                        <View style={{flexDirection: 'column', padding: 10, alignItems: 'center', height: "60%", backgroundColor: "white", borderRadius: 20, width: width*0.8, flex:1, margin: 10}}>
-                            <Text>Name: {item.hospitalName}</Text>
-                            <Text>District: {item.hospitalDistrict}</Text>
-                            <Text>location: {item.hospitalLocation}</Text>
-                            <Text>contact: {item.hospitalContact}</Text>
-                            {/* <View style={{width:"40%", flexDirection: 'row', alignItems:"center", marginLeft: 10}}>
-                            <View>
-                            <MaterialCommunityIcons name={"hospital-marker"} size={25} style={styles.icon} color={colors.blood}/>
-                            </View>
-                            <Text style={styles.bloodText}>{item.hospitalName}</Text>
-                            </View>
-                            <TouchableOpacity style={{flexDirection: 'row', marginLeft: 60}} onPress={
-                                ()=>{
-                                    Platform.OS==="ios"?Linking.openURL(`telprompt:${item.hospitalContact}`):Linking.openURL(`tel:${item.contact}`)
-                                }
-                            }>
-                                <Text style={styles.bloodText}>{item.hospitalContact}</Text>
-                                <MaterialCommunityIcons name={"phone"} size={25} style={{marginLeft: 9}} color={colors.success}/>
-                            </TouchableOpacity> */}
-                        </View>
-                        //<View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "blue", flexGrow: 1, height: "100%"}}>
-                        //     <View style={{backgroundColor: "white", height: "50%", borderRadius: 20, width: "90%", height: "20%"}}>
+                        <View style={styles.hospitalContainer}>
+                                    {/* <Image source={require("../assets/chair.jpg")} style={{width: "100%", height: "55%", borderTopLeftRadius: 20, borderTopRightRadius: 20}}/> */}
+                            
+                                <View style={{width:"100%", justifyContent: 'center', alignItems: 'center', backgroundColor: "#fadce2", padding: 10, borderRadius: 20}}>
+                                    <MaterialCommunityIcons name="hospital-marker" size={50} color={colors.blood}/>
+                                </View>
+                                <View style={{marginTop: 5, width: "100%"}}>
+                                    <Text style={{fontWeight:"bold", fontSize:20, alignSelf: 'center', color:colors.blood, }}>{item.hospitalName}</Text>
+                                    <Text style={styles.text}>District: {item.hospitalDistrict}</Text>
+                                    <Text style={styles.text}>Location: {item.hospitalLocation}</Text>
+                                    <Text style={styles.text}>Contact: {item.hospitalContact}</Text>
+                                </View>
+                                <View style={{alignItems: 'center', width:"103%", position:'absolute', bottom:1, alignSelf: 'center'}}>
 
-                        //     </View>
-                        // //</View>
+                                    <TouchableOpacity style={styles.callBtn}>
+                                        <MaterialCommunityIcons name="phone" color={colors.white} size={30}/>    
+                                    </TouchableOpacity>    
+                                </View>       
+                        </View>
+                       
                     )}
-                    //ItemSeparatorComponent = {()=> <View style={{width:"100%", backgroundColor: colors.blood, height: 1}}/>}
-                   />     
+                            
+                   />  
+             
                 </View>
 
                     );
@@ -68,7 +65,38 @@ function BloodBankList({items}) {
             fontWeight: "600",
             fontSize:  18,
             color: colors.blood
-        }
+        },
+        text:{
+            fontSize: 16,
+            paddingTop: 5,
+            fontWeight: "700",
+            color: colors.blood,
+            opacity:0.8,
+            marginLeft: 5,
+            marginTop: 5
+        },
+        hospitalContainer:{
+            padding: 5,
+            backgroundColor: "white", 
+            borderRadius: 20,
+            width: width*0.8, 
+            margin: 10,
+            marginTop: 19,
+            shadowColor: "grey",
+            shadowRadius: 10,
+            shadowOffset:{
+                width:-10,
+                height:-5
+            },
+            shadowOpacity:0.4
+        },
+        callBtn:{backgroundColor: colors.primary, 
+                width:"100%",
+                 height:45,
+                borderBottomLeftRadius:20,
+                borderBottomRightRadius:20,
+                justifyContent:'center',
+                alignItems:'center'}
         
     })
 export default BloodBankList;

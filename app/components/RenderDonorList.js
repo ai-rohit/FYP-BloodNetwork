@@ -4,7 +4,7 @@ import {ScrollView, SafeAreaView, View, StyleSheet, Text, Image, TouchableHighli
 import Constants from "expo-constants";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import colors from "../config/colors";
-
+import baseUrl from "../config/baseUrl";
 import PickerComponent from './PickerComponent';
 import AppButton from './AppButton';
 
@@ -63,7 +63,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
 
     const handleRequestButton = ()=> 
     {
-    fetch(`http://ea3bfb99c16d.ngrok.io/api/bloodRequest`,{
+    fetch(`${baseUrl.url}/api/bloodRequest`,{
                 method: "post",
                 headers: {Accept:'application/json', 'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -74,8 +74,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                     donationDetails : donationDetails,
                     donationType : donationType,
                     bloodType : bloodType,
-                    donorId: donorNum
-                    
+                    donorId: donorNum             
                 })
                 }
             )

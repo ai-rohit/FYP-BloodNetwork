@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     container:{
         width: "100%",
         flex: 1,
-        backgroundColor: "#f2f2f2"
+        backgroundColor: "#f7f7f7"
     },
     topView:{
         backgroundColor: colors.blood,

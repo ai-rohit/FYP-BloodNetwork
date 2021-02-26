@@ -122,7 +122,12 @@ function BecomeDonor({title}) {
                     <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 25, marginBottom: 20, marginLeft: 10, fontWeight: "bold"}}>Become a Donor now!</Text>
                    <Text style={{alignSelf: "flex-start", color: colors.white, fontSize: 16, marginBottom: 30, marginLeft: 10, fontWeight: "500"}}>Registering yourself as Donor will make you available as blood donor when blood recievers will search for donors of your blood group</Text>
                 </View>
-                <View style={{width: "100%", justifyContent: "center", alignItems: "center", borderTopRightRadius: 30,borderTopLeftRadius: 30, flex: 1, backgroundColor: "#ffffff"}}>
+                <View style={{width: "100%", justifyContent: "center",
+                             alignItems: "center", borderTopRightRadius: 30,
+                             borderTopLeftRadius: 30, flex: 1,
+                             backgroundColor: "#ffffff", shadowRadius: 15,
+                             shadowColor: "orange", shadowOpacity: 0.5,
+                             shadowOffset: {height: -10, width: 10}}}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>First Name</Text>
                         <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always" onChangeText= {(value)=>{setFirstName(value)}}/>
@@ -242,7 +247,6 @@ const styles = StyleSheet.create({
         width: "100%",
     }, 
     try:{
-        
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#dc143c",
@@ -255,8 +259,7 @@ const styles = StyleSheet.create({
         width: "90%",
         fontSize: 18,
         paddingLeft: 20 ,
-        color: "#a9a9a9"
-        
+        color: "#a9a9a9",
     },
     inputContainer:{
         width: "100%",

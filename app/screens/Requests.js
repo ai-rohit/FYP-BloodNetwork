@@ -49,12 +49,12 @@ function Requests(props) {
                 <View style={styles.topView}>
                     <Text style={{
                         color: "#fff",
-                        fontSize: 30,
+                        fontSize: 20,
                         fontWeight: "bold",
                         alignSelf: 'center',
                         marginLeft: 20
     
-                    }}>Blood Requests</Text>
+                    }}>You have {request.length} incoming blood requests</Text>
                 </View>
     
                 <RequestList items={request} navigation={props.navigation}/>
@@ -71,9 +71,10 @@ const styles = StyleSheet.create({
     },
     topView:{
         backgroundColor: colors.blood,
-        height: 100,
-        opacity: 0.7,
-        flexDirection: 'row'
+        height: 60,
+        opacity: 0.9,
+        flexDirection: 'row',
+        justifyContent: "center"
     }
     
 })

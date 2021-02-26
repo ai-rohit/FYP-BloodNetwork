@@ -8,6 +8,7 @@ import AppNavigator from './app/navigation/AppNavigator';
 import AuthContext from './app/auth/context';
 import MoreScreen from './app/screens/MoreScreen';
 import BloodBanks from './app/screens/BloodBanks';
+import {StatusBar} from 'expo-status-bar';
 
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
   return (
       <AuthContext.Provider value={{user, setUser}}>
          <NavigationContainer>
-          
+          <StatusBar style="dark"/>
           {user? <AppNavigator/> : <AuthNav/>}
           {/* <Requests/> */}
           {/* <AppNavigator/> */}

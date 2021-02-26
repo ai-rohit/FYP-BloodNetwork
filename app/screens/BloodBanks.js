@@ -28,9 +28,9 @@ function BloodBanks(props) {
     //     .catch((error)=> console.error(error))
     
     // }, []);
-    const nearbyBloodBanks = [{bankId: "bd1", hospitalName: "ABCasdasdasdasdaasdasdasdD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
-     {bankId: "bd2", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
-     {bankId: "bd3", hospitalName: "ABCD", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"}]
+    const nearbyBloodBanks = [{bankId: "bd1", hospitalName: "Fewa Blood Bank", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
+     {bankId: "bd2", hospitalName: "Fishtail Blood Bank Hospital", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"},
+     {bankId: "bd3", hospitalName: "Padma Nursing Home", hospitalContact: "98989898", hospitalDistrict: "Kaski", hospitalLocation: "Newroad, Pokhara"}]
     return (
         <View style={styles.container}>
             <MapView style={styles.map} 

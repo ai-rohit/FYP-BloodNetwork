@@ -45,9 +45,8 @@ const AppNavigator = ()=> (
   <Tab.Navigator tabBarOptions={{
     activeBackgroundColor: "#f2f2f2",
     activeTintColor: colors.blood,
-  }
     
-  }>
+  }}>
     <Tab.Screen name="Home" component={HomeStack}
     options={{tabBarIcon: ()=> (<MaterialCommunityIcons name="home" size={35} color= {colors.blood}/>)}}/>
     <Tab.Screen name="Requests" component={RequestStack}

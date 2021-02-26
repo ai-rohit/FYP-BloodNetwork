@@ -93,7 +93,8 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
     return (
        <View style={styles.donorContainer}>
            {/* <View style= {styles.donor}> */}
-               <View style={{flexDirection: 'row', backgroundColor: "#fff", width:"100%", borderTopRightRadius:20, borderTopLeftRadius:20}}>
+               <View style={{flexDirection: 'row', backgroundColor: "#fff", width:"100%", borderTopRightRadius:20, borderTopLeftRadius:20,
+                shadowColor: "grey", shadowOpacity: 0.1, shadowRadius: 15, shadowOffset: {height: -5, width: 5}}}>
                     <TouchableHighlight>
                         <Image style={styles.donorImage} source={require("../assets/chair.jpg")}/>
                     </TouchableHighlight>
@@ -134,7 +135,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
 
                 <Modal visible={isRequestModalVisible} transparent={true} animationType="slide">
                         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={{justifyContent: 'center', alignSelf: 'center', height: "100%", width: "90%"}}>
-                        <SafeAreaView style={{backgroundColor:"#f2f2f2", borderRadius: 20, borderWidth: 3, borderColor: "gray",}}>
+                        <SafeAreaView style={{backgroundColor:"#f7f7f7", borderRadius: 20, borderWidth: 3, borderColor: "gray",}}>
                                 <View style={styles.requestFormModal}>
                                 
                                 <View style={{flexDirection: 'row', marginLeft: 10, marginTop: -20}}>
@@ -157,15 +158,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         maxLength = {25}
                                         clearButtonMode = "always"
                                         onChangeText = {(receiverName)=> setReceiverName(receiverName)}
-                                    style={{
-                                        alignSelf: 'center',
-                                        width:"90%",
-                                        borderWidth: 1,
-                                        height: 40,
-                                        borderRadius: 10,
-                                        padding: 5,
-                                        marginVertical: 5
-                                }}/> 
+                                    style={styles.modalTextInput}/> 
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Receiver's address</Text>
@@ -176,15 +169,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         maxLength = {35}
                                         clearButtonMode = "always"
                                         onChangeText = {(receiverAddress)=> setReceiverAddress(receiverAddress)}
-                                    style={{
-                                        alignSelf: 'center',
-                                        width:"90%",
-                                        borderWidth: 1,
-                                        height: 40,
-                                        borderRadius: 10,
-                                        padding: 5,
-                                        marginVertical: 5
-                                }}/>
+                                    style={styles.modalTextInput}/>
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Requirement days</Text>
@@ -195,15 +180,8 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         maxLength = {35}
                                         clearButtonMode = "always"
                                         onChangeText = {(requirementDays)=> setRequirementDays(requirementDays)}
-                                    style={{
-                                        alignSelf: 'center',
-                                        width:"90%",
-                                        borderWidth: 1,
-                                        height: 40,
-                                        borderRadius: 10,
-                                        padding: 5,
-                                        marginVertical: 5
-                                }}/>
+                                    style={styles.modalTextInput}/>
+
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Mobile number</Text>
                                 <TextInput placeholder="Mobile Number"
@@ -214,15 +192,7 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         clearButtonMode = "always"
                                         onChangeText = {(receiverNumber)=> setReceiverNumber(receiverNumber)}
 
-                                    style={{
-                                        alignSelf: 'center',
-                                        width:"90%",
-                                        borderWidth: 1,
-                                        height: 40,
-                                        borderRadius: 10,
-                                        padding: 5,
-                                        marginVertical: 5                                
-                                    }}/> 
+                                    style={styles.modalTextInput}/> 
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Describe the detail for donation</Text>
@@ -324,6 +294,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: colors.blood,
         marginLeft: 120
+    },
+    modalTextInput:{
+        alignSelf: 'center',
+        width:"90%",
+        borderWidth: 1,
+        height: 40,
+        borderRadius: 10,
+        padding: 5,
+        marginVertical: 5,
     }
         
 })

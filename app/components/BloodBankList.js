@@ -32,7 +32,7 @@ function BloodBankList({items}) {
                         <View style={styles.hospitalContainer}>
                                     {/* <Image source={require("../assets/chair.jpg")} style={{width: "100%", height: "55%", borderTopLeftRadius: 20, borderTopRightRadius: 20}}/> */}
                             
-                                <View style={{width:"100%", justifyContent: 'center', alignItems: 'center', backgroundColor: "#fadce2", padding: 10, borderRadius: 20}}>
+                                <View style={{width:"100%", justifyContent: 'center', alignItems: 'center', backgroundColor: "#fadce2", padding: 10, borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
                                     <MaterialCommunityIcons name="hospital-marker" size={50} color={colors.blood}/>
                                 </View>
                                 <View style={{marginTop: 5, width: "100%"}}>

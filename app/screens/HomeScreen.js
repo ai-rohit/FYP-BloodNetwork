@@ -37,7 +37,7 @@ function HomeScreen(props) {
     else{
         return (
             <View style={styles.homeContainer}>
-                <ScrollView style={{width:"100%"}}>
+                <ScrollView style={{width:"100%"}} showsVerticalScrollIndicator={false}>
 
                 <View style={styles.homeProfile}>
                     <ProfileComponent image={require("../assets/chair.jpg")}

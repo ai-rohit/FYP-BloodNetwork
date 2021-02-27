@@ -11,9 +11,9 @@ import colors from '../config/colors';
 const Stack = createStackNavigator();
 
 const RequestStack = ()=>(
-    <Stack.Navigator initialRouteName="Requests">
-        <Stack.Screen name="Requests" component={Requests} options={{headerShown: true, headerTitle: "Blood Requests", headerStyle:{backgroundColor: "#f2f2f2"}, headerTitleStyle:{color: colors.blood, fontWeight: "800", fontSize: 20}}}/>
-        <Stack.Screen name="RequestDetail" component={RequestDetailScreen}/>
+    <Stack.Navigator initialRouteName="Requests" screenOptions={{headerTitleStyle:{color: colors.white, fontWeight: "800", fontSize: 20}, headerTintColor: colors.white}}>
+        <Stack.Screen name="Requests" component={Requests} options={{headerShown: true, headerTitle: "Blood Requests"}}/>
+        <Stack.Screen name="RequestDetail" component={RequestDetailScreen} options={{headerTitle: "Request Detail", headerStyle:{backgroundColor: colors.blood, opacity: 0.8, elevation:0, shadowOpacity:0}}}/>
     </Stack.Navigator>
 );
 

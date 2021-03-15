@@ -26,7 +26,6 @@ function Requests(props) {
         .then((response)=> 
             response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
             if(responseJson.status===true){
                 setRequest(responseJson.results);
                 setLoading(false);   

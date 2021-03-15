@@ -1,0 +1,23 @@
+<%- include('include/_header')%>
+
+    <main id="side-main">
+        <div class="container">
+            <div class="box-nav d-flex-between">
+                <form action="/admin/login" method="POST" id="admin_login">
+                    <div class="new_user">
+                        <div class="form-group">
+                            <label for="email" class="text-dark">Email</label>
+                            <input type="text" name="email" value="" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-dark">Password</label>
+                            <input type="text" name="password" value="" placeholder="Password">
+                        </div>  
+
+                        <div class="form-group">
+                            <button type="submit" class="btn text-dark login">Login</button>
+                        </div>
+                    </div>
+        </div>
+    </main>
+<%- include('include/_footer')%>

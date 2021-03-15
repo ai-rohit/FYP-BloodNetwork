@@ -1,0 +1,19 @@
+<% for(var i = 0; i<users.length; i++){%>
+<tr>
+    <td><%= i+1 %></td>
+    <td><%= users[i].userId %></td>
+    <td><%= users[i].firstName %></td>
+    <td><%= users[i].lastName %></td>
+    <td><%= users[i].address %></td>
+    <td><%= users[i].emailAddress %></td>
+    <td><%= users[i].role %></td>
+    <td>
+        <a href="/admin/update_user" class="btn border-shadow update">
+            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+        </a>
+        <a href="#" class="btn border-shadow delete">
+            <span class="text-gradient"><i class="fa fa-times"></i></span>
+        </a>
+    </td>
+</tr>
+<%}%>

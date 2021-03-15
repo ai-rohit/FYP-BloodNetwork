@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
 import AppButton from '../components/AppButton';
 import {MaterialCommunityIcons, Entypo} from '@expo/vector-icons'
 import colors from '../config/colors';
+import baseUrl from '../config/baseUrl';
 
 function RequestDetailScreen({route, navigation}) {
-    //const {reqId, reqDetails} = route.params;
-    const[status, setStatus] = useState("pending");
+    const {reqId, reqDetails} = route.params;
+    const[status, setStatus] = useState("");
 
+    useEffect(()=>{  
+        setStatus(reqDetails[0].requestStatus);
+    }, []);
+   
     const handleAccept = ()=>{
         alert("You're trying to accept huh but its still under development!")
     }
 
     const handleReject = ()=>{
-        alert("You're trying to reject huh but its still under development!")
+        fetch(`${baseUrl.url}/api/bloodRequest/reject/${reqDetails[0].requestId}`,
+        {
+        method: 'PUT',
+        headers: {Accept:'application/json', 'Content-Type': 'application/json'},
+        body: JSON.stringify({"donorResponse":"abcdeffg"})})
+        .then(response=>response.json())
+        .then(responseJson=>{
+            if(responseJson.status==true){
+                alert("The response has been rejected");
+                setStatus("rejected");
+                // navigation.navigate("Requests");
+            }
+        })
     }
     
     const requestStatusView = ()=>{
@@ -30,7 +47,7 @@ function RequestDetailScreen({route, navigation}) {
                     <View style={{width: 40, height: 40, borderRadius:20, backgroundColor: "#fadce2", justifyContent: 'center', alignItems: 'center'}}>
                         <Entypo name="cross" size={30} color={colors.blood}/>
                     </View>
-                    <Text style={{alignSelf: 'center', color: colors.blood, fontSize: 15, marginLeft: 8, fontWeight: "600"}}>You rejected the request of Ram Bahadur Shrestha.</Text>
+                    <Text style={{alignSelf: 'center', color: colors.blood, fontSize: 15, marginLeft: 8, fontWeight: "600"}}>You rejected the request of {reqDetails[0].receiverName}.</Text>
                 </View>
             );
         }else if(status==="accepted"){
@@ -56,16 +73,14 @@ function RequestDetailScreen({route, navigation}) {
             );
         }
     }
-
+    
     return (
        <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-           {/* <Text>Details: {JSON.stringify(reqDetails)}</Text> */}
-           
            <View style={styles.firstView}>
                 <View style={styles.textContent}>
                     <View style={{marginBottom: 20, width: "100%", marginLeft: 5}}>
                         <Text style={{fontSize: 16, fontWeight: "500", color: "grey"}}>Request From</Text>
-                        <Text style={{fontSize: 25, fontWeight: "800", width: "100%", marginTop: 5}}>Ram Bahadur Shrestha</Text>
+                        <Text style={{fontSize: 25, fontWeight: "800", width: "100%", marginTop: 5}}>{reqDetails[0].receiverName}</Text>
                     </View>
                     <View style={{marginTop: 10, marginBottom: 10, width:"100%"}}>
                         <View style={{flexDirection: 'row', justifyContent:"space-between", marginLeft: 10}}>
@@ -74,13 +89,13 @@ function RequestDetailScreen({route, navigation}) {
                                     Blood
                                 </Text>
                                 <Text style={{fontSize: 18, fontWeight: "800", alignSelf: 'center'}}>
-                                    O+
+                                {reqDetails[0].bloodType}
                                 </Text>
                             </View>
 
                             <View style= {{flexDirection: 'column', marginRight: 20}}>
                                 <Text style={{fontSize: 16, fontWeight: "500", color: "grey", marginBottom: 5}}>Requirement Time</Text>
-                                <Text style={{fontSize: 18, fontWeight: "800", alignSelf: 'center'}}>7 days</Text>
+                                <Text style={{fontSize: 18, fontWeight: "800", alignSelf: 'center'}}>{reqDetails[0].requirementDays}</Text>
                             </View>
                         </View> 
                     </View>
@@ -101,7 +116,7 @@ function RequestDetailScreen({route, navigation}) {
                     </View>
 
                     <Text style={styles.descriptionText}>
-                        ABCD ABCD ABCD ABCD ABCD ABCD
+                    {reqDetails[0].donationDetails}
                     </Text>
 
                     <View style={styles.textsContainer}>
@@ -109,7 +124,7 @@ function RequestDetailScreen({route, navigation}) {
                             <Entypo name="address" size={25}/>
                         </View>
                         <Text style={styles.headText}>
-                            Provided Address: Newroad
+                            Provided Address: {reqDetails[0].receiverAddress}
                         </Text>
                     </View>
 
@@ -118,7 +133,7 @@ function RequestDetailScreen({route, navigation}) {
                             <MaterialCommunityIcons name="phone" size={25}/>
                         </View>
                         <Text style={styles.headText}>
-                            Phone number: 9898989898
+                            Phone number: {reqDetails[0].receiverNumber}
                         </Text>
                     </View>
 
@@ -127,7 +142,7 @@ function RequestDetailScreen({route, navigation}) {
                             <MaterialCommunityIcons name="hospital" size={25}/>
                         </View>
                         <Text style={styles.headText}>
-                            Donation Type: Plasma
+                            Donation Type: {reqDetails[0].donationType}
                         </Text>
                     </View>
                 </View>

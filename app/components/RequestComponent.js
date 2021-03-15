@@ -15,7 +15,6 @@ function RequestComponent({requestId, name, bloodGroup, address, contact, donati
         .then((response)=> 
             response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
             if(responseJson.status===true){
                 setRequestDetail(responseJson.result);
                 setDetailAvailable(true);   

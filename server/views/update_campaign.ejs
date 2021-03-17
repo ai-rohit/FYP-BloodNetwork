@@ -1,0 +1,58 @@
+<!--include header-->
+<%- include('include/_header')%>
+<!--/include header-->
+     <!--MainSite-->
+    <main id="side-main">
+        <div class="container">
+            <div class="box-nav d-flex-between">
+                <div class="filter">
+                    <a href="/admin/campaigns"><i class="fas fa-angle-double-left"></i>All Campiagns</a>
+                </div>
+            </div>
+
+            <div class="form-title text-center">
+                <h2 class="text-dark">
+                <span class="text-dark">Update Campaign</span>
+                </h2>
+            </div>
+            <!--form handling-->
+            <!--include form-->
+               <!--form handling-->
+   <form action="/api/campaigns/update" method="POST" id="update_user">
+    <div class="new_user">
+        <div class="form-group">
+            <label for="campaignName" class="text-dark">Campaign Name</label>
+            <input type="hidden" name="id" value="<%=campaign[0].campaignId%>">
+            <input type="text" name="campaignName" value="<%=campaign[0].campaignName%>" placeholder="Campaign Name">
+        </div>
+        <div class="form-group">
+            <label for="campaignDetails" class="text-dark">Campaign Details</label>
+            <input type="text" name="campaignDetails" value="<%=campaign[0].campaignDetails%>" placeholder="Details">
+        </div>
+        <div class="form-group">
+            <label for="campaignDistrict" class="text-dark">Campaign District</label>
+            <input type="text" name="campaignDistrict" value="<%=campaign[0].campaignDistrict%>" placeholder="District">
+        </div>
+        <div class="form-group">
+            <label for="campaignLocation" class="text-dark">Campiagn Location</label>
+            <input type="text" name="campaignLocation" value="<%=campaign[0].campaignLocation%>" placeholder="Location">
+        </div>
+
+        <div class="form-group">
+            <label for="campaignDate" class="text-dark">Campaign Date</label>
+            <input type="text" name="campaignDate" value="<%=campaign[0].campaignDate%>" placeholder="Date">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn text-dark update">Update Campaign</button>
+        </div>
+    </div>
+</form>
+            <!--/include form-->
+
+        </div>
+    </main>
+    <!--/MainSite-->
+<!--include footer-->
+    <%- include('include/_footer')%>
+<!--/include footer-->

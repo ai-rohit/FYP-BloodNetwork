@@ -1,0 +1,49 @@
+<!--include header-->
+<%- include('include/_header')%>
+<!--/include header-->
+     <!--MainSite-->
+    <main id="side-main">
+        <div class="container">
+            <div class="box-nav d-flex-between">
+                <div class="filter">
+                    <a href="/admin/blood_hospitals"><i class="fas fa-angle-double-left"></i>All Hospitals</a>
+                </div>
+            </div>
+
+            <div class="form-title text-center">
+                <h2 class="text-dark">
+                <span class="text-dark">Update Hospital Details</span>
+                </h2>
+            </div>
+            <!--form handling-->
+            <!--include form-->
+               <!--form handling-->
+   <form action="/api/blood_banks/update" method="POST" id="update_user">
+    <div class="new_user">
+        <div class="form-group">
+            <label for="hospitalName" class="text-dark">Hospital Name</label>
+            <input type="hidden" name="id" value="<%=hospital[0].bankId%>">
+            <input type="text" name="hospitalName" value="<%=hospital[0].hospitalName%>" placeholder="hospital Name">
+        </div>
+        <div class="form-group">
+            <label for="hospitalContact" class="text-dark">Hospital Contact</label>
+            <input type="text" name="hospitalContact" value="<%=hospital[0].hospitalContact%>" placeholder="Details">
+        </div>
+        <div class="form-group">
+            <label for="hospitalAddress" class="text-dark">Hospital District</label>
+            <input type="text" name="hospitalAddress" value="<%=hospital[0].hospitalAddress%>" placeholder="District">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn text-dark update">Update hospital</button>
+        </div>
+    </div>
+</form>
+            <!--/include form-->
+
+        </div>
+    </main>
+    <!--/MainSite-->
+<!--include footer-->
+    <%- include('include/_footer')%>
+<!--/include footer-->

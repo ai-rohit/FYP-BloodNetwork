@@ -1,0 +1,30 @@
+<%- include('include/_header')%>
+<main id="side-main">
+    <div class="container">
+        <div class="box-nav d-flex-between">
+            <a href="/admin/add_hospitals" class="border-shadow">
+                <span class="text-gradient">Add Hospitals<i class="fa fa-user" aria-hidden="true"></i></span>
+            </a>
+
+            <form action="/admin/hospitals" method="POST">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>SN</th>
+                            <th>ID</th>
+                            <th>Hospital/Blood Bank Name</th>
+                            <th>Hospital Contact</th>
+                            <th>Hospital Address</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%- include('include/_showHospital')%>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</main>
+    
+<%- include('include/_footer')%>

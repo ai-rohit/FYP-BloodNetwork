@@ -1,0 +1,17 @@
+<% for(var i = 0; i<hospitals.length; i++){%>
+    <tr>
+        <td><%= i+1 %></td>
+        <td><%= hospitals[i].bankId %></td>
+        <td><%= hospitals[i].hospitalName %></td>
+        <td><%= hospitals[i].hospitalContact %></td>
+        <td><%= hospitals[i].hospitalAddress%></td>
+        <td>
+            <a href="/admin/update_hospital/<%= hospitals[i].bankId %>" class="btn border-shadow update">
+                <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+            </a>
+            <a href="/api/blood_banks/delete/<%= hospitals[i].bankId %>" class="btn border-shadow delete">
+                <span class="text-gradient"><i class="fa fa-times"></i></span>
+            </a>
+        </td>
+    </tr>
+    <%}%>

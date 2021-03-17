@@ -1,0 +1,32 @@
+<%- include('include/_header')%>
+<main id="side-main">
+    <div class="container">
+        <div class="box-nav d-flex-between">
+            <a href="/admin/add_campaigns" class="border-shadow">
+                <span class="text-gradient">Add Campaigns<i class="fa fa-user" aria-hidden="true"></i></span>
+            </a>
+
+            <form action="/admin/campaigns" method="POST">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>SN</th>
+                            <th>ID</th>
+                            <th>Campaign Name</th>
+                            <th>Campaign Details</th>
+                            <th>Campaign District</th>
+                            <th>Campaign Location</th>
+                            <th>Campaign Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%- include('include/_showCampaign')%>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</main>
+    
+<%- include('include/_footer')%>

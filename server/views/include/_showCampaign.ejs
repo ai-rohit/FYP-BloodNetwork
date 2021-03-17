@@ -1,0 +1,19 @@
+<% for(var i = 0; i<campaigns.length; i++){%>
+    <tr>
+        <td><%= i+1 %></td>
+        <td><%= campaigns[i].campaignId %></td>
+        <td><%= campaigns[i].campaignName %></td>
+        <td><%= campaigns[i].campaignDetails %></td>
+        <td><%= campaigns[i].campaignDistrict%></td>
+        <td><%= campaigns[i].campaignLocation%></td>
+        <td><%= campaigns[i].campaignDate %></td>
+        <td>
+            <a href="/admin/update_campaign/<%= campaigns[i].campaignId %>" class="btn border-shadow update">
+                <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+            </a>
+            <a href="/api/campaigns/delete/<%= campaigns[i].campaignId %>" class="btn border-shadow delete">
+                <span class="text-gradient"><i class="fa fa-times"></i></span>
+            </a>
+        </td>
+    </tr>
+    <%}%>

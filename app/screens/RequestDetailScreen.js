@@ -43,9 +43,10 @@ function RequestDetailScreen({ route, navigation }) {
         if (responseJson.status == true) {
           alert("The response has been rejected");
           setStatus("rejected");
-          // navigation.navigate("Requests");
+          navigation.navigate("Requests");
         }
       });
+    console.log("Hello ");
   };
 
   const requestStatusView = () => {
@@ -291,7 +292,7 @@ function RequestDetailScreen({ route, navigation }) {
         <View style={{ marginBottom: 10 }}>{requestStatusView()}</View>
       </View>
 
-      <Modal visible={acceptanceModal} transparent={true} animationType="slide">
+      <Modal visible={acceptanceModal} transparent={true} animationType="fade">
         <View style={styles.acceptModal}>
           <View style={styles.headerView}>
             <Text
@@ -437,6 +438,7 @@ function RequestDetailScreen({ route, navigation }) {
                 borderRadius: 10,
                 alignSelf: "center",
               }}
+              onPress={handleReject}
             />
             <Text
               style={{

@@ -138,7 +138,10 @@ function MoreScreen(props) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonBars}>
+          <TouchableOpacity
+            style={styles.buttonBars}
+            onPress={() => props.navigation.navigate("RequestStatus")}
+          >
             <View>
               <View
                 style={{

@@ -8,6 +8,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 function CampaignScreen(props) {
   const [campaigns, setCampaigns] = useState();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
       fetch(`${baseUrl.url}/api/campaigns`)
@@ -119,6 +120,15 @@ function CampaignScreen(props) {
               }}
             />
           )}
+          refreshing={refreshing}
+          onRefresh={() => {
+            fetch(`${baseUrl.url}/api/campaigns`)
+              .then((response) => response.json())
+              .then((json) => {
+                setCampaigns(json.data);
+              })
+              .catch((error) => console.error(error));
+          }}
         />
       </View>
     );

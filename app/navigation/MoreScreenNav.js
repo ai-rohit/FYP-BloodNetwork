@@ -5,6 +5,7 @@ import MoreScreen from "../screens/MoreScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import colors from "../config/colors";
 import CampaignScreen from "../screens/CampaignScreen";
+import RequestStatus from "../screens/RequestStatus";
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,13 @@ const MoreStack = () => (
     <Stack.Screen
       name="Profile"
       component={MyProfileScreen}
-      options={{ headerTitle: "Blood Banks" }}
+      options={{ headerTitle: "Profile" }}
+    />
+
+    <Stack.Screen
+      name="RequestStatus"
+      component={RequestStatus}
+      options={{ headerTitle: "Request Status" }}
     />
     {/* <Stack.Screen name="BecomeDonor" component={BecomeDonor} options={{headerTitle: "Become Donor"}}/> */}
   </Stack.Navigator>

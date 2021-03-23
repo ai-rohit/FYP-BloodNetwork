@@ -1,37 +1,33 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { useState } from "react/cjs/react.development";
-import RequestList from "../components/RequestList";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import RequestComponent from "../components/RequestComponent";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
-
-// const request = [
-
-//         {name: "Rohit Shrestha", reqId: "bd1", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
-//         details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"},
-//         {name: "Rohit Shrestha", reqId: "bd2", bloodType: "A+", address: "Newroad, Pokhara", contact:"9866014624",
-//         details: "Need donation as my friend has suffered from corona virus", donationType: "Plasma", reqDay: "emergency"}
-
-// ]
+import EmptyList from "../components/EmptyList";
 
 function Requests(props) {
   const [request, setRequest] = useState();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    fetch(`${baseUrl.url}/api/bloodRequest`, { method: "GET" })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === true) {
-          setRequest(responseJson.results);
-          setLoading(false);
-        } else {
-          alert("Something went wrong!");
-        }
-      })
-      .catch((error) => console.error(error));
-  }, []);
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      fetch(`${baseUrl.url}/api/bloodRequest`, { method: "GET" })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === true) {
+            setRequest(responseJson.results);
+            setLoading(false);
+          } else {
+            console.log(responseJson);
+            alert(responseJson);
+          }
+        })
+        .catch((error) => console.error(error));
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   if (loading === true) {
     return <ActivityIndicator />;
@@ -48,11 +44,36 @@ function Requests(props) {
               marginLeft: 20,
             }}
           >
-            You have {request.length} incoming blood requests
+            You have {request.length} pending blood requests
           </Text>
         </View>
 
-        <RequestList items={request} navigation={props.navigation} />
+        <FlatList
+          data={request}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(request) => request.requestId.toString()}
+          ListEmptyComponent={EmptyList}
+          renderItem={({ item }) => (
+            <RequestComponent
+              name={item.receiverName}
+              requestId={item.requestId}
+              navigation={props.navigation}
+            />
+          )}
+          refreshing={refreshing}
+          onRefresh={() => {
+            fetch(`${baseUrl.url}/api/bloodRequest`, { method: "GET" })
+              .then((response) => response.json())
+              .then((responseJson) => {
+                if (responseJson.status === true) {
+                  setRequest(responseJson.results);
+                } else {
+                  alert(responseJson);
+                }
+              })
+              .catch((error) => console.error(error));
+          }}
+        />
       </View>
     );
   }

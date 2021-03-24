@@ -13,12 +13,10 @@ function RequestSent(props) {
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson.status === "success") {
-            console.log(responseJson);
             setRequestSent(responseJson.results);
             setLoading(false);
             //setLoading(false);
           } else {
-            console.log(responseJson);
             alert(responseJson.status);
           }
         })

@@ -23,7 +23,7 @@ router.get("/history", isLoggedIn.isLoggedIn, (req, res) => {
     var userId = req.user.userId;
     var status = ["rejected", "accepted"];
     db.query(
-      "SELECT * FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus = ? or request_details.requestStatus = ?)",
+      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus = ? or request_details.requestStatus = ?)",
       [userId, status[0], status[1]],
       (error, results) => {
         if (error) {

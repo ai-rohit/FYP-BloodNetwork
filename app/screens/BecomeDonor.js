@@ -57,6 +57,16 @@ function BecomeDonor({title}) {
     const [date, setDate] = useState();
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const [displayContact, setDisplayContact] = useState(false);
+    const [errors, setErrors] = useState({
+        errorFirstName: false,
+        errorLastName: false,
+        errorAddress: false,
+        errorMobileNum: false,
+        fNameMsg:"",
+        lNameMsg:"",
+        addressMsg:"",
+        mobNumMsg:""
+    });
     
     const handleContactToggle= ()=> setDisplayContact(!displayContact);
     
@@ -85,6 +95,53 @@ function BecomeDonor({title}) {
        setDate("");
        setDisplayContact("");
    }
+
+   const checkFirstName = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorFirstName: true, fNameMsg:"First Name can't be empty" });
+    } else if (val.length < 2 || val.length > 25) {
+      setErrors({ ...errors, errorFirstName: true, fNameMsg:"First Name should 2 to 25 characters" });
+    } else {
+      setFirstName(val);
+      setErrors({ ...errors, errorFirstName: false });
+    }
+  };
+
+  const checkLastName = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorLastName: true, lNameMsg:"Last Name can't be empty" });
+    } else if (val.length < 2 || val.length > 25) {
+      setErrors({ ...errors, errorLastName: true, lNameMsg:"Last Name should 2 to 25 characters" });
+    } else {
+      setLastName(val);
+      setErrors({ ...errors, errorLastName: false });
+    }
+  };
+
+  const checkAddress = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorAddress: true, addressMsg:"Address can't be empty" });
+    } else if (val.length < 2 || val.length > 70) {
+      setErrors({ ...errors, errorAddress: true, addressMsg:"Address should be 2 to 70 characters" });
+    } else {
+      setAddress(val);
+      setErrors({ ...errors, errorAddress: false });
+    }
+  };
+
+  const checkContact = (val)=>{
+    if (!val) {
+        setErrors({ ...errors, errorMobileNum: true, mobNumMsg:"Contact Number can't be empty" });
+      } else if (val.length < 9 || val.length > 10) {
+        setErrors({ ...errors, errorMobileNum: true, mobNumMsg:"Incorrect Contact Number" });
+      } else {
+        setContact(val);
+        setErrors({ ...errors, errorMobileNum: false });
+      }
+    };
+  
+
+
 
    const handleRegisterDonor = ()=>{
        fetch(`${baseUrl.url}/api/register/donor`, {
@@ -130,18 +187,54 @@ function BecomeDonor({title}) {
                              shadowOffset: {height: -10, width: 10}}}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>First Name</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always" onChangeText= {(value)=>{setFirstName(value)}}/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="First Name" keyboardType="default" clearButtonMode="always" onChangeText= {(value)=>checkFirstName(value)}/>
                     </View> 
+                    {errors.errorFirstName ? (
+                    <Text
+                        style={{
+                        alignSelf: "flex-start",
+                        color: "red",
+                        marginLeft: 30,
+                       
+                        }}
+                    >
+                       {errors.fNameMsg}
+                    </Text>
+                    ) : null}
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Last Name</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Last Name" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setLastName(value)}}/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Last Name" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>checkLastName(value)}/>
                     </View>
-
+                    {errors.errorLastName ? (
+                    <Text
+                        style={{
+                        alignSelf: "flex-start",
+                        color: "red",
+                        marginLeft: 30,
+                       
+                        }}
+                    >
+                       {errors.lNameMsg}
+                    </Text>
+                    ) : null}
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Address</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Address" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setAddress(value)}}/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Address" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{checkAddress(value)}}/>
                     </View>
+
+                    {errors.errorAddress ? (
+                    <Text
+                        style={{
+                        alignSelf: "flex-start",
+                        color: "red",
+                        marginLeft: 30,
+                       
+                        }}
+                    >
+                       {errors.addressMsg}
+                    </Text>):null
+                    }
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>District</Text>
@@ -155,8 +248,21 @@ function BecomeDonor({title}) {
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Mobile number</Text>
-                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Mobile num." keyboardType="numeric" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>{setContact(value)}}/>
+                        <TextInput style={styles.textInput} autoCapitalize="none" placeholder="Mobile num." keyboardType="numeric" secureTextEntry={false} clearButtonMode="always" onChangeText= {(value)=>checkContact(value)}/>
                     </View>
+
+                    {errors.errorMobileNum ? (
+                    <Text
+                        style={{
+                        alignSelf: "flex-start",
+                        color: "red",
+                        marginLeft: 30,
+                       
+                        }}
+                    >
+                       {errors.mobNumMsg}
+                    </Text>):null
+                    }
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Your Blood Group</Text>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Linking } from "react-native";
 import Constants from "expo-constants";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -98,7 +98,14 @@ function RequestHistory(props) {
                     size={20}
                     style={{ marginHorizontal: 10 }}
                   />
-                  <Text style={styles.textData}>{item.receiverNumber}</Text>
+                  <Text
+                    style={styles.textData}
+                    onPress={() => {
+                      Linking.openURL(`tel:${item.receiverNumber}`);
+                    }}
+                  >
+                    {item.receiverNumber}
+                  </Text>
                 </View>
                 <View
                   style={{

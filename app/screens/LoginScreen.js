@@ -31,6 +31,22 @@ function LoginScreen({ navigation }) {
   const [address, setAddress] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+
+  const [errors, setErrors] = useState({
+    errorMail: false,
+    errorPassword: false,
+    errorSubmission: false,
+    errorFirstName: false,
+    errorLastName: false,
+    errorAddress: false,
+    errorRegEmail: false,
+    errorPassowrd: false,
+    mailErrorMsg: "",
+    pwErrorMsg: "",
+    submissionMsg: "",
+    firstSubError: false,
+  });
+
   const authContext = useContext(AuthContext);
 
   const clearTextState = () => {
@@ -43,6 +59,82 @@ function LoginScreen({ navigation }) {
 
   const handleSignup = () => {
     setSignupModalVisible(!signupModalVisible);
+    setErrors({
+      ...errors,
+      errorMail: false,
+      errorSubmission: false,
+      errorPassword: false,
+    });
+  };
+  const checkFirstName = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorFirstName: true });
+    } else if (val.length < 2 || val.length > 25) {
+      setErrors({ ...errors, errorFirstName: true });
+    } else {
+      setFirstName(val);
+      setErrors({ ...errors, errorFirstName: false });
+    }
+  };
+
+  const checkLastName = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorLastName: true });
+    } else if (val.length < 2 || val.length > 25) {
+      setErrors({ ...errors, errorLastName: true });
+    } else {
+      setLastName(val);
+      setErrors({ ...errors, errorLastName: false });
+    }
+  };
+
+  const checkAddress = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorAddress: true });
+    } else if (val.length < 2 || val.length > 70) {
+      setErrors({ ...errors, errorAddress: true });
+    } else {
+      setAddress(val);
+      setErrors({ ...errors, errorAddress: false });
+    }
+  };
+
+  const emailCheck = (val) => {
+    if (val === "" || val === undefined || val === null) {
+      setErrors({
+        ...errors,
+        errorMail: true,
+        mailErrorMsg: "Email missing! Please enter a valid email",
+      });
+    } else if (val.length < 2) {
+      setErrors({
+        ...errors,
+        errorMail: true,
+        mailErrorMsg: "Email length can't be less than 2",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        errorMail: false,
+      });
+      setUserAddress(val);
+    }
+  };
+
+  const passwordCheck = (val) => {
+    if (val.length < 8 || val.length > 16) {
+      setErrors({
+        ...errors,
+        errorPassword: true,
+        pwErrorMsg: "Password length must be between 8-16 digits",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        errorPassword: false,
+      });
+      setUserPassword(val);
+    }
   };
 
   const handleRegister = () => {
@@ -74,29 +166,42 @@ function LoginScreen({ navigation }) {
   };
 
   const handleLogin = () => {
-    fetch(`${baseUrl.url}/api/login_auth`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        emailAddress: userAddress,
-        password: userPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === true) {
-          const user = responseJson.user;
-          authContext.setUser(user);
-        } else if (responseJson.status === false) {
-          Alert.alert(responseJson.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+    if (errors.errorMail === true || errors.errorPassword === true) {
+      setErrors({
+        ...errors,
+        errorSubmission: true,
+        submissionMsg: "Invalid inputs, Please Try Again",
       });
+    } else {
+      setErrors({ ...errors, errorSubmission: false });
+      fetch(`${baseUrl.url}/api/login_auth`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          emailAddress: userAddress,
+          password: userPassword,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === true) {
+            const user = responseJson.user;
+            authContext.setUser(user);
+          } else if (responseJson.status === false) {
+            setErrors({
+              ...errors,
+              errorSubmission: true,
+              submissionMsg: "Username and Password doesn't match",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   return (
@@ -125,16 +230,33 @@ function LoginScreen({ navigation }) {
             }}
           >
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Username, Email</Text>
+              <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.textInput}
                 autoCapitalize="none"
-                placeholder="Email, Username or number"
+                placeholder="Email"
                 keyboardType="email-address"
                 clearButtonMode="always"
-                onChangeText={(userAddress) => setUserAddress(userAddress)}
+                onChangeText={(userAddress) => emailCheck(userAddress)}
+                // onEndEditing={(e) => emailError(e.nativeEvent.text)}
               />
             </View>
+            {errors.errorMail ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  marginLeft: 35,
+                  color: "red",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={15}
+                  style={{ marginLeft: 5 }}
+                />{" "}
+                {errors.mailErrorMsg}
+              </Text>
+            ) : null}
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Password</Text>
@@ -144,9 +266,26 @@ function LoginScreen({ navigation }) {
                 placeholder="Password"
                 maxLength={16}
                 secureTextEntry={true}
-                onChangeText={(userPassword) => setUserPassword(userPassword)}
+                onChangeText={(userPassword) => passwordCheck(userPassword)}
               />
             </View>
+            {errors.errorPassword ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  marginLeft: 35,
+                  color: "red",
+                  marginBottom: 5,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={15}
+                  style={{ marginLeft: 5 }}
+                />{" "}
+                {errors.pwErrorMsg}
+              </Text>
+            ) : null}
           </View>
 
           <View
@@ -180,6 +319,23 @@ function LoginScreen({ navigation }) {
           >
             <AppButton title="Login" onPress={handleLogin} />
           </View>
+          {errors.errorSubmission ? (
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                marginLeft: 35,
+                color: "red",
+                marginBottom: 10,
+              }}
+            >
+              <Entypo
+                name="circle-with-cross"
+                size={15}
+                style={{ marginLeft: 5 }}
+              />{" "}
+              {errors.submissionMsg}
+            </Text>
+          ) : null}
 
           <View style={styles.signup}>
             <Text>Don't have a account? </Text>
@@ -624,7 +780,7 @@ function LoginScreen({ navigation }) {
                 placeholderTextColor="#a9a9a9"
                 clearButtonMode="always"
                 autoCapitalize="none"
-                onChangeText={(firstName) => setFirstName(firstName)}
+                onChangeText={(firstName) => checkFirstName(firstName)}
                 style={{
                   width: "40%",
                   borderWidth: 1,
@@ -637,7 +793,7 @@ function LoginScreen({ navigation }) {
                 placeholder="Last name"
                 clearButtonMode="always"
                 autoCapitalize="none"
-                onChangeText={(lastName) => setLastName(lastName)}
+                onChangeText={(lastName) => checkLastName(lastName)}
                 style={{
                   width: "40%",
                   borderWidth: 1,
@@ -647,6 +803,21 @@ function LoginScreen({ navigation }) {
                 }}
               />
             </View>
+
+            {errors.errorFirstName || errors.errorLastName ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  color: "red",
+                  marginLeft: 30,
+                  marginTop: 10,
+                }}
+              >
+                *First Name/Last Name are required
+                {"\n"}
+                They can't exceed 25 characters
+              </Text>
+            ) : null}
 
             <View>
               <Text
@@ -664,7 +835,7 @@ function LoginScreen({ navigation }) {
                 placeholder="Address"
                 clearButtonMode="always"
                 autoCapitalize="none"
-                onChangeText={(address) => setAddress(address)}
+                onChangeText={(address) => checkAddress(address)}
                 style={{
                   alignSelf: "center",
                   width: "90%",
@@ -675,6 +846,22 @@ function LoginScreen({ navigation }) {
                   marginVertical: 10,
                 }}
               />
+
+              {errors.errorAddress ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 30,
+                    marginTop: 5,
+                  }}
+                >
+                  *Address is required
+                  {"\n"}
+                  They can't exceed 70 characters
+                </Text>
+              ) : null}
+
               <AppButton
                 title="Next"
                 style={{
@@ -682,8 +869,33 @@ function LoginScreen({ navigation }) {
                   alignSelf: "center",
                   borderRadius: 10,
                 }}
-                onPress={() => setFinalSetup(true)}
+                onPress={() => {
+                  if (
+                    errors.errorFirstName == true ||
+                    errors.errorLastName == true ||
+                    errors.errorAddress == true
+                  ) {
+                    setErrors({ ...errors, firstSubError: true });
+                  } else if (!firstName || !lastName || !address) {
+                    setErrors({ ...errors, firstSubError: true });
+                  } else {
+                    setFinalSetup(true);
+                  }
+                }}
               />
+              {errors.firstSubError ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 30,
+                    marginTop: -5,
+                    marginBottom: 10,
+                  }}
+                >
+                  Invalid Inputs! Please try again
+                </Text>
+              ) : null}
               <View style={{ flexDirection: "row", marginLeft: "17%" }}>
                 <Text style={{ fontSize: 16, fontWeight: "400" }}>
                   Already have an account?

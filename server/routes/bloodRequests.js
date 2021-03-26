@@ -3,6 +3,8 @@ const isLoggedIn = require("../middleware/user-authentication");
 const router = express.Router();
 var db = require("../dbconfig");
 
+const status = ["pending", "accepted", "rejected", "marked donated", "donated"];
+
 router.get("/", isLoggedIn.isLoggedIn, (req, res) => {
   var userId = req.user.userId;
   var status = "pending";
@@ -41,7 +43,7 @@ router.get("/sent", isLoggedIn.isLoggedIn, (req, res) => {
   try {
     var userId = req.user.userId;
     db.query(
-      "SELECT * FROM request_details where requesterId=?",
+      "SELECT donor_details.firstName, donor_details.lastName, donor_details.address, donorDistrict, donorContact, showContact, requestStatus, donorResponse, donationDetails, requestId, request_details.bloodType FROM request_details join donor_details on donor_details.donorId = request_details.donorId join user_details on donor_details.donorId = user_details.userId where requesterId=?",
       [userId],
       (error, results) => {
         if (error) {

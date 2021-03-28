@@ -38,6 +38,13 @@ function RequestSent(props) {
     return unsubscribe;
   }, [props.navigation]);
 
+  const handleDonated = ()=>{
+
+  }
+  const handleNotDonated = ()=>{
+
+  }
+  
   const DonatedDecision = () => {
     if (requestSent[0].requestStatus === "accepted") {
       return (
@@ -65,12 +72,14 @@ function RequestSent(props) {
                 styles.donatedButton,
                 { backgroundColor: colors.success, marginRight: 20 },
               ]}
+              onPress = {handleDonated}
             >
               <Text style={styles.texts}>Donated</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.donatedButton, { backgroundColor: colors.blood }]}
+              onPress = {handleNotDonated}
             >
               <Text style={styles.texts}>Not Donated</Text>
             </TouchableOpacity>

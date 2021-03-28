@@ -50,6 +50,15 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
     const [donationType, setDonationType] = useState("");
     const [bloodType, setBloodType] = useState("");
 
+    const [errors, setErrors] = useState({
+        errorFullName: false,
+        errorAddress: false,
+        errorReqDays: false,
+        errorMobNum: false,
+        errorDescription: false,
+        mobNumMsg: ""
+    });
+
     const clearAllState= ()=>{
         setReceiverNumber("");
         setReceiverAddress("");
@@ -60,6 +69,47 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
         setBloodType("");
         setDonorNum("");
     }
+
+    const checkReceiverName = (val)=>{
+        if(!val){
+            setErrors({...errors, errorFullName:true});
+        }
+        else if(val.length<2 || val.length>50){
+            setErrors({...errors, errorFullName:true});
+        
+        }else{
+            setErrors({...errors, errorFullName:false});
+            setReceiverName(val);
+        }
+    }
+    const checkReceiverAddress = (val)=>{
+        if(!val){
+            setErrors({...errors, errorAddress:true});
+        }
+        else if(val.length<2 || val.length>50){
+            setErrors({...errors, errorAddress:true});
+        
+        }
+        else{
+            setErrors({...errors, errorAddress:false});
+            setReceiverAddress(val);
+        }
+    }
+
+    const checkContact = (val)=>{
+        if (!val) {
+            setErrors({ ...errors, errorMobNum: true, mobNumMsg:"Contact Number can't be empty" });
+            
+          } else if (val.length < 9 || val.length > 10) {
+            setErrors({ ...errors, errorMobNum: true, mobNumMsg:"Incorrect Contact Number" });
+            
+          } else {
+            
+            setErrors({ ...errors, errorMobNum: false });
+            setReceiverNumber(val);
+          }
+        };
+      
 
     const handleRequestButton = ()=> 
     {
@@ -157,8 +207,21 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         autoCapitalize="none" 
                                         maxLength = {25}
                                         clearButtonMode = "always"
-                                        onChangeText = {(receiverName)=> setReceiverName(receiverName)}
+                                        onChangeText = {(receiverName)=> checkReceiverName(receiverName)}
                                     style={styles.modalTextInput}/> 
+
+                                {
+                                    errors.errorFullName? <Text
+                                    style={{
+                                    alignSelf: "flex-start",
+                                    color: "red",
+                                    marginLeft: 30,
+                                   
+                                    }}
+                                >
+                                "Full name must be less than 50 characters"
+                                </Text>:null
+                                }
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Receiver's address</Text>
@@ -168,8 +231,21 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         autoCapitalize="none" 
                                         maxLength = {35}
                                         clearButtonMode = "always"
-                                        onChangeText = {(receiverAddress)=> setReceiverAddress(receiverAddress)}
+                                        onChangeText = {(receiverAddress)=> checkReceiverAddress(receiverAddress)}
                                     style={styles.modalTextInput}/>
+
+                            {
+                            errors.errorAddress? <Text
+                                    style={{
+                                    alignSelf: "flex-start",
+                                    color: "red",
+                                    marginLeft: 30,
+                                   
+                                    }}
+                                >
+                                "Address must be less than 70 characters"
+                                </Text>:null
+                                }
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Requirement days</Text>
@@ -190,9 +266,21 @@ function RenderDonorList({donorId, firstName, lastName, age, bloodGroup, address
                                         autoCapitalize="none" 
                                         maxLength = {10}
                                         clearButtonMode = "always"
-                                        onChangeText = {(receiverNumber)=> setReceiverNumber(receiverNumber)}
+                                        onChangeText = {(receiverNumber)=> checkContact(receiverNumber)}
 
                                     style={styles.modalTextInput}/> 
+                                    {
+                                    errors.errorMobNum ? <Text
+                                    style={{
+                                    alignSelf: "flex-start",
+                                    color: "red",
+                                    marginLeft: 30,
+                                   
+                                    }}
+                                >
+                                {errors.mobNumMsg}
+                                </Text>:null
+                                }
 
                                 <Text style={{color: colors.blood,
                                             fontSize: 16, fontWeight: "700", marginTop: 5, marginLeft: 20}}>Describe the detail for donation</Text>

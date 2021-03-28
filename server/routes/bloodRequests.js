@@ -2,6 +2,8 @@ const express = require("express");
 const isLoggedIn = require("../middleware/user-authentication");
 const router = express.Router();
 var db = require("../dbconfig");
+const { body, param, validationResult } = require("express-validator");
+
 
 const status = ["pending", "accepted", "rejected", "marked donated", "donated"];
 
@@ -23,10 +25,10 @@ router.get("/", isLoggedIn.isLoggedIn, (req, res) => {
 router.get("/history", isLoggedIn.isLoggedIn, (req, res) => {
   try {
     var userId = req.user.userId;
-    var status = ["rejected", "accepted"];
+    var status = "pending";
     db.query(
-      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus = ? or request_details.requestStatus = ?)",
-      [userId, status[0], status[1]],
+      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus != ?)",
+      [userId, status],
       (error, results) => {
         if (error) {
           return res.send(error);
@@ -124,6 +126,39 @@ router.put("/reject/:requestId", isLoggedIn.isLoggedIn, (req, res) => {
       });
     }
   );
+});
+
+router.put("/mark_donated/:requestId", isLoggedIn.isLoggedIn, [param("requestId").custom((value)=>{
+  try{
+    db.query("Select * from request_details where requestId = ?", [value], (error, request)=>{
+      if(!request){
+        throw new Error("Request Not found");
+      }
+      return false;
+    })
+  }catch(ex){
+
+  }
+})],(req, res)=>{
+  const reqId = req.params.requestId;
+  const reqStatus = "marked donated"
+
+  const errors = validationResult(req);
+  const param = errors.array()[0].param;
+  if(!errors.isEmpty()){
+    return res.json({status:"false", data:{[param]: errors.array()[0].msg}});
+  }
+
+  try{
+  db.query("Update request_details set requestStatus = ? where requestId = ?", [reqStatus, reqId], (error, result)=>{
+    if(error){
+      return res.json({status:"error", message:error.message})
+    }
+    return res.json({status:"success", data:{request:result}})
+  })
+}catch(ex){
+  return res.json({status:"error", message:ex.message})
+}
 });
 
 router.put(

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Linking } from "react-native";
+import { View, Text, StyleSheet, FlatList, Linking, Dimensions } from "react-native";
 import Constants from "expo-constants";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { Fontisto, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function RequestHistory(props) {
   const [requestHistory, setRequestHistory] = useState("");
@@ -28,6 +29,40 @@ function RequestHistory(props) {
     });
     return unsubscribe;
   }, [props.navigation]);
+
+  const MarkDonation = ()=>{
+    if(requestHistory[0].requestStatus==="marked donated"){
+      return (
+        <View style={{ width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        
+        padding: 5,}}>
+          <Text style={{color:"grey", marginLeft: 10}}><MaterialCommunityIcons name="information-outline" size={15}/>Receiver marked the request as donated. Approve the donation with the donted date!</Text>
+        <View style={{flexDirection:"row",marginTop: 5,}}>
+        <TouchableOpacity
+              style={[
+                styles.donatedButton,
+                { backgroundColor: colors.success, marginRight: 20 },
+              ]}
+              //onPress = {handleDonated}
+            >
+              <Text style={styles.texts}>Donated</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.donatedButton, { backgroundColor: colors.blood }]}
+              //onPress = {handleNotDonated}
+            >
+              <Text style={styles.texts}>Not Donated</Text>
+            </TouchableOpacity>
+        </View>
+        </View>
+      );
+    }else{
+      return null;
+    }
+  }
 
   if (loading === true) {
     return <ActivityIndicator />;
@@ -129,10 +164,15 @@ function RequestHistory(props) {
                   </Text>
                 </View>
 
-                <View style={styles.textContainer}>
-                  <Text style={styles.label}>Your Response: </Text>
-                  <Text style={styles.textData}>{item.donorResponse}</Text>
+                <View
+                  style={[styles.textContainer, { flexDirection: "column" }]}
+                >
+                  <Text style={styles.label}>Your response: </Text>
+                  <Text style={[styles.textData, { marginLeft: 10 }]}>
+                    {item.donorResponse}
+                  </Text>
                 </View>
+                <MarkDonation/>
               </View>
             );
           }}
@@ -175,6 +215,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
+  donatedButton: {
+    width: Dimensions.get("window").width / 2.8,
+    backgroundColor: "white",
+    height: 40,
+    padding: 10,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  texts: { fontSize: 16, fontWeight: "400", color: "#fff" },
 });
 
 export default RequestHistory;

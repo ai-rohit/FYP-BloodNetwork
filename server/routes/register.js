@@ -134,8 +134,18 @@ router.post("/donor", isLoggedIn.isLoggedIn, donorValidationRules(), (req, res)=
                 if(error){ 
                     return res.status(400).send({status: "error", message: error.message});
             }
-                else{ 
-                    return res.send({status: "success", data: "Donor registered."});
+                else{
+                    try{
+                    db.query("Update user_details set role = donor where userId = ?", [userId], (error, result)=>{
+                        if(error){
+                            return res.json({status:"error", message:error.message})
+                        }
+                        return res.send({status: "success", data: "Donor registered."});
+                    }) 
+                }catch(ex){
+                    return res.json({status:"error", message:ex.message})
+                }
+                    
             }
             });
         }catch(ex){

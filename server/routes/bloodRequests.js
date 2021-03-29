@@ -128,36 +128,41 @@ router.put("/reject/:requestId", isLoggedIn.isLoggedIn, (req, res) => {
   );
 });
 
-router.put("/mark_donated/:requestId", isLoggedIn.isLoggedIn, [param("requestId").custom((value)=>{
+router.put("/mark_donated/:requestId", isLoggedIn.isLoggedIn, 
+[param("requestId").custom(async (value)=>{
   try{
-    db.query("Select * from request_details where requestId = ?", [value], (error, request)=>{
+    await db.query("Select * from request_details where requestId = ?", [value], (error, request)=>{
       if(!request){
         throw new Error("Request Not found");
       }
       return false;
     })
   }catch(ex){
-
+    throw new Error(ex.message);
   }
-})],(req, res)=>{
+})],
+async (req, res)=>{
   const reqId = req.params.requestId;
-  const reqStatus = "marked donated"
+  const reqStatus = req.body.decision;
 
   const errors = validationResult(req);
-  const param = errors.array()[0].param;
+  
   if(!errors.isEmpty()){
-    return res.json({status:"false", data:{[param]: errors.array()[0].msg}});
+    const param = errors.array()[0].param;
+    return res.json({status:"fail", data:{[param]: errors.array()[0].msg}});
   }
 
   try{
-  db.query("Update request_details set requestStatus = ? where requestId = ?", [reqStatus, reqId], (error, result)=>{
+  await db.query("Update request_details set requestStatus = ? where requestId = ?", [reqStatus, reqId], async(error, result)=>{
     if(error){
       return res.json({status:"error", message:error.message})
     }
-    return res.json({status:"success", data:{request:result}})
+    console.log(result);
+    return res.send({status:"success", data:{request:result}})
+    
   })
 }catch(ex){
-  return res.json({status:"error", message:ex.message})
+  return res.send({status:"error", message:ex.message})
 }
 });
 

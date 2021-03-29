@@ -11,10 +11,18 @@ const campaigns = require("./routes/campaigns");
 const path = require("path");
 const admin = require("./routes/admin");
 const user = require("./routes/users");
+const cors = require("cors");
 
 const app = express();
 
 app.use(helmet());
+app.use(cors());
+// app.use(helmet.contentSecurityPolicy({
+//     directives:{
+//         defaultSrc:["'self'"]
+//     }
+// }))
+
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
@@ -24,7 +32,7 @@ app.set("view engine", "ejs");
 
 //load assets
 app.use('/css', express.static(path.resolve(__dirname, "assets/css")));
-
+app.use('/html', express.static(path.resolve(__dirname, "assets/html")));
 app.use('/js', express.static(path.resolve(__dirname, "assets/js")));
 app.use('/img', express.static(path.resolve(__dirname, "assets/img")));
 
@@ -37,6 +45,7 @@ app.use("/api/donor", donors);
 app.use("/api/campaigns", campaigns);
 app.use("/api/users", user);
 app.use("/admin", admin);
+app.use("/api/payment", require("./routes/payment"))
 
 
 app.listen(3000, ()=> console.log("listening to 3000"));

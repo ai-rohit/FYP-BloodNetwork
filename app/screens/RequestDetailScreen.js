@@ -34,7 +34,27 @@ function RequestDetailScreen({ route, navigation }) {
   }, []);
 
   const handleAccept = () => {
-    alert("You're trying to accept huh but its still under development!");
+    if(errors.contactError===true || response==""){
+      setErrors({...errors, subError:true})
+    }else{
+      fetch(`${baseUrl.url}/api/bloodRequest/accept/${reqDetails[0].requestId}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ donorResponse: response }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status == true) {
+            alert("The response has been accepted");
+            setStatus("accepted");
+            navigation.navigate("Requests");
+          }
+        });
+      console.log("Hello ");
+    }
   };
 
   const handleReject = () => {
@@ -101,7 +121,10 @@ function RequestDetailScreen({ route, navigation }) {
               width: "50%",
               marginRight: 5,
             }}
-            onPress={() => setAcceptanceModal(true)}
+            onPress={() => {
+              setResponse("");
+              setErrors({...errors, contactError:false, subError:false});
+              setAcceptanceModal(true)}}
           />
           <AppButton
             title="Reject"
@@ -110,7 +133,10 @@ function RequestDetailScreen({ route, navigation }) {
               borderRadius: 10,
               width: "50%",
             }}
-            onPress={() => setRejectionModal(true)}
+            onPress={() => {
+              setResponse("");
+              setErrors({...errors, responseError:false, subError:false})
+              setRejectionModal(true)}}
           />
         </View>
       );
@@ -187,7 +213,7 @@ function RequestDetailScreen({ route, navigation }) {
               fontWeight: "600",
             }}
           >
-            You accepted the request of Ram Bahadur Shrestha. Please wait for
+            You accepted the request. Please wait for
             the response from requester.
           </Text>
         </View>
@@ -402,6 +428,14 @@ function RequestDetailScreen({ route, navigation }) {
               }}
               onPress={handleAccept}
             />
+            {errors.subError? <Text  style={{
+                                    alignSelf: "flex-start",
+                                    color: "red",
+                                    marginLeft: 30,
+                                   
+                                    }}>
+              Input might not be valid! Please try again
+              </Text>:null}
             <Text
               style={{
                 alignSelf: "center",

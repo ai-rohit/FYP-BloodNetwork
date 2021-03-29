@@ -9,6 +9,7 @@ import AuthContext from './app/auth/context';
 import MoreScreen from './app/screens/MoreScreen';
 import BloodBanks from './app/screens/BloodBanks';
 import {StatusBar} from 'expo-status-bar';
+import PaymentScreen from './app/screens/PaymentScreen';
 
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         </NavigationContainer>
         
       </AuthContext.Provider>
+      //<PaymentScreen/>
  
   );
 }

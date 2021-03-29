@@ -16,12 +16,12 @@ function RequestHistory(props) {
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson.status === "success") {
-            console.log(responseJson);
+           
             setRequestHistory(responseJson.results);
             setLoading(false);
             //setLoading(false);
           } else {
-            console.log(responseJson);
+            
             alert(responseJson.status);
           }
         })
@@ -31,43 +31,12 @@ function RequestHistory(props) {
   }, [props.navigation]);
 
   const MarkDonation = ()=>{
-    if(requestHistory[0].requestStatus==="marked donated"){
-      return (
-        <View style={{ width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        
-        padding: 5,}}>
-          <Text style={{color:"grey", marginLeft: 10}}><MaterialCommunityIcons name="information-outline" size={15}/>Receiver marked the request as donated. Approve the donation with the donted date!</Text>
-        <View style={{flexDirection:"row",marginTop: 5,}}>
-        <TouchableOpacity
-              style={[
-                styles.donatedButton,
-                { backgroundColor: colors.success, marginRight: 20 },
-              ]}
-              //onPress = {handleDonated}
-            >
-              <Text style={styles.texts}>Donated</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.donatedButton, { backgroundColor: colors.blood }]}
-              //onPress = {handleNotDonated}
-            >
-              <Text style={styles.texts}>Not Donated</Text>
-            </TouchableOpacity>
-        </View>
-        </View>
-      );
-    }else{
-      return null;
-    }
+    
   }
 
   if (loading === true) {
     return <ActivityIndicator />;
   } else {
-    console.log("Details: ", requestHistory);
     return (
       <View style={styles.container}>
         <FlatList
@@ -172,7 +141,39 @@ function RequestHistory(props) {
                     {item.donorResponse}
                   </Text>
                 </View>
-                <MarkDonation/>
+                {
+                    (item.requestStatus==="marked donated")?
+                      
+                        <View style={{ width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        
+                        padding: 5,}}>
+                          <Text style={{color:"grey", marginLeft: 10}}><MaterialCommunityIcons name="information-outline" size={15}/>Receiver marked the request as donated. Approve the donation with the donted date!</Text>
+                        <View style={{flexDirection:"row",marginTop: 5,}}>
+                        <TouchableOpacity
+                              style={[
+                                styles.donatedButton,
+                                { backgroundColor: colors.success, marginRight: 20 },
+                              ]}
+                              //onPress = {handleDonated}
+                            >
+                              <Text style={styles.texts}>Donated</Text>
+                            </TouchableOpacity>
+                
+                            <TouchableOpacity
+                              style={[styles.donatedButton, { backgroundColor: colors.blood }]}
+                              //onPress = {handleNotDonated}
+                            >
+                              <Text style={styles.texts}>Not Donated</Text>
+                            </TouchableOpacity>
+                        </View>
+                        </View>
+                      
+                    :
+                      null
+                    
+                }
               </View>
             );
           }}

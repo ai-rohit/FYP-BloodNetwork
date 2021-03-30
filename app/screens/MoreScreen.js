@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Constants from "expo-constants";
 import { Text, StyleSheet, View, Dimensions, Image } from "react-native";
 
@@ -6,10 +6,18 @@ import colors from "../config/colors";
 import Svg, { Path } from "react-native-svg";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
 function MoreScreen(props) {
+  const { navigation } = props;
+
+  // useEffect(() => {
+  //   navigation.addListener("focus", () => {
+  //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  //   });
+  // }, [navigation]);
   return (
     <>
       <View style={styles.container}>
@@ -78,7 +86,12 @@ function MoreScreen(props) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonBars}>
+          <TouchableOpacity
+            style={styles.buttonBars}
+            onPress={() => {
+              props.navigation.navigate("Donation");
+            }}
+          >
             <View>
               <View
                 style={{

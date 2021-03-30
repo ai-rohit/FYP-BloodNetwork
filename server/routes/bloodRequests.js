@@ -4,7 +4,6 @@ const router = express.Router();
 var db = require("../dbconfig");
 const { body, param, validationResult } = require("express-validator");
 
-
 const status = ["pending", "accepted", "rejected", "marked donated", "donated"];
 
 router.get("/", isLoggedIn.isLoggedIn, (req, res) => {
@@ -128,43 +127,49 @@ router.put("/reject/:requestId", isLoggedIn.isLoggedIn, (req, res) => {
   );
 });
 
-router.put("/mark_donated/:requestId", isLoggedIn.isLoggedIn, 
-[param("requestId").custom(async (value)=>{
-  try{
-    await db.query("Select * from request_details where requestId = ?", [value], (error, request)=>{
-      if(!request){
-        throw new Error("Request Not found");
-      }
-      return false;
-    })
-  }catch(ex){
-    throw new Error(ex.message);
-  }
-})],
-async (req, res)=>{
-  const reqId = req.params.requestId;
-  const reqStatus = req.body.decision;
+router.put(
+  "/mark_donated/:requestId",
+  isLoggedIn.isLoggedIn,
+  async (req, res) => {
+    const reqId = req.params.requestId;
+    const reqStatus = req.body.decision;
 
-  const errors = validationResult(req);
-  
-  if(!errors.isEmpty()){
-    const param = errors.array()[0].param;
-    return res.json({status:"fail", data:{[param]: errors.array()[0].msg}});
-  }
-
-  try{
-  await db.query("Update request_details set requestStatus = ? where requestId = ?", [reqStatus, reqId], async(error, result)=>{
-    if(error){
-      return res.json({status:"error", message:error.message})
+    try {
+      await db.query(
+        "Select * from request_details where requestId = ?",
+        [reqId],
+        async (error, request) => {
+          if (error) {
+            return res.json({ status: "error", message: error.message });
+          }
+          if (request.length < 1) {
+            return res.json({
+              status: "false",
+              data: { Request: "Invalid request! It doesn't exist" },
+            });
+          } else {
+            await db.query(
+              "Update request_details set requestStatus = ? where requestId = ?",
+              [reqStatus, reqId],
+              async (error, result) => {
+                if (error) {
+                  return res.json({ status: "error", message: error.message });
+                }
+                console.log(result);
+                return res.send({
+                  status: "success",
+                  data: { request: result },
+                });
+              }
+            );
+          }
+        }
+      );
+    } catch (ex) {
+      return res.send({ status: "error", message: ex.message });
     }
-    console.log(result);
-    return res.send({status:"success", data:{request:result}})
-    
-  })
-}catch(ex){
-  return res.send({status:"error", message:ex.message})
-}
-});
+  }
+);
 
 router.put(
   "/donated/:requestId/:donorId",

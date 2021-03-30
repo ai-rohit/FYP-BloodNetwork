@@ -5,10 +5,41 @@
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 </head>
 
-<body>
-    ...
-    <!-- Place this where you need payment button -->
-    <button id="payment-button">Pay with Khalti</button>
+<style>
+    #payment-button{
+        background-color: purple;
+        border-radius:  5px;
+        height: 35px;
+        width: 200px;
+        color: whitesmoke;
+        font-size: 16px;
+        font-weight: bold;
+        align-self: center;
+        justify-self: center;
+        margin: auto;
+    }
+    #donation-amount{
+        height: 30px;
+        width: 200px;
+        margin-top: 1em;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+</style>
+
+<body >
+    <div style="display:flex; justify-content:center; align-items: center; flex-direction: column; margin-top: 5%; padding: 10px;">
+        <img src="../assets//khalti.png" style="width:25%; height:25%"/>
+        <!-- Place this where you need payment button -->
+        <div style="padding:1.5em; display: flex; flex-direction: column;">
+            <label style="font-size: 20; font-weight: 600; color: purple;">Amount for Donation</label>
+            <input id="donation-amount" type="number" value=""/>  
+        </div>
+        <div>
+            <button id="payment-button">Donate with Khalti</button>
+        </div>
+    </div>
     <!-- Place this where you need payment button -->
     <!-- Paste this code anywhere in you body tag -->
     <script>
@@ -22,15 +53,13 @@
             "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
             "paymentPreference": [
                 "KHALTI",
-                "EBANKING",
-                "MOBILE_BANKING",
-
             ],
             "eventHandler": {
                 onSuccess(payload) {
+                    
                     // hit merchant api for initiating verfication
                     console.log("payload ", payload)
-                    fetch(`http://306d9664ef70.ngrok.io/api/payment/charge`, {
+                    fetch(`http://5351863f1a53.ngrok.io/api/payment/charge`, {
                         method: "POST",
                         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -64,11 +93,14 @@
         var btn = document.getElementById("payment-button");
         btn.onclick = function () {
             // minimum transaction amount must be 10, i.e 1000 in paisa.
-            checkout.show({ amount: 1000 });
+            var x = document.getElementById("donation-amount").value;
+            var amount = x * 100;
+            checkout.show({ amount: amount });
+            document.getElementById("donation-amount").value = "";
         }
     </script>
     <!-- Paste this code anywhere in you body tag -->
-    ...
+    
 </body>
 
 </html>

@@ -6,6 +6,7 @@ import MyProfileScreen from "../screens/MyProfileScreen";
 import colors from "../config/colors";
 import CampaignScreen from "../screens/CampaignScreen";
 import RequestStatus from "../screens/RequestStatus";
+import PaymentScreen from "../screens/PaymentScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +40,11 @@ const MoreStack = () => (
       component={RequestStatus}
       options={{ headerTitle: "Request Status" }}
     />
-    {/* <Stack.Screen name="BecomeDonor" component={BecomeDonor} options={{headerTitle: "Become Donor"}}/> */}
+    <Stack.Screen
+      name="Donation"
+      component={PaymentScreen}
+      options={{ headerTitle: "Make Donations" }}
+    />
   </Stack.Navigator>
 );
 

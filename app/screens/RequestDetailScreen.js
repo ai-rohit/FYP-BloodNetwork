@@ -25,8 +25,8 @@ function RequestDetailScreen({ route, navigation }) {
     contactError: false,
     responseError: false,
     subError: false,
-    contactErrorMsg:"",
-    responseErrorMsg: ""
+    contactErrorMsg: "",
+    responseErrorMsg: "",
   });
 
   useEffect(() => {
@@ -34,17 +34,20 @@ function RequestDetailScreen({ route, navigation }) {
   }, []);
 
   const handleAccept = () => {
-    if(errors.contactError===true || response==""){
-      setErrors({...errors, subError:true})
-    }else{
-      fetch(`${baseUrl.url}/api/bloodRequest/accept/${reqDetails[0].requestId}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ donorResponse: response }),
-      })
+    if (errors.contactError === true || response == "") {
+      setErrors({ ...errors, subError: true });
+    } else {
+      fetch(
+        `${baseUrl.url}/api/bloodRequest/accept/${reqDetails[0].requestId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ donorResponse: response }),
+        }
+      )
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson.status == true) {
@@ -58,17 +61,20 @@ function RequestDetailScreen({ route, navigation }) {
   };
 
   const handleReject = () => {
-    if(errors.responseError===true || response==""){
-      setErrors({...errors, subError:true})
-    }else{
-      fetch(`${baseUrl.url}/api/bloodRequest/reject/${reqDetails[0].requestId}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ donorResponse: response }),
-      })
+    if (errors.responseError === true || response == "") {
+      setErrors({ ...errors, subError: true });
+    } else {
+      fetch(
+        `${baseUrl.url}/api/bloodRequest/reject/${reqDetails[0].requestId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ donorResponse: response }),
+        }
+      )
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson.status == true) {
@@ -76,36 +82,51 @@ function RequestDetailScreen({ route, navigation }) {
             setStatus("rejected");
             navigation.navigate("Requests");
           }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       console.log("Hello ");
     }
   };
 
-  const checkContact = (val)=>{
+  const checkContact = (val) => {
     if (!val) {
-      setErrors({ ...errors, contactError: true, contactErrorMsg:"Contact Number can't be empty" });
-      
+      setErrors({
+        ...errors,
+        contactError: true,
+        contactErrorMsg: "Contact Number can't be empty",
+      });
     } else if (val.length < 9 || val.length > 10) {
-      setErrors({ ...errors, contactError: true, contactErrorMsg:"Incorrect Contact Number" });
-      
+      setErrors({
+        ...errors,
+        contactError: true,
+        contactErrorMsg: "Incorrect Contact Number",
+      });
     } else {
       setErrors({ ...errors, contactError: false });
       setResponse(val);
     }
-  }
+  };
 
-  const checkResponse = (val)=>{
+  const checkResponse = (val) => {
     if (!val) {
-      setErrors({ ...errors, responseError: true, responseErrorMsg:"Response can't be empty" });
-      
-    } else if (val.length < 30 || val.length >200) {
-      setErrors({ ...errors, responseError: true, responseErrorMsg:"Please try to make response a little longer" });
-      
+      setErrors({
+        ...errors,
+        responseError: true,
+        responseErrorMsg: "Response can't be empty",
+      });
+    } else if (val.length < 30 || val.length > 200) {
+      setErrors({
+        ...errors,
+        responseError: true,
+        responseErrorMsg: "Please try to make response a little longer",
+      });
     } else {
       setErrors({ ...errors, responseError: false });
       setResponse(val);
     }
-  }
+  };
 
   const requestStatusView = () => {
     if (status === "pending") {
@@ -123,8 +144,9 @@ function RequestDetailScreen({ route, navigation }) {
             }}
             onPress={() => {
               setResponse("");
-              setErrors({...errors, contactError:false, subError:false});
-              setAcceptanceModal(true)}}
+              setErrors({ ...errors, contactError: false, subError: false });
+              setAcceptanceModal(true);
+            }}
           />
           <AppButton
             title="Reject"
@@ -135,8 +157,9 @@ function RequestDetailScreen({ route, navigation }) {
             }}
             onPress={() => {
               setResponse("");
-              setErrors({...errors, responseError:false, subError:false})
-              setRejectionModal(true)}}
+              setErrors({ ...errors, responseError: false, subError: false });
+              setRejectionModal(true);
+            }}
           />
         </View>
       );
@@ -213,8 +236,8 @@ function RequestDetailScreen({ route, navigation }) {
               fontWeight: "600",
             }}
           >
-            You accepted the request. Please wait for
-            the response from requester.
+            You accepted the request. Please wait for the response from
+            requester.
           </Text>
         </View>
       );
@@ -410,15 +433,24 @@ function RequestDetailScreen({ route, navigation }) {
             >
               Your Contact No.
             </Text>
-            <TextInput style={styles.acceptTextInput} onChangeText = {(contact)=> checkContact(contact)} keyboardType="numeric" maxLength={10}/>
-            {errors.contactError? <Text  style={{
-                                    alignSelf: "flex-start",
-                                    color: "red",
-                                    marginLeft: 30,
-                                    marginTop: -10
-                                    }}>
-              {errors.contactErrorMsg}
-            </Text>: null}
+            <TextInput
+              style={styles.acceptTextInput}
+              onChangeText={(contact) => checkContact(contact)}
+              keyboardType="numeric"
+              maxLength={10}
+            />
+            {errors.contactError ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  color: "red",
+                  marginLeft: 30,
+                  marginTop: -10,
+                }}
+              >
+                {errors.contactErrorMsg}
+              </Text>
+            ) : null}
             <AppButton
               title="Accept"
               style={{
@@ -428,14 +460,17 @@ function RequestDetailScreen({ route, navigation }) {
               }}
               onPress={handleAccept}
             />
-            {errors.subError? <Text  style={{
-                                    alignSelf: "flex-start",
-                                    color: "red",
-                                    marginLeft: 30,
-                                   
-                                    }}>
-              Input might not be valid! Please try again
-              </Text>:null}
+            {errors.subError ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  color: "red",
+                  marginLeft: 30,
+                }}
+              >
+                Input might not be valid! Please try again
+              </Text>
+            ) : null}
             <Text
               style={{
                 alignSelf: "center",
@@ -510,15 +545,23 @@ function RequestDetailScreen({ route, navigation }) {
             >
               Your Reason for Rejection
             </Text>
-            <TextInput style={styles.rejectTextInput} multiline={true} onChangeText = {(response)=> checkResponse(response)}/>
-            {errors.responseError? <Text  style={{
-                                    alignSelf: "flex-start",
-                                    color: "red",
-                                    marginLeft: 30,
-                                   marginTop: -10
-                                    }}>
-              {errors.responseErrorMsg}
-            </Text>: null}
+            <TextInput
+              style={styles.rejectTextInput}
+              multiline={true}
+              onChangeText={(response) => checkResponse(response)}
+            />
+            {errors.responseError ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  color: "red",
+                  marginLeft: 30,
+                  marginTop: -10,
+                }}
+              >
+                {errors.responseErrorMsg}
+              </Text>
+            ) : null}
             <AppButton
               title="Reject"
               style={{
@@ -529,14 +572,17 @@ function RequestDetailScreen({ route, navigation }) {
               }}
               onPress={handleReject}
             />
-            {errors.subError? <Text  style={{
-                                    alignSelf: "flex-start",
-                                    color: "red",
-                                    marginLeft: 30,
-                                   
-                                    }}>
-              Input might not be valid! Please try again
-              </Text>:null}
+            {errors.subError ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  color: "red",
+                  marginLeft: 30,
+                }}
+              >
+                Input might not be valid! Please try again
+              </Text>
+            ) : null}
             <Text
               style={{
                 alignSelf: "center",

@@ -20,6 +20,20 @@ const height = Dimensions.get("window").height;
 function RequestSent(props) {
   const [requestSent, setRequestSent] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const fetchReqSent = () => {
+    fetch(`${baseUrl.url}/api/bloodRequest/sent`, { method: "GET" })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          setRequestSent(responseJson.results);
+        } else {
+          alert(responseJson.status);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
       fetch(`${baseUrl.url}/api/bloodRequest/sent`, { method: "GET" })
@@ -38,38 +52,39 @@ function RequestSent(props) {
     return unsubscribe;
   }, [props.navigation]);
 
-  const handleDonated = async (requestId)=>{
-    alert(requestId);
-  //   try{
-  //   alert("You pressed the button");
-  //   const decision="marked donated"
-  //   const result = await fetch(`${baseUrl.url}/api/bloodRequests/mark_donated/${requestId}`, {
-  //     method: "PUT",
-  //     headers:{
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({decision:decision}),
-  //   });
-  //   console.log("Result: ", result);
-  // }catch(ex){
-  //   console.log(ex.message);
-  // }
-    
-  }
-
-  const handleNotDonated = ()=>{
-
-  }
-  
-  const DonatedDecision = () => {
-    
+  const handleDonated = async (requestId) => {
+    //alert(requestId);
+    fetch(`${baseUrl.url}/api/bloodRequest/mark_donated/${requestId}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ decision: "marked donated" }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == "success") {
+          alert("request marked donated successfully");
+          fetchReqSent();
+        } else if (responseJson.status == "fail") {
+          alert("something went wrong");
+        } else {
+          alert("Many things went wrong");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const handleNotDonated = () => {};
+
+  const DonatedDecision = () => {};
 
   if (loading === true) {
     return <ActivityIndicator />;
   } else {
-   
     return (
       <FlatList
         data={requestSent}
@@ -154,51 +169,50 @@ function RequestSent(props) {
                   </Text>
                 </View>
 
-                {
-                  (item.requestStatus === "accepted")?
-                   
-                      <View>
-                        <Text style={{ marginLeft: 10, color: "grey" }}>
-                          <MaterialCommunityIcons
-                            name="information-outline"
-                            size={18}
-                            color="grey"
-                          />
-                          Your request is accepted. Mark request as donated if donor has
-                          donated the blood
-                        </Text>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            width: "100%",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                          }}
-                        >
-                          <TouchableOpacity
-                            style={[
-                              styles.donatedButton,
-                              { backgroundColor: colors.success, marginRight: 20 },
-                            ]}
-                            onPress = {()=>{handleDonated(item.requestId)}}
-                          >
-                            <Text style={styles.texts}>Donated</Text>
-                          </TouchableOpacity>
-              
-                          <TouchableOpacity
-                            style={[styles.donatedButton, { backgroundColor: colors.blood }]}
-                            onPress = {handleNotDonated}
-                          >
-                            <Text style={styles.texts}>Not Donated</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    :
-                  
-                   null
-                  
-                }
+                {item.requestStatus === "accepted" ? (
+                  <View>
+                    <Text style={{ marginLeft: 10, color: "grey" }}>
+                      <MaterialCommunityIcons
+                        name="information-outline"
+                        size={18}
+                        color="grey"
+                      />
+                      Your request is accepted. Mark request as donated if donor
+                      has donated the blood
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 10,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={[
+                          styles.donatedButton,
+                          { backgroundColor: colors.success, marginRight: 20 },
+                        ]}
+                        onPress={() => {
+                          handleDonated(item.requestId);
+                        }}
+                      >
+                        <Text style={styles.texts}>Donated</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[
+                          styles.donatedButton,
+                          { backgroundColor: colors.blood },
+                        ]}
+                        onPress={handleNotDonated}
+                      >
+                        <Text style={styles.texts}>Not Donated</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : null}
               </View>
             </View>
           );

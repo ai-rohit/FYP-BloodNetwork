@@ -4,7 +4,7 @@ const router = express.Router();
 var db = require("../dbconfig");
 const { body, param, validationResult } = require("express-validator");
 
-const status = ["pending", "accepted", "rejected", "marked donated", "donated"];
+//status = ["pending", "accepted", "rejected", "marked donated", "donated", "not donated"];
 
 router.get("/", isLoggedIn.isLoggedIn, (req, res) => {
   var userId = req.user.userId;
@@ -26,7 +26,7 @@ router.get("/history", isLoggedIn.isLoggedIn, (req, res) => {
     var userId = req.user.userId;
     var status = "pending";
     db.query(
-      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus != ?)",
+      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, request_details.donorId, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus != ?)",
       [userId, status],
       (error, results) => {
         if (error) {
@@ -133,6 +133,50 @@ router.put(
   async (req, res) => {
     const reqId = req.params.requestId;
     const reqStatus = req.body.decision;
+
+    try {
+      await db.query(
+        "Select * from request_details where requestId = ?",
+        [reqId],
+        async (error, request) => {
+          if (error) {
+            return res.json({ status: "error", message: error.message });
+          }
+          if (request.length < 1) {
+            return res.json({
+              status: "false",
+              data: { Request: "Invalid request! It doesn't exist" },
+            });
+          } else {
+            await db.query(
+              "Update request_details set requestStatus = ? where requestId = ?",
+              [reqStatus, reqId],
+              async (error, result) => {
+                if (error) {
+                  return res.json({ status: "error", message: error.message });
+                }
+                console.log(result);
+                return res.send({
+                  status: "success",
+                  data: { request: result },
+                });
+              }
+            );
+          }
+        }
+      );
+    } catch (ex) {
+      return res.send({ status: "error", message: ex.message });
+    }
+  }
+);
+
+router.put(
+  "/not_donated/:requestId",
+  isLoggedIn.isLoggedIn,
+  async (req, res) => {
+    const reqId = req.params.requestId;
+    const reqStatus = "not donated";
 
     try {
       await db.query(

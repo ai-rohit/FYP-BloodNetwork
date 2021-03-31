@@ -31,6 +31,10 @@ function LoginScreen({ navigation }) {
   const [address, setAddress] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
+  const [resetConfirmPassword, setConfirmResetPassword] = useState("");
 
   const [errors, setErrors] = useState({
     errorMail: false,
@@ -202,6 +206,99 @@ function LoginScreen({ navigation }) {
           console.error(error);
         });
     }
+  };
+
+  const checkResetEmail = (val) => {
+    setResetEmail(val);
+  };
+
+  const checkResetCode = (val) => {
+    setResetCode(val);
+  };
+
+  const checkResetPassword = (pw) => {
+    setResetPassword(pw);
+  };
+
+  const checkResetConfirmPassword = (confirmPw) => {
+    setConfirmResetPassword(confirmPw);
+  };
+
+  const handleNext = () => {
+    fetch(`${baseUrl.url}/api/login_auth/user/reset`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: resetEmail }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          //alert("Reset token sent");
+          setPasswordCodeModal(true);
+        } else {
+          alert("Failed to send reset token");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleResetCodeSub = () => {
+    fetch(`${baseUrl.url}/api/login_auth/user/reset/check_token`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: resetEmail, token: resetCode }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          //alert("Reset token sent");
+          console.log(responseJson);
+          setPasswordResetModal(true);
+        } else {
+          alert("Token didn't match");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleResetPassword = () => {
+    console.log(resetEmail);
+    fetch(`${baseUrl.url}/api/login_auth/user/reset/change_password`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: resetPassword,
+        email: resetEmail,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          console.log(responseJson);
+          alert("Password changed successfully!");
+          setForgotPassWordModal(false);
+          setPasswordCodeModal(false);
+          setPasswordResetModal(false);
+        } else {
+          alert("Something went wrong while changing the password");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -432,6 +529,7 @@ function LoginScreen({ navigation }) {
               placeholder="Email or Mobile number"
               keyboardType="email-address"
               clearButtonMode="always"
+              onChangeText={(email) => checkResetEmail(email)}
             />
           </View>
           <View style={{ flexDirection: "row" }}>
@@ -452,7 +550,7 @@ function LoginScreen({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={{ flexDirection: "row", marginLeft: "50%" }}
-              onPress={() => setPasswordCodeModal(true)}
+              onPress={() => handleNext()}
             >
               <Text style={{ fontSize: 18, color: colors.blood }}>Next</Text>
               <MaterialCommunityIcons
@@ -537,6 +635,7 @@ function LoginScreen({ navigation }) {
                 placeholder="Code"
                 keyboardType="numeric"
                 clearButtonMode="never"
+                onChangeText={(resetCode) => checkResetCode(resetCode)}
               />
             </View>
 
@@ -565,7 +664,7 @@ function LoginScreen({ navigation }) {
                   marginLeft: "49%",
                   marginTop: 10,
                 }}
-                onPress={() => setPasswordResetModal(true)}
+                onPress={() => handleResetCodeSub()}
               >
                 <Text style={{ fontSize: 18, color: colors.blood }}>Next</Text>
                 <MaterialCommunityIcons
@@ -634,6 +733,9 @@ function LoginScreen({ navigation }) {
                 placeholderTextColor="#a9a9a9"
                 maxLength={16}
                 secureTextEntry={true}
+                onChangeText={(val) => {
+                  checkResetPassword(val);
+                }}
               />
 
               <Text style={styles.label}>Confirm Password</Text>
@@ -653,6 +755,9 @@ function LoginScreen({ navigation }) {
                 placeholderTextColor="#a9a9a9"
                 maxLength={16}
                 secureTextEntry={true}
+                onChangeText={(val) => {
+                  checkResetConfirmPassword(val);
+                }}
               />
 
               <View style={{ flexDirection: "row" }}>
@@ -680,22 +785,7 @@ function LoginScreen({ navigation }) {
                     marginLeft: "20%",
                     marginTop: 10,
                   }}
-                  onPress={() => {
-                    Alert.alert(
-                      "Password Changed",
-                      "Password has been changed sucessfully",
-                      [
-                        {
-                          text: "OK",
-                          onPress: () => {
-                            setForgotPassWordModal(false);
-                            setPasswordCodeModal(false);
-                            setPasswordResetModal(false);
-                          },
-                        },
-                      ]
-                    );
-                  }}
+                  onPress={() => handleResetPassword()}
                 >
                   <Text style={{ fontSize: 18, color: colors.blood }}>
                     Change Password

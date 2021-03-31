@@ -48,8 +48,8 @@
         var config = {
             // replace the publicKey with yours
             "publicKey": "test_public_key_30940c8db7964b09924b70daad5dad1e",
-            "productIdentity": "1234567890",
-            "productName": "Dragon",
+            "productIdentity": "bdNetwork_donation",
+            "productName": "Blood Network Donation",
             "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
             "paymentPreference": [
                 "KHALTI",
@@ -59,7 +59,7 @@
                     
                     // hit merchant api for initiating verfication
                     console.log("payload ", payload)
-                    fetch(`http://5351863f1a53.ngrok.io/api/payment/charge`, {
+                    fetch(`http://bd135a915822.ngrok.io/api/payment/charge`, {
                         method: "POST",
                         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
                         body: JSON.stringify({

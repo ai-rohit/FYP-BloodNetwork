@@ -143,9 +143,13 @@ function RequestSent(props) {
                   <Text style={styles.textData}>{item.bloodType}</Text>
                 </View>
 
-                <View style={styles.textContainer}>
+                <View
+                  style={[styles.textContainer, { flexDirection: "column" }]}
+                >
                   <Text style={styles.label}>Your Message: </Text>
-                  <Text style={styles.textData}>{item.donationDetails}</Text>
+                  <Text style={[styles.textData, { marginLeft: 10 }]}>
+                    {item.donationDetails}
+                  </Text>
                 </View>
 
                 <View

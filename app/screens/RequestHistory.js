@@ -1,27 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Linking, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Linking,
+  Dimensions,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import Constants from "expo-constants";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { Fontisto, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 function RequestHistory(props) {
   const [requestHistory, setRequestHistory] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const getReqHistory = () => {
+    fetch(`${baseUrl.url}/api/bloodRequest/history`, { method: "GET" })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          setRequestHistory(responseJson.results);
+          //setLoading(false);
+          //setLoading(false);
+        } else {
+          alert(responseJson.status);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
       fetch(`${baseUrl.url}/api/bloodRequest/history`, { method: "GET" })
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson.status === "success") {
-           
             setRequestHistory(responseJson.results);
             setLoading(false);
             //setLoading(false);
           } else {
-            
             alert(responseJson.status);
           }
         })
@@ -30,9 +52,30 @@ function RequestHistory(props) {
     return unsubscribe;
   }, [props.navigation]);
 
-  const MarkDonation = ()=>{
-    
-  }
+  const handleDonated = (requestId, donationId) => {
+    fetch(
+      `${baseUrl.url}/api/bloodRequest/donated/${requestId}/${donationId}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == false) {
+          alert(responseJson.message);
+        } else if (responseJson.status == true) {
+          getReqHistory();
+          alert("Successful");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   if (loading === true) {
     return <ActivityIndicator />;
@@ -141,39 +184,49 @@ function RequestHistory(props) {
                     {item.donorResponse}
                   </Text>
                 </View>
-                {
-                    (item.requestStatus==="marked donated")?
-                      
-                        <View style={{ width: "100%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        
-                        padding: 5,}}>
-                          <Text style={{color:"grey", marginLeft: 10}}><MaterialCommunityIcons name="information-outline" size={15}/>Receiver marked the request as donated. Approve the donation with the donted date!</Text>
-                        <View style={{flexDirection:"row",marginTop: 5,}}>
-                        <TouchableOpacity
-                              style={[
-                                styles.donatedButton,
-                                { backgroundColor: colors.success, marginRight: 20 },
-                              ]}
-                              //onPress = {handleDonated}
-                            >
-                              <Text style={styles.texts}>Donated</Text>
-                            </TouchableOpacity>
-                
-                            <TouchableOpacity
-                              style={[styles.donatedButton, { backgroundColor: colors.blood }]}
-                              //onPress = {handleNotDonated}
-                            >
-                              <Text style={styles.texts}>Not Donated</Text>
-                            </TouchableOpacity>
-                        </View>
-                        </View>
-                      
-                    :
-                      null
-                    
-                }
+                {item.requestStatus === "marked donated" ? (
+                  <View
+                    style={{
+                      width: "100%",
+                      justifyContent: "center",
+                      alignItems: "center",
+
+                      padding: 5,
+                    }}
+                  >
+                    <Text style={{ color: "grey", marginLeft: 10 }}>
+                      <MaterialCommunityIcons
+                        name="information-outline"
+                        size={15}
+                      />
+                      Receiver marked the request as donated. Approve the
+                      donation with the donted date!
+                    </Text>
+                    <View style={{ flexDirection: "row", marginTop: 5 }}>
+                      <TouchableOpacity
+                        style={[
+                          styles.donatedButton,
+                          { backgroundColor: colors.success, marginRight: 20 },
+                        ]}
+                        onPress={() =>
+                          handleDonated(item.requestId, item.donorId)
+                        }
+                      >
+                        <Text style={styles.texts}>Donated</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[
+                          styles.donatedButton,
+                          { backgroundColor: colors.blood },
+                        ]}
+                        onPress={() => Alert.alert("Donated")}
+                      >
+                        <Text style={styles.texts}>Not Donated</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : null}
               </View>
             );
           }}

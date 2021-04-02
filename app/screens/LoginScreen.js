@@ -17,6 +17,26 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import baseUrl from "../config/baseUrl";
+import PickerComponent from "../components/PickerComponent";
+
+export const districts = [
+  { label: "Kavrepalanchok", value: "loc1" },
+  { label: "Kaski", value: "loc2" },
+  { label: "Chitwan", value: "loc3" },
+  { label: "Dang", value: "loc4" },
+  { label: "Bara", value: "loc5" },
+  { label: "Bhaktapur", value: "loc6" },
+  { label: "Lalitpur", value: "loc7" },
+  { label: "Mustang", value: "loc8" },
+  { label: "Manang", value: "loc9" },
+  { label: "Palpa", value: "loc10" },
+  { label: "Butwal", value: "loc11" },
+  { label: "Mugu", value: "loc12" },
+  { label: "Dolpa", value: "loct13" },
+  { label: "Ilam", value: "loc14" },
+  { label: "Parsa", value: "loc15" },
+  { label: "Arghakhanchi", value: "loc16" },
+];
 
 function LoginScreen({ navigation }) {
   const [userAddress, setUserAddress] = useState("");
@@ -29,6 +49,7 @@ function LoginScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
+  const [district, setDistrict] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [resetEmail, setResetEmail] = useState("");
@@ -59,9 +80,11 @@ function LoginScreen({ navigation }) {
     setAddress("");
     setEmailAddress("");
     setPassword("");
+    setDistrict("");
   };
 
   const handleSignup = () => {
+    clearTextState();
     setSignupModalVisible(!signupModalVisible);
     setErrors({
       ...errors,
@@ -152,6 +175,7 @@ function LoginScreen({ navigation }) {
         firstName: firstName,
         lastName: lastName,
         address: address,
+        userDistrict: district,
         emailAddress: emailAddress,
         password: password,
       }),
@@ -952,6 +976,29 @@ function LoginScreen({ navigation }) {
                 </Text>
               ) : null}
 
+              <Text
+                style={{
+                  alignSelf: "center",
+                  color: colors.blood,
+                  fontSize: 18,
+                  fontWeight: "700",
+                  marginTop: 20,
+                }}
+              >
+                What's Your District?
+              </Text>
+              <PickerComponent
+                selectedItem={district}
+                onSelectedItem={(item) => setDistrict(item.label)}
+                title="Choose a District"
+                items={districts}
+                style={{
+                  marginLeft: 20,
+                  width: "90%",
+                  height: 50,
+                  marginVertical: 10,
+                }}
+              />
               <AppButton
                 title="Next"
                 style={{

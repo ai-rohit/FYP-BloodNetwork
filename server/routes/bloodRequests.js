@@ -222,6 +222,7 @@ router.put(
     var reqId = req.params.requestId;
     var donorId = req.params.donorId;
     const reqStatus = "donated";
+    const donationDate = req.body.donatedDate;
     db.query(
       "Update request_details set requestStatus = ? where requestId=?",
       [reqStatus, reqId],
@@ -229,7 +230,6 @@ router.put(
         if (error) {
           return res.send({ status: false, message: "Something went wrong" });
         }
-        var donationDate = new Date();
         db.query(
           "Update donor_details set lastDonated = ?, numOfDonation = numOfDonation + 1 where donorId=?",
           [donationDate, donorId],
@@ -262,6 +262,7 @@ router.post("/", isLoggedIn.isLoggedIn, (req, res) => {
     donationDetails: req.body.donationDetails,
     donationType: req.body.donationType,
     bloodType: req.body.bloodType,
+    requestedDate: new Date(),
     requesterId: requesterId,
     donorId: req.body.donorId,
   };
@@ -272,13 +273,14 @@ router.post("/", isLoggedIn.isLoggedIn, (req, res) => {
     (error, result) => {
       if (error) {
         res.send({
-          data: error,
+          status: "error",
+          data: error.message,
           message: "Something went wrong",
         });
       } else {
         res.send({
           data: result,
-          message: "success",
+          status: "success",
         });
       }
     }

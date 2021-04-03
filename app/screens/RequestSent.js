@@ -78,9 +78,29 @@ function RequestSent(props) {
       });
   };
 
-  const handleNotDonated = () => {};
-
-  const DonatedDecision = () => {};
+  const handleNotDonated = (requestId) => {
+    fetch(`${baseUrl.url}/api/bloodRequest/not_donated/${requestId}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == "fail") {
+          alert("Something went wrong");
+        } else if (responseJson.status == "success") {
+          fetchReqSent();
+          alert("Successful");
+        } else if (responseJson.status == "error") {
+          alert(responseJson.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   if (loading === true) {
     return <ActivityIndicator />;
@@ -210,7 +230,7 @@ function RequestSent(props) {
                           styles.donatedButton,
                           { backgroundColor: colors.blood },
                         ]}
-                        onPress={handleNotDonated}
+                        onPress={() => handleNotDonated(item.requestId)}
                       >
                         <Text style={styles.texts}>Not Donated</Text>
                       </TouchableOpacity>

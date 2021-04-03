@@ -8,16 +8,34 @@ import {
   Dimensions,
   Alert,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Constants from "expo-constants";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { Fontisto, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 import colors from "../config/colors";
 
 function RequestHistory(props) {
   const [requestHistory, setRequestHistory] = useState("");
   const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState();
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  const handleConfirm = (date) => {
+    setDate(date);
+    hideDatePicker();
+  };
+
+  const hideDatePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+
+  const handleDateTimePicker = () => {
+    setIsDatePickerVisible(true);
+  };
 
   const getReqHistory = () => {
     fetch(`${baseUrl.url}/api/bloodRequest/history`, { method: "GET" })
@@ -61,6 +79,9 @@ function RequestHistory(props) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          donatedDate: date,
+        }),
       }
     )
       .then((response) => response.json())
@@ -70,6 +91,30 @@ function RequestHistory(props) {
         } else if (responseJson.status == true) {
           getReqHistory();
           alert("Successful");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleNotDonated = (requestId) => {
+    fetch(`${baseUrl.url}/api/bloodRequest/not_donated/${requestId}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == "fail") {
+          alert("Something went wrong");
+        } else if (responseJson.status == "success") {
+          getReqHistory();
+          alert("Successful");
+        } else if (responseJson.status == "error") {
+          alert(responseJson.message);
         }
       })
       .catch((error) => {
@@ -202,7 +247,37 @@ function RequestHistory(props) {
                       Receiver marked the request as donated. Approve the
                       donation with the donted date!
                     </Text>
-                    <View style={{ flexDirection: "row", marginTop: 5 }}>
+                    <View style={styles.inputContainer}>
+                      <Text style={[styles.dateLabel, { marginLeft: 15 }]}>
+                        Date of donation
+                      </Text>
+                      <TouchableWithoutFeedback onPress={handleDateTimePicker}>
+                        <View style={styles.dateTimePicker}>
+                          <Text style={{ fontSize: 18 }}>
+                            {date
+                              ? moment(date).format("MMMM Do YYYY")
+                              : "Select a Date"}
+                          </Text>
+                          <MaterialCommunityIcons
+                            name="calendar"
+                            size={20}
+                            style={{ marginLeft: 20, alignSelf: "center" }}
+                          />
+                        </View>
+                      </TouchableWithoutFeedback>
+                      <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        marginBottom: 10,
+                      }}
+                    >
                       <TouchableOpacity
                         style={[
                           styles.donatedButton,
@@ -220,7 +295,7 @@ function RequestHistory(props) {
                           styles.donatedButton,
                           { backgroundColor: colors.blood },
                         ]}
-                        onPress={() => Alert.alert("Donated")}
+                        onPress={() => handleNotDonated(item.requestId)}
                       >
                         <Text style={styles.texts}>Not Donated</Text>
                       </TouchableOpacity>
@@ -279,6 +354,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   texts: { fontSize: 16, fontWeight: "400", color: "#fff" },
+  dateTimePicker: {
+    backgroundColor: "#C8C8C8",
+    borderRadius: 5,
+    height: 50,
+    flexDirection: "row",
+    width: "90%",
+    padding: 15,
+    justifyContent: "center",
+  },
+  inputContainer: {
+    width: "100%",
+    margin: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateLabel: {
+    fontSize: 18,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    fontWeight: "600",
+    alignSelf: "flex-start",
+    marginLeft: 30,
+  },
 });
 
 export default RequestHistory;

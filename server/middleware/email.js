@@ -17,7 +17,7 @@ async function sendMail(data, recipient, recipientName) {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"Khaja Ghar Backend" <bloodNetwork@gmail.com>', // sender address
+      from: '"Blood Network" <bloodNetwork@gmail.com>', // sender address
       to: recipient, // list of receivers
       subject: "Password Reset Mail", // Subject line
       text: "Password Reset Token", // plain text body

@@ -32,7 +32,7 @@ function MoreScreen(props) {
             <View style={{ marginTop: 20 }}>
               <Image
                 style={styles.image}
-                source={require("../assets/chair.jpg")}
+                source={require("../assets/images.png")}
               />
               <Text style={styles.txt}>Rohit Shrestha</Text>
               <Text style={styles.txt}>Newroad, Pokhara</Text>

@@ -523,8 +523,7 @@ function LoginScreen({ navigation }) {
                 marginLeft: 10,
               }}
             >
-              Enter Your Phone no. or Email and we will send you code to reset
-              your password.
+              Enter Your Email and we will send you code to reset your password.
             </Text>
             <View
               style={{
@@ -536,7 +535,7 @@ function LoginScreen({ navigation }) {
             />
 
             <Text style={[styles.label, { marginBottom: 10, marginTop: 20 }]}>
-              Email, Mobile number
+              Email
             </Text>
             <TextInput
               style={{
@@ -550,7 +549,7 @@ function LoginScreen({ navigation }) {
                 color: "#000",
               }}
               autoCapitalize="none"
-              placeholder="Email or Mobile number"
+              placeholder="Email"
               keyboardType="email-address"
               clearButtonMode="always"
               onChangeText={(email) => checkResetEmail(email)}

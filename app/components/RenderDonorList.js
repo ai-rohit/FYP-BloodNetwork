@@ -194,7 +194,7 @@ function RenderDonorList({
         <TouchableHighlight>
           <Image
             style={styles.donorImage}
-            source={require("../assets/chair.jpg")}
+            source={require("../assets/images.png")}
           />
         </TouchableHighlight>
         <View style={styles.detailContainer}>
@@ -203,7 +203,7 @@ function RenderDonorList({
           </Text>
           <Text style={styles.txt}>Blood Group: {bloodGroup}</Text>
           <Text style={styles.txt}>Address: {address}</Text>
-          <Text style={styles.txt}>Age: {age}</Text>
+          <Text style={styles.txt}>Age: 20</Text>
 
           <Text style={styles.txt}>Contact: {contact}</Text>
         </View>

@@ -16,10 +16,13 @@ import baseUrl from "../config/baseUrl";
 import colors from "../config/colors";
 import moment from "moment";
 import AuthContext from "../auth/context";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
 function MyProfileScreen(props) {
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [imageUri, setImageUri] = useState();
 
   useEffect(() => {
     fetch(`${baseUrl.url}/api/profile/me`)
@@ -37,23 +40,27 @@ function MyProfileScreen(props) {
 
   const { setUser } = useContext(AuthContext);
 
-  const handleLogOut = () => {
-    console.log("Logging out");
-    fetch(`${baseUrl.url}/api/login_auth/out`, { method: "GET" })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === true) {
-          setUser(null);
-        } else {
-          alert("Something went wrong!");
-        }
-      })
-      .catch((error) => console.error(error));
+  const handleEditImage = async () => {
+    try {
+      const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (!result.granted) {
+        alert("You need to enable camera permission from settings");
+      } else {
+        props.navigation.navigate("EditPhoto");
+        // const image = await ImagePicker.launchImageLibraryAsync();
+        // if (!image.cancelled) {
+        //   setImageUri(image.uri);
+        // }
+      }
+    } catch (ex) {
+      alert(ex.message);
+    }
   };
 
   if (loading === true) {
     return <ActivityIndicator />;
   } else {
+    console.log(`${baseUrl.url}/${userDetails.user.profileImage}`);
     return (
       <View style={styles.container}>
         <ScrollView style={{ paddingBottom: 20 }}>
@@ -66,13 +73,30 @@ function MyProfileScreen(props) {
                 top: 110,
               }}
             >
-              <Image
-                source={require("../assets/chair.jpg")}
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.imageProfile} />
+              ) : (
+                <Image
+                  source={require("../assets/images.png")}
+                  style={styles.imageProfile}
+                />
+              )}
+              {/* <Image
+                source={{
+                  uri: `http://localhost:3000/${userDetails.user.profileImage}`,
+                }}
                 style={styles.imageProfile}
-              />
+              /> */}
               <Text
                 style={{ fontWeight: "bold", fontSize: 25 }}
               >{`${userDetails.user.firstName} ${userDetails.user.lastName}`}</Text>
+              <Text
+                onPress={() => {
+                  handleEditImage();
+                }}
+              >
+                Change Photo
+              </Text>
             </View>
           </View>
 
@@ -215,10 +239,7 @@ function MyProfileScreen(props) {
               },
             ]}
           >
-            <Text
-              style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}
-              onPress={handleLogOut}
-            >
+            <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
               Settings
             </Text>
             <AntDesign

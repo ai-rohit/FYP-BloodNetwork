@@ -25,6 +25,7 @@ router.post("/charge", async function (req, res) {
         "Content-Type": "application/json",
       },
     });
+    console.log(result);
     const contributionDetails = {
       contributorName: result.data.user.name,
       contributorNumber: result.data.user.mobile,

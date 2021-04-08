@@ -332,7 +332,7 @@ function RequestDetailScreen({ route, navigation }) {
             </View>
           </View>
         </View>
-        <Image source={require("../assets/chair.jpg")} style={styles.image} />
+        <Image source={require("../assets/images.png")} style={styles.image} />
       </View>
 
       <View style={styles.secondView}>

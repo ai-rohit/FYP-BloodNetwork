@@ -5,6 +5,7 @@ var db = require("../dbconfig");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const sendMail = require("../middleware/email");
+const { isLoggedIn } = require("../middleware/user-authentication");
 
 const generateResetToken = () => {
   const token = Math.floor(100000 + Math.random() * 900000);
@@ -41,6 +42,7 @@ router.post("/", (req, res) => {
               status: true,
               message: "Authenticated",
               user: results[0].userId,
+              token: token,
             });
           } else {
             return res.send({
@@ -209,7 +211,7 @@ router.put("/user/reset/change_password", async (req, res) => {
   }
 });
 
-router.get("/out", logout.loggedOut, (req, res) => {
+router.get("/out", isLoggedIn, logout.loggedOut, (req, res) => {
   return res.send({ status: true, details: "logged out successfully" });
 });
 

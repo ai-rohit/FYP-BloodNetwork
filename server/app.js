@@ -47,5 +47,6 @@ app.use("/api/campaigns", campaigns);
 app.use("/api/users", user);
 app.use("/admin", admin);
 app.use("/api/payment", require("./routes/payment"));
+app.use("/api/notifications", require("./routes/notification"));
 
 app.listen(3000, () => console.log("listening to 3000"));

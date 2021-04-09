@@ -18,6 +18,7 @@ import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import baseUrl from "../config/baseUrl";
 import PickerComponent from "../components/PickerComponent";
+import authStorage from "../auth/storage";
 
 export const districts = [
   { label: "Kavrepalanchok", value: "loc1" },
@@ -217,7 +218,9 @@ function LoginScreen({ navigation }) {
         .then((responseJson) => {
           if (responseJson.status === true) {
             const user = responseJson.user;
+            const jwt = responseJson.token;
             authContext.setUser(user);
+            authStorage.storeToken(jwt);
           } else if (responseJson.status === false) {
             setErrors({
               ...errors,

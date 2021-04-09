@@ -3,6 +3,10 @@ const isLoggedIn = require("../middleware/user-authentication");
 const router = express.Router();
 var db = require("../dbconfig");
 const { body, param, validationResult } = require("express-validator");
+const {
+  sendPushNotification,
+  getToken,
+} = require("../middleware/notifications");
 
 //status = ["pending", "accepted", "rejected", "marked donated", "donated", "not donated"];
 
@@ -252,7 +256,7 @@ router.put(
   }
 );
 
-router.post("/", isLoggedIn.isLoggedIn, (req, res) => {
+router.post("/", isLoggedIn.isLoggedIn, async (req, res) => {
   var requesterId = req.user.userId;
   const donorRequest = {
     receiverName: req.body.receiverName,
@@ -272,7 +276,7 @@ router.post("/", isLoggedIn.isLoggedIn, (req, res) => {
     donorRequest,
     (error, result) => {
       if (error) {
-        res.send({
+        return res.send({
           status: "error",
           data: error.message,
           message: "Something went wrong",
@@ -282,6 +286,27 @@ router.post("/", isLoggedIn.isLoggedIn, (req, res) => {
           data: result,
           status: "success",
         });
+        db.query(
+          "Select userId from donor_details where donorId = ?",
+          [req.body.donorId],
+          async (error, result) => {
+            if (error) return;
+            else {
+              db.query(
+                "Select notificationToken from user_details where userId = ?",
+                [result[0].userId],
+                (error, token) => {
+                  if (error) return;
+                  sendPushNotification(
+                    (targetExpoPushToken = token[0].notificationToken),
+                    (title = "New Blood Request"),
+                    (message = "You got a new blood request")
+                  );
+                }
+              );
+            }
+          }
+        );
       }
     }
   );

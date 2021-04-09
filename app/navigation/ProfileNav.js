@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyProfileScreen from "../screens/MyProfileScreen";
-import EditPhotoScreen from "../screens/EditPhotoScreen";
+//import EditPhotoScreen from "../screens/EditPhotoScreen";
 import colors from "../config/colors";
 import { DefaultTheme } from "@react-navigation/native";
 
@@ -14,11 +14,11 @@ const ProfileStack = () => (
       component={MyProfileScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
       name="EditPhoto"
       component={EditPhotoScreen}
       options={{ headerShown: false }}
-    />
+    /> */}
   </Stack.Navigator>
 );
 export default ProfileStack;

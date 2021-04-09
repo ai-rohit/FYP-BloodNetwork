@@ -1,53 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Dimensions, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AppButton from "../components/AppButton";
 import baseUrl from "../config/baseUrl";
 
 function EditPhotoScreen(props) {
+  const { image } = props.route.params;
   const [imageUri, setImageUri] = useState();
 
-  const handleSelectImage = async () => {
-    try {
-      const image = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 0.5,
-      });
-      if (!image.cancelled) {
-        let localUri = image.uri;
-        let fileName = localUri.split("/").pop();
-        // setImageUri(image.uri);
-        let match = /\.(\w+)$/.exec(fileName);
-        let type = match ? `image/${match[1]}` : `image`;
+  // const handleSelectImage = async () => {
+  //   try {
+  //     const image = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       quality: 0.5,
+  //     });
+  //     if (!image.cancelled) {
+  //       let localUri = image.uri;
+  //       let fileName = localUri.split("/").pop();
+  //       // setImageUri(image.uri);
+  //       let match = /\.(\w+)$/.exec(fileName);
+  //       let type = match ? `image/${match[1]}` : `image`;
 
-        let formData = new FormData();
+  //       let formData = new FormData();
 
-        formData.append("profileImage", {
-          uri: localUri,
-          name: fileName,
-          type,
-        });
+  //       formData.append("profileImage", {
+  //         uri: localUri,
+  //         name: fileName,
+  //         type,
+  //       });
 
-        await fetch(`${baseUrl.url}/api/users/image`, {
-          method: "POST",
-          body: formData,
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-          .then((response) => response.json())
-          .then((responseJson) => {
-            alert(responseJson);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    } catch (ex) {
-      Alert.alert(ex.message);
-      console.log(ex);
-    }
-  };
+  //       await fetch(`${baseUrl.url}/api/users/image`, {
+  //         method: "POST",
+  //         body: formData,
+  //         headers: {
+  //           "content-type": "multipart/form-data",
+  //         },
+  //       })
+  //         .then((response) => response.json())
+  //         .then((responseJson) => {
+  //           alert(responseJson);
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   } catch (ex) {
+  //     Alert.alert(ex.message);
+  //     console.log(ex);
+  //   }
+  // };
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>

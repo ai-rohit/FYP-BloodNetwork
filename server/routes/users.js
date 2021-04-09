@@ -25,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
+  // limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter: fileFilter,
 });
 
@@ -119,11 +119,12 @@ router.post("/", async (req, res) => {
 
 router.put("/image", isLoggedIn, type, async (req, res) => {
   try {
+    console.log(req.file);
     if (!req.file) {
       return res.send({ status: "fail", data: { image: "No image selected" } });
     }
     const userId = req.user.userId;
-    const image = req.file.path;
+    const image = req.file.originalname;
     db.query(
       "Update user_details set profileImage = ? where userId = ?",
       [image, userId],

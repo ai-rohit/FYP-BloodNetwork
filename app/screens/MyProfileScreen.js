@@ -23,13 +23,30 @@ function MyProfileScreen(props) {
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [imageUri, setImageUri] = useState();
+  const [imageChosen, setImageChosen] = useState(false);
 
-  useEffect(() => {
+  const getProfile = () => {
     fetch(`${baseUrl.url}/api/profile/me`)
       .then((response) => response.json())
       .then((json) => {
         if (json.status === "success") {
           setUserDetails(json.userDetails);
+          setImageUri(json.userDetails.user.profileImage);
+          setLoading(false);
+        } else {
+          Alert.alert("Something went wrong");
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+  useEffect(() => {
+    setImageChosen(false);
+    fetch(`${baseUrl.url}/api/profile/me`)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status === "success") {
+          setUserDetails(json.userDetails);
+          setImageUri(json.userDetails.user.profileImage);
           setLoading(false);
         } else {
           Alert.alert("Something went wrong");
@@ -46,21 +63,62 @@ function MyProfileScreen(props) {
       if (!result.granted) {
         alert("You need to enable camera permission from settings");
       } else {
-        props.navigation.navigate("EditPhoto");
-        // const image = await ImagePicker.launchImageLibraryAsync();
-        // if (!image.cancelled) {
-        //   setImageUri(image.uri);
-        // }
+        // props.navigation.navigate("EditPhoto", {
+        //   image: userDetails.user.profileImage,
+        // });
+        const image = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+
+        if (!image.cancelled) {
+          setImageChosen(true);
+          setImageUri(image.uri);
+        }
       }
     } catch (ex) {
       alert(ex.message);
     }
   };
 
+  const handleUploadImage = async () => {
+    let body = new FormData();
+    body.append("profileImage", {
+      uri: imageUri,
+      name: imageUri.split("/").pop(),
+      type: "image/png",
+    });
+    // body.append("Content-Type", "image/png");
+
+    fetch(`${baseUrl.url}/api/users/image`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: body,
+    })
+      .then((res) => res.json())
+      .then((resJson) => {
+        if (resJson.status === "success") {
+          alert("Image uploaded successfully");
+          getProfile();
+          setImageChosen(false);
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
+
+  const handleDeleteImage = async () => {
+    Alert.alert("Delete Image", "Do you want to delete your photo?");
+  };
+
   if (loading === true) {
     return <ActivityIndicator />;
   } else {
-    console.log(`${baseUrl.url}/${userDetails.user.profileImage}`);
     return (
       <View style={styles.container}>
         <ScrollView style={{ paddingBottom: 20 }}>
@@ -73,30 +131,65 @@ function MyProfileScreen(props) {
                 top: 110,
               }}
             >
-              {imageUri ? (
-                <Image source={{ uri: imageUri }} style={styles.imageProfile} />
+              {imageChosen ? (
+                <Image
+                  source={{
+                    uri: imageUri,
+                  }}
+                  style={styles.imageProfile}
+                />
               ) : (
                 <Image
-                  source={require("../assets/images.png")}
+                  source={{
+                    uri: `http://192.168.100.10:3000/uploads/` + imageUri,
+                  }}
                   style={styles.imageProfile}
                 />
               )}
-              {/* <Image
-                source={{
-                  uri: `http://localhost:3000/${userDetails.user.profileImage}`,
-                }}
-                style={styles.imageProfile}
-              /> */}
               <Text
                 style={{ fontWeight: "bold", fontSize: 25 }}
               >{`${userDetails.user.firstName} ${userDetails.user.lastName}`}</Text>
-              <Text
-                onPress={() => {
-                  handleEditImage();
-                }}
-              >
-                Change Photo
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <View>
+                  <Text
+                    onPress={() => {
+                      handleEditImage();
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="camera-image"
+                      size={30}
+                      color="grey"
+                    />
+                  </Text>
+                </View>
+                {imageChosen ? (
+                  <Text
+                    onPress={() => {
+                      handleUploadImage();
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="file-upload"
+                      size={30}
+                      color="grey"
+                    />
+                  </Text>
+                ) : null}
+                {imageUri === "images.png" ? (
+                  <Text
+                    onPress={() => {
+                      handleDeleteImage();
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="delete-circle"
+                      size={30}
+                      color="grey"
+                    />
+                  </Text>
+                ) : null}
+              </View>
             </View>
           </View>
 

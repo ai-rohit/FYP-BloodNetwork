@@ -14,6 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import PaymentScreen from "./app/screens/PaymentScreen";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import storage from "./app/auth/storage";
+import { Root } from "popup-ui";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -40,12 +41,14 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <NavigationContainer ref={navigationRef}>
-        <StatusBar style="dark" />
-        {user ? <AppNavigator /> : <AuthNav />}
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <Root>
+      <AuthContext.Provider value={{ user, setUser }}>
+        <NavigationContainer ref={navigationRef}>
+          <StatusBar style="dark" />
+          {user ? <AppNavigator /> : <AuthNav />}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </Root>
     // <PaymentScreen />
   );
 }

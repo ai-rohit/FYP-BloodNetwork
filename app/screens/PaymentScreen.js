@@ -17,6 +17,7 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
+import { Root, Popup } from "popup-ui";
 
 function PaymentScreen(props) {
   const { navigation } = props;
@@ -118,6 +119,17 @@ function PaymentScreen(props) {
             console.log(responseJson);
             if (responseJson.status == "success") {
               console.log("Payment Successful");
+              clearState();
+              setOtpModalVisible(false);
+              Popup.show({
+                type: "Success",
+                title: "Donation completed",
+                button: true,
+                textBody: "Thank you for your donation",
+                autoClose: true,
+                buttontext: "Ok",
+                callback: () => Popup.hide(),
+              });
               //window.location.replace("http://www.w3schools.com");
             } else {
               clearState();
@@ -141,7 +153,7 @@ function PaymentScreen(props) {
     setToken("");
   };
   return (
-    <>
+    <Root>
       <SafeAreaView style={{ flex: 1, height: "100%" }}>
         <View style={styles.topView}>
           <Image
@@ -383,7 +395,7 @@ function PaymentScreen(props) {
           </View>
         </Modal>
       </SafeAreaView>
-    </>
+    </Root>
   );
 }
 const styles = StyleSheet.create({

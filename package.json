@@ -31,6 +31,7 @@
     "jwt-decode": "^3.1.2",
     "lottie-react-native": "~2.6.1",
     "moment": "^2.29.1",
+    "popup-ui": "^1.2.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",

@@ -18,6 +18,8 @@ import moment from "moment";
 import AuthContext from "../auth/context";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import { Root, Popup } from "popup-ui";
+import PopupUI from "../components/Popup";
 
 function MyProfileScreen(props) {
   const [userDetails, setUserDetails] = useState([]);
@@ -102,9 +104,23 @@ function MyProfileScreen(props) {
       .then((res) => res.json())
       .then((resJson) => {
         if (resJson.status === "success") {
-          alert("Image uploaded successfully");
+          //alert("Image uploaded successfully");
           getProfile();
           setImageChosen(false);
+          console.log("Hello");
+          PopupUI(
+            (type = "Success"),
+            (title = "Image Uploaded"),
+            (textBody = "Your profile image was uploaded successfully")
+          );
+          // Popup.show({
+          //   type: "Success",
+          //   title: "Upload completed",
+          //   button: true,
+          //   textBody: "Your profile image was uploaded successfully",
+          //   buttonText: "Ok",
+          //   callback: () => Popup.hide(),
+          // });
         }
       })
       .catch((error) => {

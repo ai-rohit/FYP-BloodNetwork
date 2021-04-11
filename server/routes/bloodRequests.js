@@ -30,7 +30,7 @@ router.get("/history", isLoggedIn.isLoggedIn, (req, res) => {
     var userId = req.user.userId;
     var status = "pending";
     db.query(
-      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, request_details.donorId, donorResponse, requestStatus FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus != ?)",
+      "SELECT requestId, receiverName, receiverAddress, receiverNumber, requirementDays, donationType, request_details.bloodType, request_details.donorId, donorResponse, requestStatus, request_details.requestedDate FROM request_details inner join donor_details on request_details.donorId = donor_details.donorId inner join user_details on user_details.userId = donor_details.userId where user_details.userId = ? and (request_details.requestStatus != ?)",
       [userId, status],
       (error, results) => {
         if (error) {
@@ -48,7 +48,7 @@ router.get("/sent", isLoggedIn.isLoggedIn, (req, res) => {
   try {
     var userId = req.user.userId;
     db.query(
-      "SELECT donor_details.firstName, donor_details.lastName, donor_details.address, donorDistrict, donorContact, showContact, requestStatus, donorResponse, donationDetails, requestId, request_details.bloodType FROM request_details join donor_details on donor_details.donorId = request_details.donorId join user_details on donor_details.donorId = user_details.userId where requesterId=?",
+      "SELECT donor_details.firstName, donor_details.lastName, donor_details.address, donorDistrict, donorContact, showContact, requestStatus, donorResponse, donationDetails, requestId, request_details.bloodType, request_details.requestedDate FROM request_details join donor_details on donor_details.donorId = request_details.donorId join user_details on donor_details.donorId = user_details.userId where requesterId=?",
       [userId],
       (error, results) => {
         if (error) {

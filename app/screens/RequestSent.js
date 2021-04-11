@@ -13,6 +13,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../config/colors";
 import { Fontisto, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import moment from "moment";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -134,6 +135,13 @@ function RequestSent(props) {
                   />
                   <Text style={[styles.textData, { marginLeft: 10 }]}>
                     {item.address}, {item.donorDistrict}
+                  </Text>
+                </View>
+
+                <View style={styles.textContainer}>
+                  <Text style={styles.label}>Requested Date</Text>
+                  <Text style={[styles.textData, { marginLeft: 10 }]}>
+                    {moment(item.requestedDate).format("YYYY-MM-DD")}
                   </Text>
                 </View>
 

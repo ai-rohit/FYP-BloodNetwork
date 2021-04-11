@@ -154,6 +154,13 @@ function RequestHistory(props) {
                   <Text style={styles.textData}>{item.bloodType}</Text>
                 </View>
 
+                <View style={styles.textContainer}>
+                  <Text style={styles.label}>Requested Date: </Text>
+                  <Text style={styles.textData}>
+                    {moment(item.requestedDate).format("YYYY-MM-DD")}
+                  </Text>
+                </View>
+
                 <View
                   style={{
                     backgroundColor: "#f5f5f5",

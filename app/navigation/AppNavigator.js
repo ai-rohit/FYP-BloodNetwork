@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,10 +10,12 @@ import HomeStack from "./HomeStack";
 import { createStackNavigator } from "@react-navigation/stack";
 import MoreStack from "./MoreScreenNav";
 import RequestStack from "./RequestStack";
-import { useEffect } from "react/cjs/react.development";
+
 import baseUrl from "../config/baseUrl";
 import { Alert } from "react-native";
 import navigation from "./rootNavigation";
+import { useDeviceOrientation } from "@react-native-community/hooks";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +67,7 @@ const AppNavigator = () => {
     }
   };
 
+  const orientation = useDeviceOrientation();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -81,6 +84,7 @@ const AppNavigator = () => {
               name="home"
               size={35}
               color={colors.blood}
+              style={{ paddingRight: orientation.landscape === true ? 40 : 0 }}
             />
           ),
         }}
@@ -90,7 +94,12 @@ const AppNavigator = () => {
         component={RequestStack}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Fontisto name="blood" size={30} color={colors.blood} />
+            <Fontisto
+              name="blood"
+              size={30}
+              color={colors.blood}
+              style={{ paddingRight: orientation.landscape === true ? 20 : 0 }}
+            />
           ),
         }}
       />
@@ -103,6 +112,7 @@ const AppNavigator = () => {
               name="hand-heart"
               size={30}
               color={colors.blood}
+              style={{ paddingRight: orientation.landscape === true ? 40 : 0 }}
             />
           ),
         }}
@@ -112,7 +122,12 @@ const AppNavigator = () => {
         component={MoreStack}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Feather name="more-horizontal" size={35} color={colors.blood} />
+            <Feather
+              name="more-horizontal"
+              size={35}
+              color={colors.blood}
+              style={{ paddingRight: orientation.landscape === true ? 40 : 0 }}
+            />
           ),
         }}
       />

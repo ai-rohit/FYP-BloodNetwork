@@ -121,7 +121,10 @@ function MyProfileScreen(props) {
   } else {
     return (
       <View style={styles.container}>
-        <ScrollView style={{ paddingBottom: 20 }}>
+        <ScrollView
+          style={{ paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.topView}>
             <View
               style={{

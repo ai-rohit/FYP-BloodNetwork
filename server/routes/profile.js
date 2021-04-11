@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/me", isLoggedIn.isLoggedIn, (req, res) => {
   var user = req.user;
+  console.log(req.user);
   //res.send(user);
   const userDetails = {};
   if (user.role !== "donor") {

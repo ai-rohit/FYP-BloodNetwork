@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  BackHandler,
+  Image,
+  ScrollView,
+  Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -330,21 +332,39 @@ function LoginScreen({ navigation }) {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
-        <Text
-          style={{
-            color: "#770001",
-            fontSize: 30,
-            fontWeight: "bold",
-            marginLeft: Platform.OS === "android" ? 35 : 35,
-            marginTop: 20,
-            marginBottom: -20,
-          }}
-        >
-          Welcome to Blood Network!
-        </Text>
+      <ScrollView style={styles.container}>
+        <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+          <Image
+            source={require("../assets/logo.png")}
+            style={{ height: 180, width: 180, marginTop: 20 }}
+          />
+          <Text
+            style={{
+              position: "absolute",
+              color: "#770001",
+              fontSize: 40,
+              fontWeight: "bold",
+              left: 150,
+              top: 60,
+            }}
+          >
+            Blood
+          </Text>
+          <Text
+            style={{
+              position: "absolute",
+              color: "#770001",
+              fontSize: 40,
+              fontWeight: "bold",
+              left: 180,
+              top: 100,
+            }}
+          >
+            Network
+          </Text>
+        </View>
 
-        <View style={{ width: "100%", marginTop: -30 }}>
+        <View style={{ width: "100%", marginTop: -110 }}>
           <View
             style={{
               width: "100%",
@@ -468,7 +488,7 @@ function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </SafeAreaView>
+      </ScrollView>
 
       <Modal
         visible={forgotPasswordModal}
@@ -1214,8 +1234,9 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f2f7f9",
     flex: 1,
+    paddingTop: Dimensions.get("window").height / 9,
     // justifyContent: "center",
     // alignItems: "center",
     // alignContent: "center"

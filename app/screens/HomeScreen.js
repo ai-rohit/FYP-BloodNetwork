@@ -10,19 +10,31 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import ProfileComponent from "../components/ProfileComponent";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import baseUrl from "../config/baseUrl";
+import storage from "../auth/storage";
+import { color } from "react-native-reanimated";
 
 function HomeScreen(props) {
   const [userProfile, setUserProfile] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState();
 
+  // const genToken = async () => {
+  //   const token = await storage.getToken();
+  //   setToken(token);
+  // };
   useEffect(() => {
     let unmounted = false;
-
-    fetch(`${baseUrl.url}/api/profile/me`)
+    //genToken();
+    //console.log(token);
+    fetch(`${baseUrl.url}/api/profile/me`, {
+      // headers: {
+      //   Authorization: "Bearer " + token,
+      // },
+    })
       .then((response) => response.json())
       .then((json) => {
         if (!unmounted) {
@@ -50,7 +62,7 @@ function HomeScreen(props) {
         >
           <View style={styles.homeProfile}>
             <ProfileComponent
-              image={require("../assets/chair.jpg")}
+              image={userProfile.user.profileImage}
               title={`${userProfile.user.firstName} ${userProfile.user.lastName}`}
               subTitle={userProfile.user.address}
               navigation={props.navigation}
@@ -63,10 +75,14 @@ function HomeScreen(props) {
               onPress={() => props.navigation.navigate("FindDonor")}
             >
               <View style={styles.home}>
-                <Image
-                  style={styles.image}
-                  source={require("../assets/chair.jpg")}
-                />
+                <View style={styles.iconContainer}>
+                  <MaterialIcons
+                    name="person-search"
+                    size={20}
+                    color={"#fea064"}
+                    // style={{ marginTop: 20, marginRight: 20 }}
+                  />
+                </View>
                 <View style={{ flexShrink: 1 }}>
                   <Text style={{ fontSize: 18, fontWeight: "500" }}>
                     Find Donors
@@ -114,10 +130,16 @@ function HomeScreen(props) {
               onPress={() => props.navigation.navigate("BecomeDonor")}
             >
               <View style={styles.home}>
-                <Image
-                  style={styles.image}
-                  source={require("../assets/chair.jpg")}
-                />
+                <View
+                  style={[styles.iconContainer, { backgroundColor: "#e5f9fb" }]}
+                >
+                  <MaterialCommunityIcons
+                    name="hand-heart"
+                    size={20}
+                    color={"#00b6d3"}
+                    // style={{ marginTop: 20, marginRight: 20 }}
+                  />
+                </View>
                 <View style={{ flexShrink: 1 }}>
                   <Text style={{ fontSize: 18, fontWeight: "500" }}>
                     Become a Donor
@@ -166,10 +188,16 @@ function HomeScreen(props) {
               onPress={() => props.navigation.navigate("BloodBank")}
             >
               <View style={styles.home}>
-                <Image
-                  style={styles.image}
-                  source={require("../assets/chair.jpg")}
-                />
+                <View
+                  style={[styles.iconContainer, { backgroundColor: "#fadce2" }]}
+                >
+                  <MaterialCommunityIcons
+                    name="hospital-marker"
+                    size={20}
+                    color={colors.blood}
+                    style={{ opacity: 0.9 }}
+                  />
+                </View>
                 <View style={{ flexShrink: 1, marginVertical: 10 }}>
                   <Text style={{ fontSize: 18, fontWeight: "500" }}>
                     Blood Banks Near Me
@@ -255,6 +283,16 @@ const styles = StyleSheet.create({
   homeProfile: {
     marginTop: 5,
     width: "100%",
+  },
+  iconContainer: {
+    height: 35,
+    width: 35,
+    backgroundColor: "#ffe7d7",
+    borderRadius: 17.5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    marginHorizontal: 10,
   },
 });
 

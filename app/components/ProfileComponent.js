@@ -24,10 +24,13 @@ function HomeComponent({ image, title, subTitle, icon, navigation }) {
       })
       .catch((error) => console.error(error));
   };
-
+  console.log(image);
   return (
     <View style={styles.profile}>
-      <Image style={styles.image} source={image} />
+      <Image
+        style={styles.image}
+        source={{ uri: `http://192.168.100.10:3000/uploads/` + image }}
+      />
       <View style={styles.profileContainer}>
         <Text style={{ color: "white", fontWeight: "600", fontSize: 20 }}>
           {title}

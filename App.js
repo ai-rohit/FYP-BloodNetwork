@@ -19,25 +19,25 @@ export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
-  const restoreToken = async () => {
-    const token = await storage.getToken();
-    if (!token) return;
-    setUser(jwtDecode(token));
-    //console.log(user);
-  };
+  // const restoreToken = async () => {
+  //   const token = await storage.getToken();
+  //   if (!token) return;
+  //   setUser(jwtDecode(token));
+  //   //console.log(user);
+  // };
 
-  if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={restoreToken}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
-    );
-  }
-  // useEffect(() => {
-  //   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-  // }, []);
+  // if (!isReady) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={restoreToken}
+  //       onFinish={() => setIsReady(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -46,7 +46,7 @@ export default function App() {
         {user ? <AppNavigator /> : <AuthNav />}
       </NavigationContainer>
     </AuthContext.Provider>
-    //<PaymentScreen/>
+    // <PaymentScreen />
   );
 }
 

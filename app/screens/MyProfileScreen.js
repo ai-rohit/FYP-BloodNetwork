@@ -113,14 +113,6 @@ function MyProfileScreen(props) {
             (title = "Image Uploaded"),
             (textBody = "Your profile image was uploaded successfully")
           );
-          // Popup.show({
-          //   type: "Success",
-          //   title: "Upload completed",
-          //   button: true,
-          //   textBody: "Your profile image was uploaded successfully",
-          //   buttonText: "Ok",
-          //   callback: () => Popup.hide(),
-          // });
         }
       })
       .catch((error) => {

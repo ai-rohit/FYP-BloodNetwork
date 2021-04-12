@@ -46,7 +46,7 @@ router.post("/charge", async function (req, res) {
       }
     );
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.json({ status: "error", message: error.message });
   }
 });

@@ -117,6 +117,40 @@ router.post("/", async (req, res) => {
   );
 });
 
+router.put("/", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const address = req.body.address;
+    const userDistrict = req.body.userDistrict;
+
+    db.query(
+      "Select * from user_details where userId = ?",
+      [userId],
+      (error, result) => {
+        if (error) return res.send({ status: "error", message: error.message });
+
+        db.query(
+          "Update user_details set firstName = ?, lastName = ?, address=?, userDistrict = ? where userId = ?",
+          [firstName, lastName, address, userDistrict, userId],
+          (error, result) => {
+            if (error)
+              return res.send({ status: "error", message: error.message });
+
+            return res.send({
+              status: "success",
+              data: { User: "User updated successully" },
+            });
+          }
+        );
+      }
+    );
+  } catch (ex) {
+    return res.send({ status: "error", message: ex.message });
+  }
+});
+
 router.put("/image", isLoggedIn, type, async (req, res) => {
   try {
     console.log(req.file);

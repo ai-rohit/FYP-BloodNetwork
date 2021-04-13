@@ -22,7 +22,7 @@
     "expo-image-picker": "~9.2.0",
     "expo-linear-gradient": "~8.4.0",
     "expo-location": "~10.0.0",
-    "expo-notifications": "~0.8.2",
+    "expo-notifications": "^0.11.4",
     "expo-permissions": "~10.0.0",
     "expo-screen-orientation": "~2.1.0",
     "expo-secure-store": "~9.3.0",
@@ -45,7 +45,7 @@
     "react-native-screens": "~2.15.0",
     "react-native-svg": "12.1.0",
     "react-native-tab-view": "^2.16.0",
-    "react-native-web": "~0.13.12",
+    "react-native-web": "^0.15.6",
     "react-native-webview": "11.0.0"
   },
   "devDependencies": {

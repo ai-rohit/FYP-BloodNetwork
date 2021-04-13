@@ -8,6 +8,9 @@ import CampaignScreen from "../screens/CampaignScreen";
 import RequestStatus from "../screens/RequestStatus";
 import PaymentScreen from "../screens/PaymentScreen";
 import ProfileStack from "./ProfileNav";
+import EditUserScreen from "../screens/EditUserScreen";
+import SettingScreen from "../screens/SettingScreen";
+import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +44,18 @@ const MoreStack = () => (
       name="Donation"
       component={PaymentScreen}
       options={{ headerTitle: "Make Donations" }}
+    />
+
+    <Stack.Screen name="Settings" component={SettingScreen} />
+    <Stack.Screen
+      name="EditUser"
+      component={EditUserScreen}
+      options={{ headerShown: true }}
+    />
+    <Stack.Screen
+      name="ChangePassword"
+      component={ChangePasswordScreen}
+      options={{ headerShown: true }}
     />
   </Stack.Navigator>
 );

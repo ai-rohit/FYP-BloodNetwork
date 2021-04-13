@@ -12,7 +12,6 @@ import {
   Alert,
 } from "react-native";
 import { WebView } from "react-native-webview";
-const PaymentWeb = require("../components/index.html");
 import * as ScreenOrientation from "expo-screen-orientation";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";

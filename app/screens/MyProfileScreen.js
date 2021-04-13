@@ -43,19 +43,22 @@ function MyProfileScreen(props) {
   };
   useEffect(() => {
     setImageChosen(false);
-    fetch(`${baseUrl.url}/api/profile/me`)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.status === "success") {
-          setUserDetails(json.userDetails);
-          setImageUri(json.userDetails.user.profileImage);
-          setLoading(false);
-        } else {
-          Alert.alert("Something went wrong");
-        }
-      })
-      .catch((error) => console.error(error));
-  }, []);
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      fetch(`${baseUrl.url}/api/profile/me`)
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.status === "success") {
+            setUserDetails(json.userDetails);
+            setImageUri(json.userDetails.user.profileImage);
+            setLoading(false);
+          } else {
+            Alert.alert("Something went wrong");
+          }
+        })
+        .catch((error) => console.error(error));
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   const { setUser } = useContext(AuthContext);
 
@@ -342,6 +345,12 @@ function MyProfileScreen(props) {
                 marginTop: 10,
               },
             ]}
+            onPress={() =>
+              props.navigation.navigate("Settings", {
+                user: userDetails.user,
+                donor: userDetails.donor ? userDetails.donor : "not a donor",
+              })
+            }
           >
             <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
               Settings

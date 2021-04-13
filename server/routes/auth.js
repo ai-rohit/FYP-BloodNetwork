@@ -211,6 +211,58 @@ router.put("/user/reset/change_password", async (req, res) => {
   }
 });
 
+router.put("/password", isLoggedIn, async (req, res) => {
+  try {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+
+    if (newPassword !== confirmPassword) {
+      return res.json({
+        status: "fail",
+        data: { Password: "Confirm password and new password doesn't match" },
+      });
+    }
+
+    db.query(
+      "Select * from user_details where userId = ?",
+      [req.user.userId],
+      async (error, result) => {
+        if (error) {
+          return res.json({
+            status: "error",
+            message: error.message,
+          });
+        }
+        console.log(result[0].password);
+        console.log(await bcrypt.compare(oldPassword, result[0].password));
+        if (!(await bcrypt.compare(oldPassword, result[0].password))) {
+          return res.json({
+            status: "fail",
+            data: { Password: "Incorrect current password" },
+          });
+        }
+
+        db.query(
+          "Update user_details set password = ?",
+          [await bcrypt.hashSync(newPassword)],
+          (error, result) => {
+            if (error) {
+              return res.json({ status: "error", message: error.message });
+            }
+            return res.json({
+              status: "success",
+              data: { Password: "Password changed successfully!" },
+            });
+          }
+        );
+      }
+    );
+  } catch (ex) {
+    return res.send({ status: "error", message: ex.message });
+  }
+});
+
 router.get("/out", isLoggedIn, logout.loggedOut, (req, res) => {
   return res.send({ status: true, details: "logged out successfully" });
 });

@@ -27,4 +27,61 @@ router.get("/:location/:bloodType", isLoggedIn.isLoggedIn, (req, res) => {
   );
 });
 
+router.put("/", isLoggedIn.isLoggedIn, (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const donorData = req.body.donorData;
+    db.query(
+      "Select * from donor_details where userId = ?",
+      [userId],
+      (error, result) => {
+        if (error) {
+          return res.json({
+            status: "error",
+            message: error.message,
+          });
+        }
+        if (result.length < 1) {
+          return res.json({
+            status: "false",
+            data: {
+              donor: "Can't find Donor!",
+            },
+          });
+        }
+
+        db.query(
+          "Update donor_details set firstName = ?, lastName = ?, address = ?, donorDistrict = ?, donorProvince = ?, donorContact = ?, showContact = ?, bloodType = ? where userId = ?",
+          [
+            donorData.firstName,
+            donorData.lastName,
+            donorData.address,
+            donorData.donorDistrict,
+            donorData.donorProvince,
+            donorData.donorContact,
+            donorData.showContact,
+            donorData.bloodType,
+            userId,
+          ],
+          (error, result) => {
+            if (error) {
+              return res.json({ status: "error", message: error.message });
+            }
+
+            res.json({
+              status: "success",
+              data: { donor: "Donor data updated successfully" },
+            });
+          }
+        );
+      }
+    );
+  } catch (ex) {
+    return res.json({
+      status: "error",
+      message: ex.message,
+    });
+  }
+});
+
 module.exports = router;

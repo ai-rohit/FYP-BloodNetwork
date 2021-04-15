@@ -4,7 +4,7 @@ const { promisify } = require("util");
 
 const readFile = promisify(fs.readFile);
 
-async function sendMail(data, recipient, recipientName) {
+async function sendMail(data, recipient, recipientName, html) {
   // create reusable transporter object using the default SMTP transport
   try {
     let transporter = nodemailer.createTransport({
@@ -21,11 +21,10 @@ async function sendMail(data, recipient, recipientName) {
       to: recipient, // list of receivers
       subject: "Password Reset Mail", // Subject line
       text: "Password Reset Token", // plain text body
-      html: data,
-      //   html: await (
-      //     await readFile("./views/email/passwordVerification.html", "utf8")
-      //   )
-      //     .replace("___token___", data)
+      //html: data,
+      html: await (
+        await readFile("../server/views/email/forgotPassword.html", "utf8")
+      ).replace("___token___", data),
       //     .replace("___name___", recipientName), // html body
     });
     return Promise.resolve("Mail sent");

@@ -7,6 +7,7 @@ const router = express.Router();
 const sendMail = require("../middleware/email");
 const { isLoggedIn } = require("../middleware/user-authentication");
 
+const passwordPath = "../server/views/email/forgotPassword.html";
 const generateResetToken = () => {
   const token = Math.floor(100000 + Math.random() * 900000);
   return token;
@@ -133,7 +134,8 @@ router.post("/user/reset", async (req, res) => {
                         }
                         sendMail(
                           (data = resetToken.toString()),
-                          (recepient = email)
+                          (recepient = email),
+                          (html = passwordPath.toString())
                         )
                           .then(() => {
                             return res.json({

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
+    <style>
+        *,
+        *::after,
+        *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F4F4F4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 19px;
+        }
+
+        header {
+            display: flex;
+            align-items: flex-end;
+            border-bottom: 2px solid #F4F4F4;
+            padding: 20px 0;
+        }
+
+        header h3 {
+            margin-left: 10px;
+            font-size: 1.5rem;
+            color: green;
+        }
+
+        #logo {
+            min-height: 40px;
+        }
+
+        .verification-card {
+            background-color: white;
+            /* height: 50vh; */
+            padding: 0 40px;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .verification-card h1 {
+            margin: 20px 0;
+            font-size: 1.3rem;
+        }
+
+        .verification-code {
+            text-align: center;
+            background-color: #F4F4F4;
+            padding: 20px 0;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .bottom-text {
+            margin: 30px 0;
+        }
+
+        footer {
+            border-top: 2px solid #F4F4F4;
+            padding: 30px 0;
+            font-size: 16px;
+        }
+
+        footer a {
+            color: lightblue;
+        }
+
+        footer p {
+            color: #7A7A7A;
+        }
+
+        .footer {
+            text-align: center;
+            color: #7A7A7A;
+        }
+
+        .footer p {
+            font-size: 16px;
+        }
+
+        .footer i {
+            margin: 15px 10px;
+            font-size: 35px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="verification-card">
+        <header>
+            <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M24.903 5.605L22.939 20.999H16.306L14.35 5.528H22.45L24.05 0L24.957 0.273L23.42 5.593L24.903 5.604V5.605ZM13.412 14.511C13.412 14.511 13.66 12.511 10.22 12.511H4.74304C1.30804 12.511 1.55104 14.511 1.55104 14.511H13.412ZM1.55104 19.003C1.55104 19.003 1.30804 21.003 4.74304 21.003H10.221C13.661 21.003 13.413 19.003 13.413 19.003H1.55104ZM12.898 18.003C13.1974 17.9702 13.4718 17.8211 13.6622 17.5878C13.8527 17.3546 13.9438 17.0558 13.916 16.756C13.9446 16.4559 13.8538 16.1566 13.6632 15.923C13.4727 15.6894 13.1978 15.5403 12.898 15.508H2.01804C1.71815 15.5408 1.44323 15.6903 1.25273 15.9243C1.06222 16.1582 0.971451 16.4577 1.00004 16.758C0.97281 17.0577 1.06416 17.3562 1.25448 17.5893C1.4448 17.8225 1.71894 17.9717 2.01804 18.005H12.898V18.003Z"
+                    fill="#30B700" />
+            </svg>
+            <h3>Blood Network</h3>
+        </header>
+        <h1>Hi ___name___,</h1>
+        <p>We recieved a request to reset the password on your account. <br>
+            Your verification code is:</p>
+        <div class="verification-code">
+            <h2>___token___</h2>
+        </div>
+        <p>Note: Code expires in 10 minutes and can be used only once.</p>
+        <p class="bottom-text">Thank you, <br> Blood Network Team</p>
+        <footer>
+            <p>If you did not request a password reset,
+                contact us at bloodnetworkapp@gmail.com</p> <a href="#">click here</a>
+        </footer>
+    </div>
+    <div class="footer">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-google-play"></i>
+        <p>&copy; 2020 Blood Network, All rights reserved</p>
+    </div>
+</body>
+
+</html>

@@ -15,6 +15,7 @@ import { WebView } from "react-native-webview";
 import * as ScreenOrientation from "expo-screen-orientation";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
+import baseUrl from "../config/baseUrl";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { Root, Popup } from "popup-ui";
 
@@ -101,7 +102,7 @@ function PaymentScreen(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        fetch(`http://5d78c6a1101e.ngrok.io/api/payment/charge`, {
+        fetch(`${baseUrl.url}/api/payment/charge`, {
           method: "POST",
           headers: {
             Accept: "application/json",

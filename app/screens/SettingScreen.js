@@ -57,6 +57,7 @@ function EditUserScreen(props) {
         />
       </TouchableOpacity>
 
+      {/* {!donor == "not a donor" ? ( */}
       <TouchableOpacity
         style={[
           styles.donorDetails,
@@ -69,6 +70,9 @@ function EditUserScreen(props) {
             marginTop: 10,
           },
         ]}
+        onPress={() =>
+          props.navigation.navigate("EditDonor", { detail: donor })
+        }
       >
         <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
           Edit Donor Details
@@ -80,7 +84,7 @@ function EditUserScreen(props) {
           style={{ marginRight: 10 }}
         />
       </TouchableOpacity>
-      <Text>{user.firstName}</Text>
+      {/* ) : null} */}
     </View>
   );
 }

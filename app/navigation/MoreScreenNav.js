@@ -9,6 +9,8 @@ import RequestStatus from "../screens/RequestStatus";
 import PaymentScreen from "../screens/PaymentScreen";
 import ProfileStack from "./ProfileNav";
 import EditUserScreen from "../screens/EditUserScreen";
+import EditDonorScreen from "../screens/EditDonorScreen";
+import EditRequestScreen from "../screens/EditRequestScreen";
 import SettingScreen from "../screens/SettingScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 
@@ -50,12 +52,23 @@ const MoreStack = () => (
     <Stack.Screen
       name="EditUser"
       component={EditUserScreen}
-      options={{ headerShown: true }}
+      options={{ headerShown: true, headerTitle: "Edit User" }}
     />
     <Stack.Screen
       name="ChangePassword"
       component={ChangePasswordScreen}
-      options={{ headerShown: true }}
+      options={{ headerShown: true, headerTitle: "Change Password" }}
+    />
+    <Stack.Screen
+      name="EditDonor"
+      component={EditDonorScreen}
+      options={{ headerShown: true, headerTitle: "Edit Donor" }}
+    />
+
+    <Stack.Screen
+      name="EditRequest"
+      component={EditRequestScreen}
+      options={{ headerShown: true, headerTitle: "Edit Request" }}
     />
   </Stack.Navigator>
 );

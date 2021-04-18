@@ -17,4 +17,8 @@ export default {
     { label: "Parsa", value: "dist15" },
     { label: "Tanahu", value: "dist16" },
   ],
+  province: [
+    { label: "Bagmati", value: "prov1" },
+    { label: "Gandaki", value: "prov2" },
+  ],
 };

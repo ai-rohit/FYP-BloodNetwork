@@ -48,7 +48,7 @@ router.get("/sent", isLoggedIn.isLoggedIn, (req, res) => {
   try {
     var userId = req.user.userId;
     db.query(
-      "SELECT donor_details.firstName, donor_details.lastName, donor_details.address, donorDistrict, donorContact, showContact, requestStatus, donorResponse, donationDetails, requestId, request_details.bloodType, request_details.requestedDate FROM request_details join donor_details on donor_details.donorId = request_details.donorId join user_details on donor_details.donorId = user_details.userId where requesterId=?",
+      "SELECT donor_details.firstName, donor_details.lastName, donor_details.address, donorDistrict, donorContact, showContact, requestStatus, donorResponse, donationDetails, request_details.* FROM request_details join donor_details on donor_details.donorId = request_details.donorId join user_details on donor_details.donorId = user_details.userId where requesterId=?",
       [userId],
       (error, results) => {
         if (error) {
@@ -312,4 +312,82 @@ router.post("/", isLoggedIn.isLoggedIn, async (req, res) => {
   );
 });
 
+router.put("/", (req, res) => {
+  try {
+    const reqDetails = req.body.request;
+    db.query(
+      "Select * from request_details where requestId = ?",
+      [reqDetails.requestId],
+      (error, request) => {
+        if (error) return res.json({ status: "error", message: error.message });
+
+        if (request.length < 1) {
+          return res.json({
+            status: "fail",
+            data: { request: "Request not found" },
+          });
+        }
+        db.query(
+          "Update request_details set receiverName=?, receiverAddress=?, requirementDays=?, receiverNumber=?, donationDetails=?, donationType = ? where requestId=?",
+          [
+            reqDetails.receiverName,
+            reqDetails.receiverAddress,
+            reqDetails.requirementDays,
+            reqDetails.receiverNumber,
+            reqDetails.donationDetails,
+            reqDetails.donationType,
+            reqDetails.requestId,
+          ],
+          (error, result) => {
+            if (error) {
+              return res.json({ status: "error", message: error.message });
+            } else {
+              return res.json({
+                status: "success",
+                data: { request: "Request Updated" },
+              });
+            }
+          }
+        );
+      }
+    );
+  } catch (ex) {
+    return res.json({ status: "error", message: ex.message });
+  }
+});
+
+router.delete("/:requestId", (error, result) => {
+  try {
+    const reqId = req.params.requestId;
+    db.query(
+      "Select * from request_details where requestId = ?",
+      [reqId],
+      (error, request) => {
+        if (error) return res.json({ status: "error", message: error.message });
+
+        if (request.length < 1) {
+          return res.json({
+            status: "fail",
+            data: { request: "Request not found" },
+          });
+        }
+        db.query(
+          "Delete from request_details where requestId = ?",
+          [reqId],
+          (error, result) => {
+            if (error)
+              return res.json({ status: "error", message: error.message });
+
+            return res.json({
+              status: "success",
+              data: { request: "Request deleted successfully" },
+            });
+          }
+        );
+      }
+    );
+  } catch (ex) {
+    return res.json({ status: "error", message: ex.message });
+  }
+});
 module.exports = router;

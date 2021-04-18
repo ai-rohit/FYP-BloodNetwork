@@ -12,7 +12,12 @@ import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../config/colors";
-import { Fontisto, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Fontisto,
+  Entypo,
+  MaterialCommunityIcons,
+  AntDesign,
+} from "@expo/vector-icons";
 import moment from "moment";
 
 const width = Dimensions.get("window").width;
@@ -245,6 +250,32 @@ function RequestSent(props) {
                     </View>
                   </View>
                 ) : null}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    padding: 5,
+                  }}
+                >
+                  <AntDesign
+                    name="edit"
+                    size={25}
+                    color={colors.blood}
+                    style={{ marginRight: 20 }}
+                    onPress={() =>
+                      props.navigation.navigate("EditRequest", {
+                        request: item,
+                      })
+                    }
+                  />
+                  <AntDesign
+                    name="delete"
+                    size={25}
+                    color={colors.blood}
+                    style={{ marginRight: 10 }}
+                  />
+                </View>
               </View>
             </View>
           );

@@ -15,6 +15,7 @@ import PaymentScreen from "./app/screens/PaymentScreen";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import storage from "./app/auth/storage";
 import { Root } from "popup-ui";
+import EditUserScreen from "./app/screens/EditUserScreen";
 
 export default function App() {
   const [user, setUser] = useState();

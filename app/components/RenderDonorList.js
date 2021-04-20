@@ -22,6 +22,7 @@ import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
 import PickerComponent from "./PickerComponent";
 import AppButton from "./AppButton";
+import { Popup } from "popup-ui";
 
 const donationTypes = [
   {
@@ -127,13 +128,13 @@ function RenderDonorList({
       setErrors({
         ...errors,
         errorMobNum: true,
-        mobNumMsg: "Contact Number can't be empty",
+        mobNumMsg: "*Contact Number can't be empty",
       });
     } else if (val.length < 9 || val.length > 10) {
       setErrors({
         ...errors,
         errorMobNum: true,
-        mobNumMsg: "Incorrect Contact Number",
+        mobNumMsg: "*Invalid Contact Number",
       });
     } else {
       setErrors({ ...errors, errorMobNum: false });
@@ -162,16 +163,26 @@ function RenderDonorList({
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
-          alert(JSON.stringify(responseJson.status));
           clearAllState();
-          Alert.alert("Blood Request", "The request is being sent", [
-            {
-              text: "OK",
-              onPress: () => {
-                setIsRequestModalVisible(false);
-              },
+          // Alert.alert("Blood Request", "The request is being sent", [
+          //   {
+          //     text: "OK",
+          //     onPress: () => {
+          //       setIsRequestModalVisible(false);
+          //     },
+          //   },
+          // ]);
+          setIsRequestModalVisible(false);
+          Popup.show({
+            type: "Success",
+            title: "Blood Request",
+            button: true,
+            textBody: "Your request for blood is being sent to the user",
+            buttontext: "Ok",
+            callback: () => {
+              Popup.hide();
             },
-          ]);
+          });
         }
       });
   };
@@ -367,10 +378,10 @@ function RenderDonorList({
                     style={{
                       alignSelf: "flex-start",
                       color: "red",
-                      marginLeft: 30,
+                      marginLeft: 20,
                     }}
                   >
-                    "Full name must be less than 50 characters"
+                    "Full name must be between 5-50 characters"
                   </Text>
                 ) : null}
 
@@ -403,10 +414,10 @@ function RenderDonorList({
                     style={{
                       alignSelf: "flex-start",
                       color: "red",
-                      marginLeft: 30,
+                      marginLeft: 20,
                     }}
                   >
-                    "Address must be less than 70 characters"
+                    "Address must be between 2-70 characters"
                   </Text>
                 ) : null}
 
@@ -462,7 +473,7 @@ function RenderDonorList({
                     style={{
                       alignSelf: "flex-start",
                       color: "red",
-                      marginLeft: 30,
+                      marginLeft: 20,
                     }}
                   >
                     {errors.mobNumMsg}
@@ -486,7 +497,7 @@ function RenderDonorList({
                   placeholderTextColor="#a9a9a9"
                   keyboardType="default"
                   autoCapitalize="none"
-                  maxLength={35}
+                  maxLength={200}
                   clearButtonMode="always"
                   onChangeText={(donationDetails) =>
                     setDonationDetails(donationDetails)
@@ -558,6 +569,19 @@ function RenderDonorList({
                   }}
                   onPress={handleRequestButton}
                 />
+                {/* <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 20,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                  />{" "}
+                  Invalid inputs! Please try again
+                </Text> */}
               </ScrollView>
             </View>
           </SafeAreaView>

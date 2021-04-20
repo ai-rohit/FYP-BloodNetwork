@@ -185,13 +185,14 @@ function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson.status === false) {
-          alert(JSON.stringify(responseJson.message));
+        if (responseJson.status == false) {
+          console.log(responseJson);
+          alert(responseJson.message);
         } else if (responseJson.status === true) {
+          alert("Email has been sent for verification");
           clearTextState();
           setSignupModalVisible(false);
           setFinalSetup(false);
-          alert(JSON.stringify(responseJson.message));
         }
       });
   };
@@ -268,6 +269,7 @@ function LoginScreen({ navigation }) {
           //alert("Reset token sent");
           setPasswordCodeModal(true);
         } else {
+          console.log(responseJson);
           alert("Failed to send reset token");
         }
       })
@@ -1052,6 +1054,11 @@ function LoginScreen({ navigation }) {
                     marginBottom: 10,
                   }}
                 >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
                   Invalid Inputs! Please try again
                 </Text>
               ) : null}
@@ -1210,6 +1217,7 @@ function LoginScreen({ navigation }) {
                 style={{ backgroundColor: colors.blood, alignSelf: "center" }}
                 onPress={handleRegister}
               />
+
               <View style={{ flexDirection: "row", marginLeft: "17%" }}>
                 <Text style={{ fontSize: 16, fontWeight: "400" }}>
                   Already have an account?

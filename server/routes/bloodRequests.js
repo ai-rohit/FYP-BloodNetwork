@@ -297,11 +297,16 @@ router.post("/", isLoggedIn.isLoggedIn, async (req, res) => {
                 [result[0].userId],
                 (error, token) => {
                   if (error) return;
-                  sendPushNotification(
-                    (targetExpoPushToken = token[0].notificationToken),
-                    (title = "New Blood Request"),
-                    (message = "You got a new blood request")
-                  );
+                  if (token[0].notificationToken) {
+                    sendPushNotification(
+                      (targetExpoPushToken = token[0].notificationToken),
+                      (title = "New Blood Request"),
+                      (message = "You got a new blood request")
+                    );
+                  } else {
+                    console.log(token[0]);
+                    return;
+                  }
                 }
               );
             }

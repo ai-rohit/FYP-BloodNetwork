@@ -1,20 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
-    <title>Blood Network</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Verification</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
+    <style>
+        *,
+        *::after,
+        *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F4F4F4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 19px;
+        }
+
+        header {
+            display: flex;
+            align-items: flex-end;
+            border-bottom: 2px solid #F4F4F4;
+            padding: 20px 0;
+        }
+
+        header h3 {
+            margin-left: 10px;
+            font-size: 1.5rem;
+            color: #dc143c;
+        }
+
+        #logo {
+            min-height: 40px;
+        }
+
+        .verification-card {
+            background-color: white;
+            /* height: 50vh; */
+            padding: 0 40px;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .verification-card h1 {
+            margin: 20px 0;
+            font-size: 1.3rem;
+        }
+
+        .verification-code {
+            text-align: center;
+            background-color: #F4F4F4;
+            padding: 20px 0;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .bottom-text {
+            margin: 30px 0;
+        }
+
+        footer {
+            border-top: 2px solid #F4F4F4;
+            padding: 30px 0;
+            font-size: 16px;
+        }
+
+        footer a {
+            color: lightblue;
+        }
+
+        footer p {
+            color: #7A7A7A;
+        }
+
+        .footer {
+            text-align: center;
+            color: #7A7A7A;
+        }
+
+        .footer p {
+            font-size: 16px;
+        }
+
+        .footer i {
+            margin: 15px 10px;
+            font-size: 35px;
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <p>Hello</p>
-    </header>
-    <p>Hello</p>
-    <footer>
-    </footer>
+    <div class="verification-card">
+        <header>
+            <h3>Blood Network</h3>
+        </header>
+        <h1>Hi!,</h1>
+        <p>Thank you for registering yourself in blood network application.</p>
+        
+        <p>You email has been successfully verified and you can enjoy the app now!</p>
+        <p class="bottom-text">Thank you, <br> Blood Network Team</p>
+        <footer>
+            <p>If you did not request a email verification mail,
+                contact us at bloodnetworkapp@gmail.com</p>
+        </footer>
+    </div>
+    <div class="footer">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-google-play"></i>
+        <p>&copy; 2020 Blood Network, All rights reserved</p>
+    </div>
 </body>
-    </html>
+
+</html>

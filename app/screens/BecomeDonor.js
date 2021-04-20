@@ -26,6 +26,7 @@ import moment from "moment";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
+import { Popup } from "popup-ui";
 
 const districts = [
   { label: "Kathmandu", value: "dist1" },
@@ -111,13 +112,13 @@ function BecomeDonor({ title }) {
       setErrors({
         ...errors,
         errorFirstName: true,
-        fNameMsg: "First Name can't be empty",
+        fNameMsg: "*First Name can't be empty",
       });
     } else if (val.length < 2 || val.length > 25) {
       setErrors({
         ...errors,
         errorFirstName: true,
-        fNameMsg: "First Name should 2 to 25 characters",
+        fNameMsg: "*First Name should 2 to 25 characters",
       });
     } else {
       setFirstName(val);
@@ -130,13 +131,13 @@ function BecomeDonor({ title }) {
       setErrors({
         ...errors,
         errorLastName: true,
-        lNameMsg: "Last Name can't be empty",
+        lNameMsg: "*Last Name can't be empty",
       });
     } else if (val.length < 2 || val.length > 25) {
       setErrors({
         ...errors,
         errorLastName: true,
-        lNameMsg: "Last Name should 2 to 25 characters",
+        lNameMsg: "*Last Name should 2 to 25 characters",
       });
     } else {
       setLastName(val);
@@ -149,13 +150,13 @@ function BecomeDonor({ title }) {
       setErrors({
         ...errors,
         errorAddress: true,
-        addressMsg: "Address can't be empty",
+        addressMsg: "*Address can't be empty",
       });
     } else if (val.length < 2 || val.length > 70) {
       setErrors({
         ...errors,
         errorAddress: true,
-        addressMsg: "Address should be 2 to 70 characters",
+        addressMsg: "*Address should be 2 to 70 characters",
       });
     } else {
       setAddress(val);
@@ -168,13 +169,13 @@ function BecomeDonor({ title }) {
       setErrors({
         ...errors,
         errorMobileNum: true,
-        mobNumMsg: "Contact Number can't be empty",
+        mobNumMsg: "*Contact Number can't be empty",
       });
     } else if (val.length < 9 || val.length > 10) {
       setErrors({
         ...errors,
         errorMobileNum: true,
-        mobNumMsg: "Incorrect Contact Number",
+        mobNumMsg: "*Incorrect Contact Number",
       });
     } else {
       setContact(val);
@@ -218,7 +219,16 @@ function BecomeDonor({ title }) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
-          alert("User has been registered as donor successfully");
+          Popup.show({
+            type: "Success",
+            title: "User Registered as Donor",
+            button: true,
+            textBody: "You have been registered as donor successfully!",
+            buttontext: "Ok",
+            callback: () => {
+              Popup.hide();
+            },
+          });
           clearState();
         } else if (responseJson.status === "fail") {
           alert(responseJson.message);
@@ -505,6 +515,15 @@ function BecomeDonor({ title }) {
             onCancel={hideDatePicker}
           />
         </View>
+        {/* <Text
+          style={{
+            alignSelf: "flex-start",
+            color: "red",
+            marginLeft: 30,
+          }}
+        >
+          *Age must be 16 years or more to become a donor
+        </Text> */}
 
         <View style={styles.inputContainer}>
           <View style={{ flexDirection: "row" }}>
@@ -531,6 +550,17 @@ function BecomeDonor({ title }) {
           style={{ backgroundColor: colors.blood }}
           onPress={handleRegisterDonor}
         />
+        {/* <Text
+          style={{
+            alignSelf: "flex-start",
+            color: "red",
+            marginLeft: 30,
+            marginBottom: 10,
+          }}
+        >
+          <MaterialCommunityIcons name="information-outline" size={15} />{" "}
+          *Invalid inputs please try again
+        </Text> */}
       </View>
     </ScrollView>
   );

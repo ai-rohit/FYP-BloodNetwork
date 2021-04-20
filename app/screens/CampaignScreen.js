@@ -4,6 +4,7 @@ import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
 import ActivityIndicator from "../components/ActivityIndicator";
+import moment from "moment";
 
 function CampaignScreen(props) {
   const [campaigns, setCampaigns] = useState();
@@ -105,7 +106,10 @@ function CampaignScreen(props) {
 
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <MaterialIcons name="date-range" size={20} color="grey" />
-                  <Text style={styles.texts}>Date: {item.campaignDate}</Text>
+                  <Text style={styles.texts}>
+                    Date:{" "}
+                    {moment(item.campaignDate).format("Do MMMM, YYYY") + " A.D"}
+                  </Text>
                 </View>
               </View>
             );

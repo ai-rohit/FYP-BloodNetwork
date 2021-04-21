@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, Alert } from "react-native";
 import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LoginScreen from "../screens/LoginScreen";
@@ -46,7 +46,21 @@ function HomeComponent({ image, title, subTitle, icon, navigation }) {
           {subTitle}
         </Text>
       </View>
-      <Text style={styles.logout} onPress={handleLogOut}>
+      <Text
+        style={styles.logout}
+        onPress={() =>
+          Alert.alert("Log Out", "Do you want to log out?", [
+            {
+              text: "Cancel",
+              onPress: () => console.log("..."),
+            },
+            {
+              text: "Yes",
+              onPress: () => handleLogOut(),
+            },
+          ])
+        }
+      >
         <MaterialCommunityIcons
           name={"logout"}
           size={30}

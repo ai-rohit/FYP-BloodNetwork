@@ -318,17 +318,18 @@ function LoginScreen({ navigation }) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
-          console.log(responseJson);
           alert("Password changed successfully!");
-          setForgotPassWordModal(false);
-          setPasswordCodeModal(false);
-          setPasswordResetModal(false);
+          setTimeout(() => {
+            setForgotPassWordModal(false);
+            setPasswordCodeModal(false);
+            setPasswordResetModal(false);
+          }, 5000);
         } else {
           alert("Something went wrong while changing the password");
         }
       })
       .catch((error) => {
-        console.log(error);
+        alert("Something went wrong");
       });
   };
 

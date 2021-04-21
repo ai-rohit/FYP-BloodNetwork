@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Alert,
+  ScrollView,
+} from "react-native";
 import AppButton from "../components/AppButton";
 import baseUrl from "../config/baseUrl";
 import colors from "../config/colors";
 import { Popup } from "popup-ui";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 function ChangePasswordScreen(props) {
   const [oldPassword, setOldPassword] = useState();
   const [newPassword, setNewPassword] = useState();
@@ -62,7 +70,18 @@ function ChangePasswordScreen(props) {
       });
   };
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text
+        style={{
+          color: "grey",
+          width: "85%",
+          letterSpacing: 1,
+          marginBottom: 20,
+        }}
+      >
+        <MaterialCommunityIcons name="information-outline" size={20} /> You can
+        change your password below!
+      </Text>
       <Text
         style={{
           alignSelf: "flex-start",
@@ -132,13 +151,14 @@ function ChangePasswordScreen(props) {
         style={{ width: "90%", borderRadius: 5, backgroundCOlor: colors.blood }}
         onPress={() => handlePasswordChange()}
       />
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     flex: 1,
+    justifyContent: "center",
   },
   textInput: {
     height: 50,

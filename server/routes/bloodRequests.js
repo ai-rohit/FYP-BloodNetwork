@@ -301,7 +301,7 @@ router.post("/", isLoggedIn.isLoggedIn, async (req, res) => {
                     sendPushNotification(
                       (targetExpoPushToken = token[0].notificationToken),
                       (title = "New Blood Request"),
-                      (message = "You got a new blood request")
+                      (message = `You got a new blood request from ${donorRequest.receiverName}`)
                     );
                   } else {
                     console.log(token[0]);

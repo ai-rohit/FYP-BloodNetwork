@@ -71,7 +71,7 @@ function RequestSent(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == "success") {
-          alert("request marked donated successfully");
+          alert("Request marked donated successfully");
           fetchReqSent();
         } else if (responseJson.status == "fail") {
           alert("something went wrong");

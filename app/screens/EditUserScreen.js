@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Alert,
+  ScrollView,
+} from "react-native";
 import colors from "../config/colors";
 import districts from "../config/districts";
 
@@ -7,6 +14,7 @@ import PickerComponent from "../components/PickerComponent";
 import AppButton from "../components/AppButton";
 import baseUrl from "../config/baseUrl";
 import { Popup } from "popup-ui";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function EditUserScreen(props) {
   const { detail } = props.route.params;
@@ -73,7 +81,18 @@ function EditUserScreen(props) {
       });
   };
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text
+        style={{
+          color: "grey",
+          width: "90%",
+          letterSpacing: 1,
+          marginBottom: 20,
+        }}
+      >
+        <MaterialCommunityIcons name="information-outline" size={20} /> You can
+        edit your information by filling the details in the form presented below
+      </Text>
       <Text
         style={{
           alignSelf: "flex-start",
@@ -162,7 +181,7 @@ function EditUserScreen(props) {
           marginTop: 10,
         }}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -170,6 +189,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     flex: 1,
+    justifyContent: "center",
   },
   textInput: {
     height: 50,

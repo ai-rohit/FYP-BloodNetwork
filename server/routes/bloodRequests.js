@@ -361,7 +361,7 @@ router.put("/", (req, res) => {
   }
 });
 
-router.delete("/:requestId", (error, result) => {
+router.delete("/:requestId", (req, res) => {
   try {
     const reqId = req.params.requestId;
     db.query(

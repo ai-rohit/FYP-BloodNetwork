@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   Linking,
+  Alert,
 } from "react-native";
 import Constants from "expo-constants";
 import baseUrl from "../config/baseUrl";
@@ -105,6 +106,28 @@ function RequestSent(props) {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  const handleDelete = (requestId) => {
+    fetch(`${baseUrl.url}/api/bloodRequest/${requestId}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == "success") {
+          fetchReqSent();
+          Alert.alert(
+            "Request Deleted",
+            "Your request for blood has been cancelled and deleted successfully!"
+          );
+        } else {
+          Alert.alert("Fail", "Failed To Delete Blood Request");
+        }
       });
   };
 
@@ -274,6 +297,24 @@ function RequestSent(props) {
                     size={25}
                     color={colors.blood}
                     style={{ marginRight: 10 }}
+                    onPress={() => {
+                      Alert.alert(
+                        "Delete/Cancel Request?",
+                        "Are you sure you want to delete/cancel Request?",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => {
+                              return;
+                            },
+                          },
+                          {
+                            text: "Yes",
+                            onPress: () => handleDelete(item.requestId),
+                          },
+                        ]
+                      );
+                    }}
                   />
                 </View>
               </View>

@@ -12,7 +12,6 @@
 //         data[n['name']] = n['value']
 //     })
 
-
 //     var request = {
 //         "url" : `http://localhost:3000/api/users/${data.id}`,
 //         "method" : "PUT",
@@ -24,3 +23,29 @@
 //     })
 
 // })
+
+const form = document.querySelector("form");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = form.email.value;
+  const password = form.password.value;
+
+  console.log(email, password);
+  console.log("Hello");
+  fetch("http://localhost:3000/admin/login", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ email: email, password: password }),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+});

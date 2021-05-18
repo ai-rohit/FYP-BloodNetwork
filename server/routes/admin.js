@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("../dbconfig");
 const { isLoggedIn } = require("../middleware/user-authentication");
-const { validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const validationRules = require("../validations/campaignvalidation");
 const { campaignsAuthorization } = require("../middleware/authorization");
 const router = express.Router();
@@ -13,56 +13,87 @@ router.get("/login", (req, res) => {
   res.render("admin_login");
 });
 
-router.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+router.post(
+  "/login",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("*Email seems invalid")
+      .exists()
+      .withMessage("*Email value is empty"),
+    body("password")
+      .isLength({ max: 16, min: 8 })
+      .withMessage("Password length must be between 8-16 char")
+      .exists()
+      .withMessage("*Password seems to be missing"),
+  ],
+  (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
 
-  db.query(
-    "SELECT * FROM user_details WHERE emailAddress = ?",
-    [email],
-    async (error, results) => {
-      if (error) {
-        return res.send({
-          status: false,
-          message: "Something went wrong",
-        });
-      } else {
-        if (results.length > 0) {
-          // if(results[0].role=="admin")
-          if (await bcrypt.compare(password, results[0].password)) {
-            const token = jwt.sign(
-              { userId: results[0].userId },
-              "bld_network_jwtPrivateKey",
-              { expiresIn: "30d" }
-            );
-            const cookieOptions = {
-              expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-              httpOnly: true,
-            };
-            res.cookie("jwt", token, cookieOptions);
-            return res.redirect("/admin");
+    const errors = validationResult(req);
+
+    const error = {};
+    errors.array().forEach((err) => {
+      error[err.param] = err.msg;
+    });
+    console.log(error);
+    if (!errors.isEmpty()) {
+      return res.json({
+        status: "fail",
+        data: error,
+      });
+    }
+    db.query(
+      "SELECT * FROM user_details WHERE emailAddress = ?",
+      [email],
+      async (error, results) => {
+        if (error) {
+          return res.send({
+            status: error,
+            message: error.message,
+          });
+        } else {
+          if (results.length > 0) {
+            // if(results[0].role=="admin")
+            if (await bcrypt.compare(password, results[0].password)) {
+              const token = jwt.sign(
+                { userId: results[0].userId },
+                "bld_network_jwtPrivateKey",
+                { expiresIn: "30d" }
+              );
+              const cookieOptions = {
+                expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+                httpOnly: true,
+              };
+              res.cookie("jwt", token, cookieOptions);
+              return res.json({
+                status: "success",
+                user: {},
+              });
+            } else {
+              return res.send({
+                status: false,
+                message: "Password does not match",
+              });
+            }
+            // else{
+            //     return res.status(401).send({status: "fail", data:{user:'Unauthorized user'}})
+
+            // }
           } else {
             return res.send({
               status: false,
-              message: "Password does not match",
+              message: results + "Enter a valid name or username",
             });
           }
-          // else{
-          //     return res.status(401).send({status: "fail", data:{user:'Unauthorized user'}})
-
-          // }
-        } else {
-          return res.send({
-            status: false,
-            message: results + "Enter a valid name or username",
-          });
         }
       }
-    }
-  );
-});
+    );
+  }
+);
 
-router.get("/", isLoggedIn, (req, res) => {
+router.get("/", (req, res) => {
   axios
     .get("http://localhost:3000/api/users")
     .then((response) => {

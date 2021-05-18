@@ -3,13 +3,17 @@ const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("../dbconfig");
-const { isLoggedIn } = require("../middleware/user-authentication");
+const {
+  isLoggedIn,
+  isLoggedOut,
+  isAdminLoggedIn,
+} = require("../middleware/user-authentication");
 const { body, validationResult } = require("express-validator");
 const validationRules = require("../validations/campaignvalidation");
 const { campaignsAuthorization } = require("../middleware/authorization");
 const router = express.Router();
 
-router.get("/login", (req, res) => {
+router.get("/login", isLoggedOut, (req, res) => {
   res.render("admin_login");
 });
 
@@ -73,8 +77,10 @@ router.post(
               });
             } else {
               return res.send({
-                status: false,
-                message: "Password does not match",
+                status: "fail",
+                data: {
+                  password: "Password and email doesn't match",
+                },
               });
             }
             // else{
@@ -83,8 +89,10 @@ router.post(
             // }
           } else {
             return res.send({
-              status: false,
-              message: results + "Enter a valid name or username",
+              status: "fail",
+              data: {
+                email: "User not registered",
+              },
             });
           }
         }
@@ -93,7 +101,7 @@ router.post(
   }
 );
 
-router.get("/", (req, res) => {
+router.get("/", isAdminLoggedIn, (req, res) => {
   axios
     .get("http://localhost:3000/api/users")
     .then((response) => {

@@ -72,14 +72,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    address,
-    emailAddress,
-    password,
-    role,
-  } = req.body;
+  const { firstName, lastName, address, emailAddress, password, role } =
+    req.body;
   db.query(
     "SELECT emailAddress From user_details where emailAddress = ?",
     [emailAddress],
@@ -218,7 +212,7 @@ router.get("/:id", (req, res) => {
   const id = req.params.id;
   db.query("Delete from user_details where userId=?", [id], (error, result) => {
     if (error) {
-      return res.json({ message: "Something went wrong" });
+      return res.json({ message: error.message });
     } else {
       return res.redirect("/admin");
     }

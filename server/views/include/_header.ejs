@@ -6,18 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
     <title>Blood Network</title>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
 </head>
 <body>
-    <!--Header-->
-    <header id="header">
-        <nav>
-            <div class="container">
-                <div class="text-center">
-                    <a href="/admin" class="nav-brand text-dark">Blood Network Application</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <!--/Header-->
+    <input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+    <header>Blood Network</header>
+    <ul>
+     <li><a href="#"><i class="fas fa-qrcode"></i>Dashboard</a></li>
+     <li><a href="/admin/campaigns"><i class="fas fa-link"></i>campaigns</a></li>
+     <li><a href="#"><i class="fas fa-stream"></i>Blood Banks</a></li>
+     <li><a href="#"><i class="fas fa-calendar-week"></i>Requests</a></li>
+     <li><a href="#"><i class="far fa-question-circle"></i>Donors</a></li>
+     <li><a href="#"><i class="fas fa-sliders-h"></i></a></li>
+     <li><a href="#"><i class="far fa-envelope"></i>Contact</a></li>
+    </ul>
+   </div>    <!--/Header-->
+   <section>

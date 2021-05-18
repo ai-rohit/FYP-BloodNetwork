@@ -30,8 +30,9 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = form.email.value;
   const password = form.password.value;
+  var allCookies = document.cookie;
+  console.log(allCookies);
 
-  console.log(email, password);
   console.log("Hello");
   fetch("http://localhost:3000/admin/login", {
     method: "POST",
@@ -43,7 +44,9 @@ form.addEventListener("submit", async (e) => {
   })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log(responseJson);
+      if (responseJson.status == "success") {
+        window.open("http://localhost:3000/admin");
+      }
     })
     .catch((error) => {
       console.log(error.message);

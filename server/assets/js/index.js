@@ -45,7 +45,7 @@ form.addEventListener("submit", async (e) => {
     .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status == "success") {
-        window.open("http://localhost:3000/admin");
+        window.location.replace("http://localhost:3000/admin");
       }
     })
     .catch((error) => {

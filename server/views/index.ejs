@@ -3,7 +3,28 @@
 <!--/include header-->
      <!--MainSite-->
      <main id="side-main">
+         
         <div class="container">
+            <div class="row" style="margin-top:20px; margin-bottom:20px;">
+                <div class="col-sm-6">
+                  <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); padding:20px;">
+                    <div class="card-body">
+                      <h5 class="card-title">Blood Requests</h5>
+                      <p class="card-text">See the blood requests made by user in the app.</p>
+                      <a href="#" class="btn btn-primary">See requests</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); padding:20px;">
+                    <div class="card-body">
+                      <h5 class="card-title">Blood Donors</h5>
+                      <p class="card-text">See list of donors who registered themselves for blood donation.</p>
+                      <a href="#" class="btn btn-primary">See donors</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <div class="box-nav d-flex-between">
                 <a href="/admin/add_users" class="border-shadow">
                     <span class="text-gradient">New User<i class="fa fa-user" aria-hidden="true"></i></span>
@@ -12,7 +33,7 @@
 
             <!--form handling-->
             <form action="/admin" method="POST">
-                <table class="table">
+                <table class="table table-striped">
                     <thead class="thead-dark">
                       <tr>
                           <th>SN</th>

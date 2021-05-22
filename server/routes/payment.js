@@ -5,14 +5,16 @@ const axios = require("axios");
 const fetch = require("cross-fetch");
 const { post } = require("./register");
 const db = require("../dbconfig");
+const { isLoggedIn } = require("../middleware/user-authentication");
 var KHALTI_VERIFY = "https://khalti.com/api/v2/payment/verify/";
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/payment.html"));
 });
 
-router.post("/charge", async function (req, res) {
+router.post("/charge", isLoggedIn, async function (req, res) {
   try {
+    const user = req.user;
     const result = await axios({
       method: "post",
       url: "https://khalti.com/api/v2/payment/verify/",
@@ -25,26 +27,33 @@ router.post("/charge", async function (req, res) {
         "Content-Type": "application/json",
       },
     });
-    console.log(result);
-    const contributionDetails = {
-      contributorName: result.data.user.name,
-      contributorNumber: result.data.user.mobile,
-      contributionAmount: result.data.amount / 100,
-      contributionDate: result.data.created_on,
-      contributionStatus: result.data.state.name,
-    };
-    db.query(
-      "Insert into money_contributions set ?",
-      [contributionDetails],
-      (error, results) => {
-        if (error) {
-          return res.json({ status: "error", message: error.message });
-        } else {
-          console.log(results);
-          return res.send({ status: "success", data: "Payment Successful" });
+    if (result.status == 200) {
+      const contributionDetails = {
+        contributorName: result.data.user.name,
+        contributorNumber: result.data.user.mobile,
+        contributionAmount: result.data.amount / 100,
+        contributionDate: result.data.created_on,
+        contributionStatus: result.data.state.name,
+        userId: user.userId,
+      };
+      db.query(
+        "Insert into money_contributions set ?",
+        [contributionDetails],
+        (error, results) => {
+          if (error) {
+            return res.json({ status: "error", message: error.message });
+          } else {
+            console.log(results);
+            return res.send({ status: "success", data: "Payment Successful" });
+          }
         }
-      }
-    );
+      );
+    } else {
+      return res.json({
+        status: "error",
+        message: "Sorry! Couldn't verify transaction!",
+      });
+    }
   } catch (error) {
     //console.log(error);
     return res.json({ status: "error", message: error.message });

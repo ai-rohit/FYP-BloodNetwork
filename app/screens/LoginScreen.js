@@ -269,8 +269,10 @@ function LoginScreen({ navigation }) {
           //alert("Reset token sent");
           setPasswordCodeModal(true);
         } else {
-          console.log(responseJson);
-          alert("Failed to send reset token");
+          console.log(
+            responseJson.message[Object.keys(responseJson.message)[0]]
+          );
+          alert(responseJson.message[Object.keys(responseJson.message)[0]]);
         }
       })
       .catch((error) => {

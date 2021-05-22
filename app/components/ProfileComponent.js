@@ -23,8 +23,9 @@ function HomeComponent({ image, title, subTitle, icon, navigation }) {
         }
       })
       .catch((error) => console.error(error));
+    setUser(null);
   };
-  console.log(image);
+
   return (
     <View style={styles.profile}>
       <Image

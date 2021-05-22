@@ -22,23 +22,24 @@ function HomeScreen(props) {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState();
 
-  // const genToken = async () => {
-  //   const token = await storage.getToken();
-  //   setToken(token);
-  // };
+  const genToken = async () => {
+    const token = await storage.getToken();
+    setToken(token);
+  };
   useEffect(() => {
     let unmounted = false;
-    //genToken();
+    genToken();
     //console.log(token);
     fetch(`${baseUrl.url}/api/profile/me`, {
-      // headers: {
-      //   Authorization: "Bearer " + token,
-      // },
+      headers: {
+        Authorization: "Bearer " + token,
+      },
     })
       .then((response) => response.json())
       .then((json) => {
         if (!unmounted) {
           if (json.status == "success") {
+            console.log(genToken());
             setUserProfile(json.userDetails);
             setLoading(false);
           }

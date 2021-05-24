@@ -55,6 +55,7 @@ function LoginScreen({ navigation }) {
   const [district, setDistrict] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [resetCode, setResetCode] = useState("");
   const [resetPassword, setResetPassword] = useState("");
@@ -69,10 +70,21 @@ function LoginScreen({ navigation }) {
     errorAddress: false,
     errorRegEmail: false,
     errorPassowrd: false,
+    errorResetEmail: false,
+    errorResetPw: false,
+    errorResetConfPw: false,
+    errorRegPw: false,
+    errorRegConfPw: false,
+    msgRegPw: "",
+    msgRegConfPw: "",
+    resetPwMsg: "",
+    resetConfPwMsg: "",
     mailErrorMsg: "",
     pwErrorMsg: "",
     submissionMsg: "",
     firstSubError: false,
+    resetMailError: "",
+    regEmailMessage: "",
   });
 
   const authContext = useContext(AuthContext);
@@ -130,6 +142,8 @@ function LoginScreen({ navigation }) {
   };
 
   const emailCheck = (val) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
     if (val === "" || val === undefined || val === null) {
       setErrors({
         ...errors,
@@ -141,6 +155,12 @@ function LoginScreen({ navigation }) {
         ...errors,
         errorMail: true,
         mailErrorMsg: "Email length can't be less than 2",
+      });
+    } else if (reg.test(val) === false) {
+      setErrors({
+        ...errors,
+        errorMail: true,
+        mailErrorMsg: "*Email seems to be invalid",
       });
     } else {
       setErrors({
@@ -168,33 +188,45 @@ function LoginScreen({ navigation }) {
   };
 
   const handleRegister = () => {
-    fetch(`${baseUrl.url}/api/register`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        userDistrict: district,
-        emailAddress: emailAddress,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status == false) {
-          console.log(responseJson);
-          alert(responseJson.message);
-        } else if (responseJson.status === true) {
-          alert("Email has been sent for verification");
-          clearTextState();
-          setSignupModalVisible(false);
-          setFinalSetup(false);
-        }
-      });
+    if (errors.errorRegPw || errors.errorResetConfPw) {
+      Alert.alert("Cannot proceed for registration with invalid details");
+    } else if (password != confirmPassword) {
+      console.log(password, "+", confirmPassword);
+      Alert.alert("Password and Confirm Password doesn't match!");
+    } else {
+      fetch(`${baseUrl.url}/api/register`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          userDistrict: district,
+          emailAddress: emailAddress,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status == false) {
+            console.log(responseJson);
+            alert(responseJson.message);
+          } else if (responseJson.status === true) {
+            Alert.alert("Email has been sent for verification");
+            setTimeout(() => {
+              clearTextState();
+              setSignupModalVisible(false);
+              setFinalSetup(false);
+            }, 3000);
+          }
+        })
+        .catch((error) => {
+          Alert.alert("Failed to register user!");
+        });
+    }
   };
 
   const handleLogin = () => {
@@ -233,13 +265,40 @@ function LoginScreen({ navigation }) {
           }
         })
         .catch((error) => {
-          console.error(error);
+          Alert.alert("Error Logging In! \n Couldn't Connect to Server");
         });
     }
   };
 
   const checkResetEmail = (val) => {
-    setResetEmail(val);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+    if (val === "" || val === undefined || val === null) {
+      setErrors({
+        ...errors,
+        errorResetEmail: true,
+        resetMailError: "Email missing! Please enter a valid email",
+      });
+    } else if (val.length < 2) {
+      setErrors({
+        ...errors,
+        errorResetMail: true,
+        resetMailError: "Email length can't be less than 2",
+      });
+    } else if (reg.test(val) === false) {
+      setErrors({
+        ...errors,
+        errorResetMail: true,
+        resetMailError: "*Email seems to be invalid",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        resetMailError: "",
+        errorResetEmail: false,
+      });
+      setResetEmail(val);
+    }
   };
 
   const checkResetCode = (val) => {
@@ -247,94 +306,189 @@ function LoginScreen({ navigation }) {
   };
 
   const checkResetPassword = (pw) => {
-    setResetPassword(pw);
+    if (pw == "" || pw == undefined || pw.length < 8 || pw.length > 16) {
+      setErrors({
+        ...errors,
+        errorResetPw: true,
+        resetPwMsg: "*Password seems to be invalid",
+      });
+    } else {
+      setErrors({ ...errors, errorResetPw: false, resetPwMsg: "" });
+      setResetPassword(pw);
+    }
   };
 
   const checkResetConfirmPassword = (confirmPw) => {
-    setConfirmResetPassword(confirmPw);
+    if (
+      confirmPw == "" ||
+      confirmPw == undefined ||
+      confirmPw.length < 8 ||
+      confirmPw.length > 16
+    ) {
+      setErrors({
+        ...errors,
+        errorResetConfPw: true,
+        resetConfPwMsg: "*Confirm Password seems to be invalid",
+      });
+    } else {
+      setErrors({ ...errors, errorResetConfPw: false, resetConfPwMsg: "" });
+      setConfirmResetPassword(confirmPw);
+    }
   };
 
   const handleNext = () => {
-    fetch(`${baseUrl.url}/api/login_auth/user/reset`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: resetEmail }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          //alert("Reset token sent");
-          setPasswordCodeModal(true);
-        } else {
-          console.log(
-            responseJson.message[Object.keys(responseJson.message)[0]]
-          );
-          alert(responseJson.message[Object.keys(responseJson.message)[0]]);
-        }
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+    if (errors.errorResetEmail) {
+      Alert.alert("Can't proceed to change password with incorrect email");
+    } else if (reg.test(resetEmail) === false) {
+      Alert.alert("Can't proceed to change password with incorrect email");
+    } else {
+      fetch(`${baseUrl.url}/api/login_auth/user/reset`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: resetEmail }),
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            //alert("Reset token sent");
+            setPasswordCodeModal(true);
+          } else {
+            // console.log(
+            //   responseJson.message[Object.keys(responseJson.message)[0]]
+            // );
+            Alert.alert(
+              responseJson.message[Object.keys(responseJson.message)[0]]
+            );
+          }
+        })
+        .catch((error) => {
+          Alert.alert("Something is wrong with server!");
+        });
+    }
   };
 
   const handleResetCodeSub = () => {
-    fetch(`${baseUrl.url}/api/login_auth/user/reset/check_token`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: resetEmail, token: resetCode }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          //alert("Reset token sent");
-          console.log(responseJson);
-          setPasswordResetModal(true);
-        } else {
-          alert("Token didn't match");
-        }
+    if (resetCode.length == 6) {
+      fetch(`${baseUrl.url}/api/login_auth/user/reset/check_token`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: resetEmail, token: resetCode }),
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            //alert("Reset token sent");
+            console.log(responseJson);
+            setPasswordResetModal(true);
+          } else {
+            alert("Token didn't match");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      Alert.alert("The pin for password reset is of 6-digits!");
+    }
   };
 
   const handleResetPassword = () => {
     console.log(resetEmail);
-    fetch(`${baseUrl.url}/api/login_auth/user/reset/change_password`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        password: resetPassword,
-        email: resetEmail,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          alert("Password changed successfully!");
-          setTimeout(() => {
-            setForgotPassWordModal(false);
-            setPasswordCodeModal(false);
-            setPasswordResetModal(false);
-          }, 5000);
-        } else {
-          alert("Something went wrong while changing the password");
-        }
+    if (errors.errorResetConfPw || errors.errorResetPw) {
+      Alert.alert("Can't proceed to change password with invalid inputs!");
+    } else if (resetPassword !== resetConfirmPassword) {
+      Alert.alert("Password and confirm password doesn't match");
+    } else {
+      fetch(`${baseUrl.url}/api/login_auth/user/reset/change_password`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: resetPassword,
+          email: resetEmail,
+        }),
       })
-      .catch((error) => {
-        alert("Something went wrong");
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            alert("Password changed successfully!");
+            setTimeout(() => {
+              setForgotPassWordModal(false);
+              setPasswordCodeModal(false);
+              setPasswordResetModal(false);
+            }, 2000);
+          } else {
+            alert("Something went wrong while changing the password");
+          }
+        })
+        .catch((error) => {
+          alert("Something went wrong");
+        });
+    }
   };
 
+  // const emailError = (val) => {
+  //   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  //   if (reg.test(val) === false) {
+  //     setErrors({
+  //       ...errors,
+  //       errorResetMail: true,
+  //       resetMailError: "*Email seems to be invalid",
+  //     });
+  //   }
+  // };
+  const checkRegistrationEmail = (val) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(val) === false) {
+      setErrors({
+        ...errors,
+        errorRegEmail: true,
+        regEmailMessage: "*Email seems to be invalid",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        errorRegEmail: false,
+        regEmailMessage: "",
+      });
+      setEmailAddress(val);
+    }
+  };
+
+  const checkRegPassword = (val) => {
+    if (val.length < 8 || val.length > 18 || val == "" || val == "undefined") {
+      setErrors({
+        ...errors,
+        errorRegPw: true,
+        msgRegPw: "Password must be between 8-16 characaters",
+      });
+    } else {
+      setErrors({ ...errors, errorRegPw: false, msgRegPw: "" });
+      setPassword(val);
+    }
+  };
+  const checkRegConfPassword = (val) => {
+    if (val.length < 8 || val.length > 18 || val == "" || val == "undefined") {
+      setErrors({
+        ...errors,
+        errorRegConfPw: true,
+        msgRegConfPw: "Password must be between 8-16 characaters",
+      });
+    } else {
+      setErrors({ ...errors, errorRegConfPw: false, msgRegConfPw: "" });
+      setConfirmPassword(val);
+    }
+  };
   return (
     <>
       <ScrollView style={styles.container}>
@@ -515,7 +669,14 @@ function LoginScreen({ navigation }) {
               Forgot Password?
             </Text>
             <Text
-              onPress={() => setForgotPassWordModal(false)}
+              onPress={() => {
+                setForgotPassWordModal(false);
+                setErrors({
+                  ...errors,
+                  resetMailError: "",
+                  errorResetEmail: false,
+                });
+              }}
               style={styles.closeIcon}
             >
               X
@@ -576,12 +737,30 @@ function LoginScreen({ navigation }) {
                 borderBottomColor: colors.blood,
                 color: "#000",
               }}
+              // onEndEditing={(e) => emailError(e.nativeEvent.text)}
               autoCapitalize="none"
               placeholder="Email"
               keyboardType="email-address"
               clearButtonMode="always"
               onChangeText={(email) => checkResetEmail(email)}
             />
+            {errors.errorResetEmail ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  marginLeft: 20,
+                  color: "red",
+                  marginTop: 5,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={15}
+                  style={{ marginLeft: 5 }}
+                />{" "}
+                {errors.resetMailError}
+              </Text>
+            ) : null}
           </View>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
@@ -682,6 +861,7 @@ function LoginScreen({ navigation }) {
                   borderBottomColor: colors.blood,
                   backgroundColor: "#f2f2f2",
                 }}
+                maxLength={6}
                 autoCapitalize="none"
                 placeholder="Code"
                 keyboardType="numeric"
@@ -788,7 +968,23 @@ function LoginScreen({ navigation }) {
                   checkResetPassword(val);
                 }}
               />
-
+              {errors.errorResetPw ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    marginLeft: 20,
+                    color: "red",
+                    marginTop: 5,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
+                  {errors.resetPwMsg}
+                </Text>
+              ) : null}
               <Text style={styles.label}>Confirm Password</Text>
               <TextInput
                 style={{
@@ -810,6 +1006,23 @@ function LoginScreen({ navigation }) {
                   checkResetConfirmPassword(val);
                 }}
               />
+              {errors.errorResetConfPw ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    marginLeft: 20,
+                    color: "red",
+                    marginTop: 5,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
+                  {errors.resetConfPwMsg}
+                </Text>
+              ) : null}
 
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity
@@ -1042,6 +1255,8 @@ function LoginScreen({ navigation }) {
                     setErrors({ ...errors, firstSubError: true });
                   } else if (!firstName || !lastName || !address) {
                     setErrors({ ...errors, firstSubError: true });
+                  } else if (district == "") {
+                    Alert.alert("You forgot to choose your district");
                   } else {
                     setFinalSetup(true);
                   }
@@ -1146,7 +1361,9 @@ function LoginScreen({ navigation }) {
                 placeholderTextColor="#a9a9a9"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+                onChangeText={(emailAddress) =>
+                  checkRegistrationEmail(emailAddress)
+                }
                 style={{
                   alignSelf: "center",
                   width: "90%",
@@ -1157,7 +1374,24 @@ function LoginScreen({ navigation }) {
                   marginVertical: 10,
                 }}
               />
-
+              {errors.errorRegEmail ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 30,
+                    marginTop: -5,
+                    marginBottom: 10,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
+                  {errors.regEmailMessage}
+                </Text>
+              ) : null}
               <Text
                 style={{
                   alignSelf: "center",
@@ -1175,7 +1409,7 @@ function LoginScreen({ navigation }) {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
+                onChangeText={(password) => checkRegPassword(password)}
                 style={{
                   alignSelf: "center",
                   width: "90%",
@@ -1186,7 +1420,24 @@ function LoginScreen({ navigation }) {
                   marginVertical: 10,
                 }}
               />
-
+              {errors.errorRegPw ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 30,
+                    marginTop: -5,
+                    marginBottom: 10,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
+                  {errors.msgRegPw}
+                </Text>
+              ) : null}
               <Text
                 style={{
                   alignSelf: "center",
@@ -1204,6 +1455,7 @@ function LoginScreen({ navigation }) {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 secureTextEntry={true}
+                onChangeText={(val) => checkRegConfPassword(val)}
                 style={{
                   alignSelf: "center",
                   width: "90%",
@@ -1214,7 +1466,24 @@ function LoginScreen({ navigation }) {
                   marginVertical: 10,
                 }}
               />
-
+              {errors.errorRegConfPw ? (
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    color: "red",
+                    marginLeft: 30,
+                    marginTop: -5,
+                    marginBottom: 10,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="information-outline"
+                    size={15}
+                    style={{ marginLeft: 5 }}
+                  />{" "}
+                  {errors.msgRegConfPw}
+                </Text>
+              ) : null}
               <AppButton
                 title="Register & Get Started"
                 style={{ backgroundColor: colors.blood, alignSelf: "center" }}

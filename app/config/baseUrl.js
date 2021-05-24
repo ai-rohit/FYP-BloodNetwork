@@ -1,3 +1,3 @@
 export default {
-  url: "https://3fd5bef81afa.ngrok.io",
+  url: "http://e0ba8ddaa1ed.ngrok.io",
 };

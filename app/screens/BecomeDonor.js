@@ -15,6 +15,7 @@ import {
   ScrollView,
   Platform,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -185,59 +186,76 @@ function BecomeDonor({ title }) {
 
   const handleRegisterDonor = () => {
     console.log(firstName);
-    console.log(
-      //   firstName
-      // lastName +
-      // address +
-      // district +
-      // province +
-      // contact +
-      // bloodGroup +
-      // checkedGender +
-      date
-      // displayContact
-    );
-    fetch(`${baseUrl.url}/api/register/donor`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        district: district,
-        province: province,
-        mobileNum: contact,
-        bloodType: bloodGroup,
-        gender: checkedGender,
-        dob: date,
-        showContact: displayContact,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          Popup.show({
-            type: "Success",
-            title: "User Registered as Donor",
-            button: true,
-            textBody: "You have been registered as donor successfully!",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-            },
-          });
-          clearState();
-        } else if (responseJson.status === "fail") {
-          alert(responseJson.message);
-          console.log(responseJson.data);
-        } else {
-          alert(responseJson.status + responseJson.message);
-          console.log(responseJson.data);
-        }
-      });
+    console.log(date);
+    console.log("d", district);
+    console.log(checkedGender);
+    var now = moment(new Date());
+    var end = moment(date);
+    var duration = moment.duration(now.diff(end));
+    var years = duration.asYears();
+
+    if (
+      errors.errorFirstName ||
+      errors.errorLastName ||
+      errors.errorAddress ||
+      errors.errorMobileNum
+    ) {
+      Alert.alert("Some inputs seem to be invalid! Please check again.");
+    } else if (
+      district == "" ||
+      province == "" ||
+      bloodGroup == "" ||
+      district === undefined ||
+      province === undefined ||
+      bloodGroup === undefined ||
+      date === undefined
+    ) {
+      Alert.alert("You might have forgot to select some fields");
+    } else if (years < 16) {
+      Alert.alert("Your age must be more than 16 years to register as donor");
+    } else if (checkedGender == undefined || checkedGender == "") {
+      Alert.alert("Please select your gender!");
+    } else {
+      fetch(`${baseUrl.url}/api/register/donor`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          district: district,
+          province: province,
+          mobileNum: contact,
+          bloodType: bloodGroup,
+          gender: checkedGender,
+          dob: date,
+          showContact: displayContact,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            Popup.show({
+              type: "Success",
+              title: "User Registered as Donor",
+              button: true,
+              textBody: "You have been registered as donor successfully!",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+              },
+            });
+            clearState();
+          } else if (responseJson.status === "fail") {
+            Alert.alert("Couldn't register user as donor!");
+          } else {
+            Alert.alert("Something went wrong");
+          }
+        });
+    }
   };
   return (
     <ScrollView

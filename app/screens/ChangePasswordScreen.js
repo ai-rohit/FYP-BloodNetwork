@@ -18,56 +18,106 @@ function ChangePasswordScreen(props) {
   const [confirmPassword, setConfirmPassword] = useState();
   const [erroMsg, setErrorMsg] = useState();
 
+  const [errors, setErrors] = useState({
+    oldPwError: "",
+    newPwError: "",
+    confirmPasswordError: "",
+  });
   const checkOldPassword = (value) => {
-    setOldPassword(value);
+    if (
+      value == "" ||
+      value == undefined ||
+      value.length < 8 ||
+      value.length > 16
+    ) {
+      setErrors({
+        ...errors,
+        oldPwError: "*Password must be between 8-16 characters!",
+      });
+    } else {
+      setErrors({ ...errors, oldPwError: "" });
+      setOldPassword(value);
+    }
   };
 
   const checkNewPassword = (value) => {
-    setNewPassword(value);
+    if (
+      value == "" ||
+      value == undefined ||
+      value.length < 8 ||
+      value.length > 16
+    ) {
+      setErrors({
+        ...errors,
+        newPwError: "*Password must be between 8-16 characters!",
+      });
+    } else {
+      setErrors({ ...errors, newPwError: "" });
+      setNewPassword(value);
+    }
   };
 
   const checkConfirmPassword = (value) => {
-    setConfirmPassword(value);
+    if (
+      value == "" ||
+      value == undefined ||
+      value.length < 8 ||
+      value.length > 16
+    ) {
+      setErrors({
+        ...errors,
+        confirmPwError: "*Password must be between 8-16 characters!",
+      });
+    } else {
+      setErrors({ ...errors, confirmPwError: "" });
+      setConfirmPassword(value);
+    }
   };
 
   const handlePasswordChange = () => {
     console.log(oldPassword, newPassword, confirmPassword);
-    fetch(`${baseUrl.url}/api/login_auth/password`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "fail") {
-          //Alert.alert(Object.keys(responseJson.data)[0]);
-          setErrorMsg(responseJson.data[Object.keys(responseJson.data)[0]]);
-        } else if (responseJson.status === "success") {
-          Popup.show({
-            type: "Success",
-            title: "Password Changed",
-            button: true,
-            textBody: "You changed the password successfully!",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-              props.navigation.navigate("Settings");
-            },
-          });
-        } else {
-          alert("Sorry, Something went wrong!");
-        }
+    if (errors.newPwError || errors.oldPwError || errors.confirmPasswordError) {
+      Alert.alert("Can't proceed with invalid inputs");
+    } else if (newPassword !== confirmPassword) {
+      Alert.alert("Password and Confirm Password doesn't match");
+    } else {
+      fetch(`${baseUrl.url}/api/login_auth/password`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
       })
-      .catch((error) => {
-        alert("Sorry, Something went wrong!");
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "fail") {
+            //Alert.alert(Object.keys(responseJson.data)[0]);
+            setErrorMsg(responseJson.data[Object.keys(responseJson.data)[0]]);
+          } else if (responseJson.status === "success") {
+            Popup.show({
+              type: "Success",
+              title: "Password Changed",
+              button: true,
+              textBody: "You changed the password successfully!",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+                props.navigation.navigate("Settings");
+              },
+            });
+          } else {
+            alert("Sorry, Something went wrong!");
+          }
+        })
+        .catch((error) => {
+          alert("Sorry, Something went wrong!");
+        });
+    }
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -94,7 +144,6 @@ function ChangePasswordScreen(props) {
         Old Password
       </Text>
       <TextInput
-        value={oldPassword}
         onChangeText={(value) => checkOldPassword(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Old Password"
@@ -102,7 +151,23 @@ function ChangePasswordScreen(props) {
         secureTextEntry={true}
         maxLength={16}
       />
-
+      {errors.oldPwError ? (
+        <Text
+          style={{
+            alignSelf: "flex-start",
+            marginLeft: 20,
+            color: "red",
+            marginBottom: 5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={15}
+            style={{ marginLeft: 5 }}
+          />{" "}
+          {errors.oldPwError}
+        </Text>
+      ) : null}
       <Text
         style={{
           alignSelf: "flex-start",
@@ -115,7 +180,6 @@ function ChangePasswordScreen(props) {
         New Password
       </Text>
       <TextInput
-        value={newPassword}
         onChangeText={(value) => checkNewPassword(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="New Password"
@@ -123,6 +187,23 @@ function ChangePasswordScreen(props) {
         secureTextEntry={true}
         maxLength={16}
       />
+      {errors.newPwError ? (
+        <Text
+          style={{
+            alignSelf: "flex-start",
+            marginLeft: 20,
+            color: "red",
+            marginBottom: 5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={15}
+            style={{ marginLeft: 5 }}
+          />{" "}
+          {errors.newPwError}
+        </Text>
+      ) : null}
 
       <Text
         style={{
@@ -136,7 +217,6 @@ function ChangePasswordScreen(props) {
         Confirm New Password
       </Text>
       <TextInput
-        value={confirmPassword}
         onChangeText={(value) => checkConfirmPassword(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Confirm Password"
@@ -144,13 +224,29 @@ function ChangePasswordScreen(props) {
         secureTextEntry={true}
         maxLength={16}
       />
-      {erroMsg ? <Text style={{ color: "red" }}>{erroMsg}</Text> : null}
-
+      {errors.confirmPwError ? (
+        <Text
+          style={{
+            alignSelf: "flex-start",
+            marginLeft: 20,
+            color: "red",
+            marginBottom: 5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={15}
+            style={{ marginLeft: 5 }}
+          />{" "}
+          {errors.confirmPwError}
+        </Text>
+      ) : null}
       <AppButton
         title="Change Password"
         style={{ width: "90%", borderRadius: 5, backgroundCOlor: colors.blood }}
         onPress={() => handlePasswordChange()}
       />
+      {erroMsg ? <Text style={{ color: "red" }}>*{erroMsg}</Text> : null}
     </ScrollView>
   );
 }

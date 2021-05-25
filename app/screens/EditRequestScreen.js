@@ -76,7 +76,11 @@ function EditRequestScreen(props) {
           Alert.alert("Something went wrong");
         }
       })
-      .catch((error) => Alert.alert("Something went wrong"));
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        )
+      );
   };
 
   return (

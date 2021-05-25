@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
 import RequestComponent from "../components/RequestComponent";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
@@ -20,11 +20,14 @@ function Requests(props) {
             setRequest(responseJson.results);
             setLoading(false);
           } else {
-            console.log(responseJson);
-            alert(responseJson);
+            Alert.alert("Something went wrong!");
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -68,10 +71,14 @@ function Requests(props) {
                 if (responseJson.status === true) {
                   setRequest(responseJson.results);
                 } else {
-                  alert(responseJson);
+                  Alert.alert("Something went wrong!");
                 }
               })
-              .catch((error) => console.error(error));
+              .catch((error) =>
+                Alert.alert(
+                  "Your internet connection seems down! Please try again later."
+                )
+              );
           }}
         />
       </View>

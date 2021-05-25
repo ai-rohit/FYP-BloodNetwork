@@ -1,7 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Alert,
+  ScrollView,
+} from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import BloodBankList from "../components/BloodBankList";
@@ -32,9 +38,15 @@ function BloodBanks(props) {
           setNearByBloodBanks(json.data);
           setLocations(json.locations);
           console.log(locations);
+        } else {
+          Alert.alert("Internal Server Error! Come back in few minutes");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems to be down. Please try again"
+        )
+      );
   }, []);
   //   const getBloodBanks = async () => {
   //     const data = await fetch(`${baseUrl.url}/api/blood_banks`);

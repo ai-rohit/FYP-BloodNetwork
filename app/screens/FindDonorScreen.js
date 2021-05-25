@@ -59,7 +59,11 @@ function FindDonorScreen(props) {
             setIsResultVisible(true);
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     }
   };
 

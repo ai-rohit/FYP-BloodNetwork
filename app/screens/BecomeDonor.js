@@ -28,6 +28,7 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
 import { Popup } from "popup-ui";
+import { add } from "react-native-reanimated";
 
 const districts = [
   { label: "Kathmandu", value: "dist1" },
@@ -109,7 +110,13 @@ function BecomeDonor({ title }) {
   };
 
   const checkFirstName = (val) => {
-    if (!val) {
+    if (val.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        errorFirstName: true,
+        fNameMsg: "*First Name can't have any white spaces",
+      });
+    } else if (!val) {
       setErrors({
         ...errors,
         errorFirstName: true,
@@ -128,7 +135,13 @@ function BecomeDonor({ title }) {
   };
 
   const checkLastName = (val) => {
-    if (!val) {
+    if (val.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        errorLastName: true,
+        lNameMsg: "*Last Name can't have any white spaces",
+      });
+    } else if (!val) {
       setErrors({
         ...errors,
         errorLastName: true,
@@ -153,7 +166,10 @@ function BecomeDonor({ title }) {
         errorAddress: true,
         addressMsg: "*Address can't be empty",
       });
-    } else if (val.length < 2 || val.length > 70) {
+    } else if (
+      val.replaceAll(" ", "").length < 2 ||
+      val.length.replaceAll(" ", "") > 70
+    ) {
       setErrors({
         ...errors,
         errorAddress: true,
@@ -166,7 +182,13 @@ function BecomeDonor({ title }) {
   };
 
   const checkContact = (val) => {
-    if (!val) {
+    if (val.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        errorMobileNum: true,
+        mobNumMsg: "*Contact can't have any white spaces",
+      });
+    } else if (!val) {
       setErrors({
         ...errors,
         errorMobileNum: true,
@@ -185,10 +207,6 @@ function BecomeDonor({ title }) {
   };
 
   const handleRegisterDonor = () => {
-    console.log(firstName);
-    console.log(date);
-    console.log("d", district);
-    console.log(checkedGender);
     var now = moment(new Date());
     var end = moment(date);
     var duration = moment.duration(now.diff(end));
@@ -202,9 +220,17 @@ function BecomeDonor({ title }) {
     ) {
       Alert.alert("Some inputs seem to be invalid! Please check again.");
     } else if (
+      firstName == "" ||
+      lastName == "" ||
+      address == "" ||
+      contact == "" ||
       district == "" ||
       province == "" ||
       bloodGroup == "" ||
+      firstName == undefined ||
+      lastName == undefined ||
+      address == undefined ||
+      contact == undefined ||
       district === undefined ||
       province === undefined ||
       bloodGroup === undefined ||
@@ -254,6 +280,11 @@ function BecomeDonor({ title }) {
           } else {
             Alert.alert("Something went wrong");
           }
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Couldn't register as donor! Please check your connection or wait few minutes before trying"
+          );
         });
     }
   };

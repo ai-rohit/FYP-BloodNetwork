@@ -1,0 +1,17 @@
+<% for(var i = 0; i<donor.length; i++){%>
+    <tr>
+        <td><%= i+1 %></td>  
+        <td><%= donor[i].donorId %></td>
+        <td><%= donor[i].firstName %></td>
+        <td><%= donor[i].lastName%></td>
+        <td><%= donor[i].address%></td>
+        <td><%= donor[i].donorDistrict%></td>
+        <td><%= donor[i].donorContact%></td>
+        <td><%= donor[i].bloodType%></td>
+        <td><%= donor[i].donorDistrict%></td>
+        <td><%= donor[i].dob.getFullYear()+"/"+ donor[i].dob.getMonth()+"/"+ donor[i].dob.getDate()%></td>
+        <td><%= donor[i].lastDonated==null?"Not donated":donor[i].lastDonated.getFullYear()+"/"+donor[i].lastDonated.getMonth()+"/"+donor[i].lastDonated.getDate()%></td>
+        <td>    
+        </td>
+    </tr>
+    <%}%>

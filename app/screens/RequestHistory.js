@@ -46,10 +46,14 @@ function RequestHistory(props) {
           //setLoading(false);
           //setLoading(false);
         } else {
-          alert(responseJson.status);
+          Alert.alert("Something went wrong!");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        )
+      );
   };
 
   useEffect(() => {
@@ -62,10 +66,14 @@ function RequestHistory(props) {
             setLoading(false);
             //setLoading(false);
           } else {
-            alert(responseJson.status);
+            Alert.alert("Something went wrong!");
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -87,14 +95,16 @@ function RequestHistory(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == false) {
-          alert(responseJson.message);
+          Alert.alert(responseJson.message);
         } else if (responseJson.status == true) {
           getReqHistory();
-          alert("Successful");
+          Alert.alert("Action Completed");
         }
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 
@@ -109,16 +119,18 @@ function RequestHistory(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == "fail") {
-          alert("Something went wrong");
+          Alert.alert("Something went wrong");
         } else if (responseJson.status == "success") {
           getReqHistory();
-          alert("Successful");
+          alert("Action completed");
         } else if (responseJson.status == "error") {
-          alert(responseJson.message);
+          Alert.alert(responseJson.message);
         }
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 

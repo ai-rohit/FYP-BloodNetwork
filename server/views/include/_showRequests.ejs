@@ -1,0 +1,15 @@
+<% for(var i = 0; i<request.length; i++){%>
+    <tr>
+        <td><%= i+1 %></td>
+        <td><%= request[i].requestId %></td>
+        <td><%= request[i].receiverName %></td>
+        <td><%= request[i].receiverNumber %></td>
+        <td><%= request[i].bloodType %></td> 
+        <td><%= request[i].requestStatus%></td>
+        <td><%= request[i].userFName +" "+ request[i].userLName%></td>
+        <td><%= request[i].firstName + " "+ request[i].lastName %></td>
+        <td><%= request[i].requestedDate.getFullYear()+"/"+ request[i].requestedDate.getMonth()+"/"+ request[i].requestedDate.getDate()%></td>
+        <td>  
+        </td>
+    </tr>
+    <%}%>

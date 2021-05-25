@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
@@ -18,7 +18,11 @@ function CampaignScreen(props) {
           setCampaigns(json.data);
           setLoading(false);
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -131,7 +135,11 @@ function CampaignScreen(props) {
               .then((json) => {
                 setCampaigns(json.data);
               })
-              .catch((error) => console.error(error));
+              .catch((error) =>
+                Alert.alert(
+                  "Your internet connection seems down! Please try again later."
+                )
+              );
           }}
         />
       </View>

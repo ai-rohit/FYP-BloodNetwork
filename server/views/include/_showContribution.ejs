@@ -1,0 +1,13 @@
+<% for(var i = 0; i<contribution.length; i++){%>
+    <tr>
+        <td><%= i+1 %></td>
+        <td><%= contribution[i].contributionId %></td>
+        <td><%= contribution[i].contributorName %></td>
+        <td><%= contribution[i].contributorNumber %></td>
+        <td><%= contribution[i].contributionAmount %></td> 
+        <td><%= contribution[i].contributionDate%></td>
+        <td><%= contribution[i].contributionStatus%></td>
+        <td><%= contribution[i].firstName + " "+ contribution[i].lastName %></td>
+            
+    </tr>
+    <%}%>

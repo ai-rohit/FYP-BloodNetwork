@@ -19,10 +19,10 @@ function HomeComponent({ image, title, subTitle, icon, navigation }) {
           setUser(null);
           storage.removeToken();
         } else {
-          alert("Something went wrong!");
+          Alert.alert("Something went wrong!");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => Alert.alert("Error While Logging Put!"));
     setUser(null);
   };
 

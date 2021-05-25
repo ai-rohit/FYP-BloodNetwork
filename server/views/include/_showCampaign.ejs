@@ -6,7 +6,7 @@
         <td><%= campaigns[i].campaignDetails %></td>
         <td><%= campaigns[i].campaignDistrict%></td>
         <td><%= campaigns[i].campaignLocation%></td>
-        <td><%= campaigns[i].campaignDate %></td>
+        <td><%= campaigns[i].campaignDate.getFullYear()+"/"+ campaigns[i].campaignDate.getMonth()+"/"+ campaigns[i].campaignDate.getDate()%></td>
         <td>
             <a href="/admin/update_campaign/<%= campaigns[i].campaignId %>" class="btn border-shadow update">
                 <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>

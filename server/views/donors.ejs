@@ -2,26 +2,25 @@
 <main id="side-main">
     <div class="container">
         <div class="box-nav d-flex-between">
-            <a href="/admin/add_hospitals" class="border-shadow">
-                <span class="text-gradient">Add Hospitals<i class="fa fa-user" aria-hidden="true"></i></span>
-            </a>
-
-            <form action="/admin/hospitals" method="POST">
+            <form action="/admin/donors" method="POST">
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th>SN</th>
                             <th>ID</th>
-                            <th>Hospital/Blood Bank Name</th>
-                            <th>Hospital Contact</th>
-                            <th>Hospital District</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
                             <th>Address</th>
-                            <th>Location</th>
-                            <th>Actions</th>
+                            <th>District</th>
+                            <th>Contact</th>
+                            <th>Blood Type</th>
+                            <th>District</th>
+                            <th>D.O.B</th>
+                            <th>Last Donated</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <%- include('include/_showHospital')%>
+                        <%- include('include/_showDonors')%>
                     </tbody>
                 </table>
             </form>

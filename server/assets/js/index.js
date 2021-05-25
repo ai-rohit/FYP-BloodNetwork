@@ -46,6 +46,8 @@ form.addEventListener("submit", async (e) => {
     .then((responseJson) => {
       if (responseJson.status == "success") {
         window.location.replace("http://localhost:3000/admin");
+      } else {
+        console.log(responseJson);
       }
     })
     .catch((error) => {

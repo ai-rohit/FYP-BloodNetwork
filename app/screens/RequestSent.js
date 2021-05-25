@@ -35,10 +35,14 @@ function RequestSent(props) {
         if (responseJson.status === "success") {
           setRequestSent(responseJson.results);
         } else {
-          alert(responseJson.status);
+          Alert.alert("Something went wrong!");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        )
+      );
   };
 
   useEffect(() => {
@@ -51,10 +55,14 @@ function RequestSent(props) {
             setLoading(false);
             //setLoading(false);
           } else {
-            alert(responseJson.status);
+            Alert.alert("Something went wrong!");
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -72,16 +80,18 @@ function RequestSent(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == "success") {
-          alert("Request marked donated successfully");
+          Alert.alert("Request marked donated successfully");
           fetchReqSent();
         } else if (responseJson.status == "fail") {
-          alert("something went wrong");
+          Alert.alert("something went wrong");
         } else {
-          alert("Many things went wrong");
+          Alert.alert("Many things went wrong");
         }
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 
@@ -96,16 +106,18 @@ function RequestSent(props) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == "fail") {
-          alert("Something went wrong");
+          Alert.alert("Something went wrong");
         } else if (responseJson.status == "success") {
           fetchReqSent();
-          alert("Successful");
+          Alert.alert("Action completed");
         } else if (responseJson.status == "error") {
-          alert(responseJson.message);
+          Alert.alert("Something went wrong");
         }
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 
@@ -128,6 +140,11 @@ function RequestSent(props) {
         } else {
           Alert.alert("Fail", "Failed To Delete Blood Request");
         }
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 

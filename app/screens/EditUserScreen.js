@@ -28,42 +28,29 @@ function EditUserScreen(props) {
     errorAddress: "",
   });
   const checkFirstName = (val) => {
-    if (val == "" || val.length < 2 || val.length > 25 || val == undefined) {
-      setErrors({
-        ...errors,
-        errorFirstName: "*First Name can be of 2-25 characters only.",
-      });
-    } else {
-      setErrors({ ...errors, errorFirstName: "" });
-      setFirstName(val);
-    }
+    setFirstName(val);
   };
   const checkLastName = (val) => {
-    if (val == "" || val.length < 2 || val.length > 25 || val == undefined) {
-      setErrors({
-        ...errors,
-        errorLastName: "*Last Name can be of 2-25 characters only.",
-      });
-    } else {
-      setErrors({ ...errors, errorLastName: "" });
-      setLastName(val);
-    }
+    setLastName(val);
   };
   const checkAddress = (val) => {
-    if (val == "" || val.length < 2 || val.length > 70 || val == undefined) {
-      setErrors({
-        ...errors,
-        errorAddress: "*Address can be of 2-70 characters only.",
-      });
-    } else {
-      setErrors({ ...errors, errorAddress: "" });
-      setAddress(val);
-    }
+    setAddress(val);
   };
 
   const handleUpdate = () => {
-    if (errors.errorLastName || errors.errorFirstName || errors.errorAddress) {
-      Alert.alert("Can't Proceed with invalid inputs!");
+    console.log(firstName.replaceAll(" ", ""));
+    if (
+      firstName == undefined ||
+      firstName.replaceAll(" ", "").length < 2 ||
+      firstName.replaceAll(" ", "").length > 25 ||
+      address.replaceAll(" ", "").length > 70 ||
+      address == undefined ||
+      address.replaceAll(" ", "").length < 2 ||
+      lastName.replaceAll(" ", "").length > 25 ||
+      lastName.replaceAll(" ", "").length < 2 ||
+      lastName == undefined
+    ) {
+      Alert.alert("Invalid inputs found! Please try again!");
     } else {
       fetch(`${baseUrl.url}/api/users`, {
         method: "PUT",
@@ -95,9 +82,9 @@ function EditUserScreen(props) {
           } else {
             Popup.show({
               type: "Danger",
-              title: "User updated",
+              title: "User not updated",
               button: true,
-              textBody: "Details of user have been updated successfully",
+              textBody: "Failed to update user",
               autoClose: true,
               buttontext: "Ok",
               callback: () => {
@@ -107,7 +94,9 @@ function EditUserScreen(props) {
           }
         })
         .catch((error) => {
-          Alert.alert("Sorry, Something went wrong");
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          );
         });
     }
   };
@@ -136,14 +125,14 @@ function EditUserScreen(props) {
         First Name
       </Text>
       <TextInput
-        // value={firstName}
+        value={firstName}
         onChangeText={(value) => checkFirstName(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="First Name"
         keyboardType="default"
         //maxLength={6}
       />
-      {errors.errorFirstName ? (
+      {/* {errors.errorFirstName ? (
         <Text
           style={{
             alignSelf: "flex-start",
@@ -159,7 +148,7 @@ function EditUserScreen(props) {
           />{" "}
           {errors.errorFirstName}
         </Text>
-      ) : null}
+      ) : null} */}
       <Text
         style={{
           alignSelf: "flex-start",
@@ -172,13 +161,14 @@ function EditUserScreen(props) {
         Last Name
       </Text>
       <TextInput
+        value={lastName}
         onChangeText={(value) => checkLastName(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Last Name"
         keyboardType="default"
         //maxLength={6}
       />
-      {errors.errorLastName ? (
+      {/* {errors.errorLastName ? (
         <Text
           style={{
             alignSelf: "flex-start",
@@ -194,7 +184,7 @@ function EditUserScreen(props) {
           />{" "}
           {errors.errorLastName}
         </Text>
-      ) : null}
+      ) : null} */}
       <Text
         style={{
           alignSelf: "flex-start",
@@ -207,13 +197,14 @@ function EditUserScreen(props) {
         Address
       </Text>
       <TextInput
+        value={address}
         onChangeText={(value) => checkAddress(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Address"
         keyboardType="default"
         //maxLength={6}
       />
-      {errors.errorAddress ? (
+      {/* {errors.errorAddress ? (
         <Text
           style={{
             alignSelf: "flex-start",
@@ -229,7 +220,7 @@ function EditUserScreen(props) {
           />{" "}
           {errors.errorAddress}
         </Text>
-      ) : null}
+      ) : null} */}
       <Text
         style={{
           alignSelf: "flex-start",

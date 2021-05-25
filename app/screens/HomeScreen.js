@@ -42,11 +42,16 @@ function HomeScreen(props) {
             console.log(genToken());
             setUserProfile(json.userDetails);
             setLoading(false);
+          } else {
+            Alert.alert("Something went wrong!");
           }
         }
       })
-      .catch((error) => console.error(error));
-
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        )
+      );
     return () => {
       unmounted = true;
     };

@@ -16,6 +16,9 @@ import { navigationRef } from "./app/navigation/rootNavigation";
 import storage from "./app/auth/storage";
 import { Root } from "popup-ui";
 import EditUserScreen from "./app/screens/EditUserScreen";
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
+import OfflineNotice from "./app/components/OfflineNotice";
+import Progress from "./app/components/Progress";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -27,7 +30,7 @@ export default function App() {
     setUser(jwtDecode(token));
     //console.log(user);
   };
-
+  // NetInfo.fetch().then((netInfo) => console.log(netInfo));
   if (!isReady) {
     return (
       <AppLoading
@@ -47,13 +50,13 @@ export default function App() {
   return (
     <Root>
       <AuthContext.Provider value={{ user, setUser }}>
+        <OfflineNotice />
         <NavigationContainer ref={navigationRef}>
           <StatusBar style="dark" />
           {user ? <AppNavigator /> : <AuthNav />}
         </NavigationContainer>
       </AuthContext.Provider>
     </Root>
-    // <PaymentScreen />
   );
 }
 

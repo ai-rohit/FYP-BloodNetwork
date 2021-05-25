@@ -104,7 +104,7 @@ const isAdminLoggedIn = async (req, res, next) => {
       return res.status(400).send({ status: "error", message: err.message });
     }
   } else {
-    return res.render("page_not_found");
+    return res.redirect("http://localhost:3000/admin/login");
   }
 };
 

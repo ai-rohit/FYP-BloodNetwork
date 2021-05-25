@@ -20,12 +20,14 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { Root, Popup } from "popup-ui";
 import PopupUI from "../components/Popup";
+import Progress from "../components/Progress";
 
 function MyProfileScreen(props) {
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [imageUri, setImageUri] = useState();
   const [imageChosen, setImageChosen] = useState(false);
+  const [progress, setProgress] = useState(false);
 
   const getProfile = () => {
     fetch(`${baseUrl.url}/api/profile/me`)
@@ -39,7 +41,11 @@ function MyProfileScreen(props) {
           Alert.alert("Something went wrong");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) =>
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        )
+      );
   };
   useEffect(() => {
     setImageChosen(false);
@@ -55,7 +61,11 @@ function MyProfileScreen(props) {
             Alert.alert("Something went wrong");
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -96,7 +106,7 @@ function MyProfileScreen(props) {
       type: "image/png",
     });
     // body.append("Content-Type", "image/png");
-
+    setProgress(true);
     fetch(`${baseUrl.url}/api/users/image`, {
       method: "PUT",
       headers: {
@@ -110,16 +120,22 @@ function MyProfileScreen(props) {
           //alert("Image uploaded successfully");
           getProfile();
           setImageChosen(false);
+          setProgress(false);
           console.log("Hello");
           PopupUI(
             (type = "Success"),
             (title = "Image Uploaded"),
             (textBody = "Your profile image was uploaded successfully")
           );
+        } else {
+          setProgress(false);
+          Alert.alert("Something went wrong");
         }
       })
       .catch((error) => {
-        alert(error.message);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 
@@ -130,241 +146,248 @@ function MyProfileScreen(props) {
   if (loading === true) {
     return <ActivityIndicator />;
   } else {
-    return (
-      <View style={styles.container}>
-        <ScrollView
-          style={{ paddingBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.topView}>
+    if (progress == true) {
+      return <Progress progressMessage="Uploading Image" />;
+    } else {
+      return (
+        <View style={styles.container}>
+          <ScrollView
+            style={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.topView}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "absolute",
+                  top: 110,
+                }}
+              >
+                {imageChosen ? (
+                  <Image
+                    source={{
+                      uri: imageUri,
+                    }}
+                    style={styles.imageProfile}
+                  />
+                ) : (
+                  <Image
+                    source={{
+                      uri: `http://192.168.100.10:3000/uploads/` + imageUri,
+                    }}
+                    style={styles.imageProfile}
+                  />
+                )}
+                <Text
+                  style={{ fontWeight: "bold", fontSize: 25 }}
+                >{`${userDetails.user.firstName} ${userDetails.user.lastName}`}</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View>
+                    <Text
+                      onPress={() => {
+                        handleEditImage();
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="camera-image"
+                        size={30}
+                        color="grey"
+                      />
+                    </Text>
+                  </View>
+                  {imageChosen ? (
+                    <Text
+                      onPress={() => {
+                        handleUploadImage();
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="file-upload"
+                        size={30}
+                        color="grey"
+                      />
+                    </Text>
+                  ) : null}
+                  {imageUri === "images.png" ? (
+                    <Text
+                      onPress={() => {
+                        handleDeleteImage();
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete-circle"
+                        size={30}
+                        color="grey"
+                      />
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.profileDetails}>
+              <Text
+                style={styles.textDetails}
+              >{`Lives in ${userDetails.user.address}`}</Text>
+              {/* <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text> */}
+              <Text style={styles.textDetails}>
+                Email: {userDetails.user.emailAddress}
+              </Text>
+              <Text style={styles.textDetails}>
+                Joined:{" "}
+                {moment(userDetails.user.joinedDate).format("Do MMMM YYYY")}
+              </Text>
+            </View>
+            <Text
+              style={[
+                styles.textDetails,
+                { marginTop: 20, fontWeight: "bold", fontSize: 20 },
+              ]}
+            >
+              Donor Details
+            </Text>
             <View
               style={{
-                justifyContent: "center",
-                alignItems: "center",
-                position: "absolute",
-                top: 110,
+                width: "90%",
+                backgroundColor: "#f2f2f2",
+                height: 1,
+                alignSelf: "center",
               }}
-            >
-              {imageChosen ? (
-                <Image
-                  source={{
-                    uri: imageUri,
-                  }}
-                  style={styles.imageProfile}
-                />
-              ) : (
-                <Image
-                  source={{
-                    uri: `http://192.168.100.10:3000/uploads/` + imageUri,
-                  }}
-                  style={styles.imageProfile}
-                />
-              )}
-              <Text
-                style={{ fontWeight: "bold", fontSize: 25 }}
-              >{`${userDetails.user.firstName} ${userDetails.user.lastName}`}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <View>
-                  <Text
-                    onPress={() => {
-                      handleEditImage();
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="camera-image"
-                      size={30}
-                      color="grey"
-                    />
-                  </Text>
-                </View>
-                {imageChosen ? (
-                  <Text
-                    onPress={() => {
-                      handleUploadImage();
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="file-upload"
-                      size={30}
-                      color="grey"
-                    />
-                  </Text>
-                ) : null}
-                {imageUri === "images.png" ? (
-                  <Text
-                    onPress={() => {
-                      handleDeleteImage();
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="delete-circle"
-                      size={30}
-                      color="grey"
-                    />
-                  </Text>
-                ) : null}
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.profileDetails}>
-            <Text
-              style={styles.textDetails}
-            >{`Lives in ${userDetails.user.address}`}</Text>
-            {/* <Text style={styles.textDetails}>Kaski, Gandaki, Nepal</Text> */}
-            <Text style={styles.textDetails}>
-              Email: {userDetails.user.emailAddress}
-            </Text>
-            <Text style={styles.textDetails}>
-              Joined:{" "}
-              {moment(userDetails.user.joinedDate).format("Do MMMM YYYY")}
-            </Text>
-          </View>
-          <Text
-            style={[
-              styles.textDetails,
-              { marginTop: 20, fontWeight: "bold", fontSize: 20 },
-            ]}
-          >
-            Donor Details
-          </Text>
-          <View
-            style={{
-              width: "90%",
-              backgroundColor: "#f2f2f2",
-              height: 1,
-              alignSelf: "center",
-            }}
-          />
-          {userDetails.user.role == "donor" ? (
-            <>
-              <View
-                style={[
-                  styles.donorDetails,
-                  { paddingVertical: 10, flexDirection: "row" },
-                ]}
-              >
-                <View style={{ alignSelf: "flex-start", marginLeft: -10 }}>
-                  <Text
-                    style={[
-                      styles.textDetails,
-                      { fontSize: 15, alignSelf: "center" },
-                    ]}
-                  >
-                    {userDetails.donor.numOfDonation}
-                  </Text>
-                  <Text style={[styles.textDetails, { alignSelf: "center" }]}>
-                    Donations made
-                  </Text>
-                </View>
-
+            />
+            {userDetails.user.role == "donor" ? (
+              <>
                 <View
-                  style={{
-                    alignSelf: "flex-start",
-                    borderLeftColor: "grey",
-                    borderLeftWidth: 1,
-                    marginLeft: 15,
-                  }}
+                  style={[
+                    styles.donorDetails,
+                    { paddingVertical: 10, flexDirection: "row" },
+                  ]}
                 >
-                  <Text
-                    style={[
-                      styles.textDetails,
-                      { alignSelf: "center", fontSize: 15 },
-                    ]}
+                  <View style={{ alignSelf: "flex-start", marginLeft: -10 }}>
+                    <Text
+                      style={[
+                        styles.textDetails,
+                        { fontSize: 15, alignSelf: "center" },
+                      ]}
+                    >
+                      {userDetails.donor.numOfDonation}
+                    </Text>
+                    <Text style={[styles.textDetails, { alignSelf: "center" }]}>
+                      Donations made
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      alignSelf: "flex-start",
+                      borderLeftColor: "grey",
+                      borderLeftWidth: 1,
+                      marginLeft: 15,
+                    }}
                   >
-                    {moment(userDetails.donor.lastDonated).format(
-                      "Do MMMM YYYY"
-                    )}
+                    <Text
+                      style={[
+                        styles.textDetails,
+                        { alignSelf: "center", fontSize: 15 },
+                      ]}
+                    >
+                      {moment(userDetails.donor.lastDonated).format(
+                        "Do MMMM YYYY"
+                      )}
+                    </Text>
+                    <Text style={[styles.textDetails, { alignSelf: "center" }]}>
+                      Last donated
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={[styles.donorDetails, { alignItems: "flex-start" }]}
+                >
+                  <Text style={[styles.textDetails, { color: colors.blood }]}>
+                    Registered Donor in Blood Network
                   </Text>
-                  <Text style={[styles.textDetails, { alignSelf: "center" }]}>
-                    Last donated
+
+                  <Text style={styles.textDetails}>
+                    Provided Address: {userDetails.donor.address}
+                  </Text>
+                  <Text style={styles.textDetails}>
+                    District: {userDetails.donor.donorDistrict}
+                  </Text>
+                  <Text style={styles.textDetails}>
+                    Blood type is {userDetails.donor.bloodType}, Gender:{" "}
+                    {userDetails.donor.gender}
+                  </Text>
+                  <Text style={styles.textDetails}>
+                    Born on{" "}
+                    {moment(userDetails.donor.dob).format("Do MMMM YYYY")}
+                  </Text>
+                  <Text style={styles.textDetails}>
+                    Provided Mobile: {userDetails.donor.donorContact}
                   </Text>
                 </View>
+              </>
+            ) : (
+              <View>
+                <Text>You are not registered as donor</Text>
               </View>
-              <View style={[styles.donorDetails, { alignItems: "flex-start" }]}>
-                <Text style={[styles.textDetails, { color: colors.blood }]}>
-                  Registered Donor in Blood Network
-                </Text>
+            )}
+            <TouchableOpacity
+              style={[
+                styles.donorDetails,
+                {
+                  paddingVertical: 10,
+                  flexDirection: "row",
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                },
+              ]}
+              onPress={() => props.navigation.navigate("RequestStatus")}
+            >
+              <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
+                See My Blood Request Details
+              </Text>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color="grey"
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
 
-                <Text style={styles.textDetails}>
-                  Provided Address: {userDetails.donor.address}
-                </Text>
-                <Text style={styles.textDetails}>
-                  District: {userDetails.donor.donorDistrict}
-                </Text>
-                <Text style={styles.textDetails}>
-                  Blood type is {userDetails.donor.bloodType}, Gender:{" "}
-                  {userDetails.donor.gender}
-                </Text>
-                <Text style={styles.textDetails}>
-                  Born on {moment(userDetails.donor.dob).format("Do MMMM YYYY")}
-                </Text>
-                <Text style={styles.textDetails}>
-                  Provided Mobile: {userDetails.donor.donorContact}
-                </Text>
-              </View>
-            </>
-          ) : (
-            <View>
-              <Text>You are not registered as donor</Text>
-            </View>
-          )}
-          <TouchableOpacity
-            style={[
-              styles.donorDetails,
-              {
-                paddingVertical: 10,
-                flexDirection: "row",
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "space-between",
-              },
-            ]}
-            onPress={() => props.navigation.navigate("RequestStatus")}
-          >
-            <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
-              See My Blood Request Details
-            </Text>
-            <MaterialCommunityIcons
-              name="chevron-right"
-              size={20}
-              color="grey"
-              style={{ marginRight: 10 }}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.donorDetails,
-              {
-                paddingVertical: 10,
-                flexDirection: "row",
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: 10,
-              },
-            ]}
-            onPress={() =>
-              props.navigation.navigate("Settings", {
-                user: userDetails.user,
-                donor: userDetails.donor ? userDetails.donor : "not a donor",
-              })
-            }
-          >
-            <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
-              Settings
-            </Text>
-            <AntDesign
-              name="setting"
-              size={20}
-              color="grey"
-              style={{ marginRight: 10 }}
-            />
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    );
+            <TouchableOpacity
+              style={[
+                styles.donorDetails,
+                {
+                  paddingVertical: 10,
+                  flexDirection: "row",
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop: 10,
+                },
+              ]}
+              onPress={() =>
+                props.navigation.navigate("Settings", {
+                  user: userDetails.user,
+                  donor: userDetails.donor ? userDetails.donor : "not a donor",
+                })
+              }
+            >
+              <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
+                Settings
+              </Text>
+              <AntDesign
+                name="setting"
+                size={20}
+                color="grey"
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      );
+    }
   }
 }
 const styles = StyleSheet.create({

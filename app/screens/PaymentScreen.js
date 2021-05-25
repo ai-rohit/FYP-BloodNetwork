@@ -81,7 +81,9 @@ function PaymentScreen(props) {
         setPhonePinModal(false);
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 
@@ -137,11 +139,15 @@ function PaymentScreen(props) {
             }
           })
           .catch((error) => {
-            console.log(error);
+            Alert.alert(
+              "Your internet connection seems down! Please try again later."
+            );
           });
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
 

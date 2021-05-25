@@ -54,9 +54,15 @@ function RequestDetailScreen({ route, navigation }) {
             alert("The response has been accepted");
             setStatus("accepted");
             navigation.navigate("Requests");
+          } else {
+            Alert.alert("Something went wrong!");
           }
-        });
-      console.log("Hello ");
+        })
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
     }
   };
 
@@ -81,12 +87,15 @@ function RequestDetailScreen({ route, navigation }) {
             alert("The response has been rejected");
             setStatus("rejected");
             navigation.navigate("Requests");
+          } else {
+            Alert.alert("Something went wrong");
           }
         })
         .catch((error) => {
-          console.log(error);
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          );
         });
-      console.log("Hello ");
     }
   };
 

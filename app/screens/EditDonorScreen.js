@@ -94,17 +94,9 @@ function EditUserScreen(props) {
         }
       })
       .catch((error) => {
-        Popup.show({
-          type: "Warning",
-          title: "Something went wrong!",
-          button: true,
-          textBody: "Couldn't update the detail of donor",
-          buttontext: "Ok",
-          callback: () => {
-            Popup.hide();
-            props.navigation.navigate("Settings");
-          },
-        });
+        Alert.alert(
+          "Your internet connection seems down! Please try again later."
+        );
       });
   };
   return (

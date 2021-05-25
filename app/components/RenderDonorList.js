@@ -183,7 +183,14 @@ function RenderDonorList({
               Popup.hide();
             },
           });
+        } else {
+          Alert.alert("The request was not sent to the donor!");
         }
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Failed to send request! Check your internet connection and try again"
+        );
       });
   };
   return (

@@ -52,6 +52,10 @@ router.post("/update", (req, res) => {
             req.body.hospitalContact +
             "',hospitalAddress='" +
             req.body.hospitalAddress +
+            "',address='" +
+            req.body.address +
+            "',location='" +
+            req.body.location +
             "' where bankId=?",
           [id],
           (error, results) => {

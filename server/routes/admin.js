@@ -59,7 +59,13 @@ router.post(
           });
         } else {
           if (results.length > 0) {
-            // if(results[0].role=="admin")
+            if (results[0].role !== "admin") {
+              return res.send({
+                status: "fail",
+                message: "User access denied",
+              });
+            }
+
             if (await bcrypt.compare(password, results[0].password)) {
               const token = jwt.sign(
                 { userId: results[0].userId },
@@ -112,7 +118,7 @@ router.get("/", isAdminLoggedIn, (req, res) => {
     });
 });
 
-router.get("/add_users", (req, res) => {
+router.get("/add_users", isAdminLoggedIn, (req, res) => {
   res.render("add_user");
 });
 
@@ -127,33 +133,96 @@ router.get("/update_user", (req, res) => {
     .catch((err) => res.json("Something went wrong"));
 });
 
-router.get("/campaigns", (req, res) => {
-  db.query("SELECT * From campaign_details", (error, campiagn) => {
-    if (error) {
-      return res.json({ status: "error", message: error.message });
-    }
-    res.render("campaign_index", {
-      campaigns: campiagn,
+router.get("/campaigns", isAdminLoggedIn, (req, res) => {
+  try {
+    db.query("SELECT * From campaign_details", (error, campiagn) => {
+      if (error) {
+        return res.json({ status: "error", message: error.message });
+      }
+      res.render("campaign_index", {
+        campaigns: campiagn,
+      });
     });
-  });
+  } catch (ex) {
+    return res.json({
+      status: "error",
+      message: ex.message,
+    });
+  }
 });
 
-router.get("/blood_hospitals", (req, res) => {
+router.get("/blood_hospitals", isAdminLoggedIn, (req, res) => {
   db.query("Select * from blood_hospitals", (error, hospital) => {
     if (error) return res.send("Something went wrong");
     res.render("bloodBank_index", { hospitals: hospital });
   });
 });
 
-router.get("/add_campaigns", (req, res) => {
+router.get("/add_campaigns", isAdminLoggedIn, (req, res) => {
   res.render("add_campaign");
 });
 
-router.get("/add_hospitals", (req, res) => {
+router.get("/add_hospitals", isAdminLoggedIn, (req, res) => {
   res.render("add_hospitals");
 });
 
-router.get("/update_hospital/:id", (req, res) => {
+router.get("/donors", isAdminLoggedIn, (req, res) => {
+  try {
+    db.query(
+      "Select donorId, firstName, lastName, address, donorDistrict, donorContact, bloodType, dob, lastDonated from donor_details",
+      async (error, result) => {
+        if (error) {
+          return res.json({
+            status: "error",
+            message: "Something went wrong",
+          });
+        }
+        res.render("donors", { donor: result });
+      }
+    );
+  } catch (ex) {
+    return res.json({
+      status: "error",
+      message: "Something went wrong",
+    });
+  }
+});
+
+router.get("/blood_requests", isAdminLoggedIn, (req, res) => {
+  try {
+    db.query(
+      "Select request_details.requestId, request_details.receiverName, request_details.receiverNumber, request_details.bloodType, request_details.requestStatus, user_details.firstName as userFName, user_details.lastName as userLName, donor_details.firstName, donor_details.lastName, request_details.requestedDate from request_details join user_details on request_details.requesterId = user_details.userId join donor_details on request_details.donorId = donor_details.donorId",
+      async (error, request) => {
+        if (error) {
+          return res.json({
+            status: "error",
+            message: "Something went wrong",
+          });
+        }
+        res.render("requests", { request: request });
+      }
+    );
+  } catch (ex) {
+    return res.json({ status: "error", message: ex.message });
+  }
+});
+
+router.get("/contributions", isAdminLoggedIn, (req, res) => {
+  try {
+    db.query(
+      "Select money_contributions.*, user_details.firstName, user_details.lastName from money_contributions join user_details on money_contributions.userId = user_details.userId",
+      (error, contributions) => {
+        if (error) {
+          return res.json({ status: "error", message: "Something went wrong" });
+        }
+        res.render("contribution", { contribution: contributions });
+      }
+    );
+  } catch (ex) {
+    return res.json({ status: "error", message: "Something went wrong" });
+  }
+});
+router.get("/update_hospital/:id", isAdminLoggedIn, (req, res) => {
   const id = req.params.id;
 
   db.query(
@@ -168,7 +237,12 @@ router.get("/update_hospital/:id", (req, res) => {
   );
 });
 
-router.get("/update_campaign/:id", (req, res) => {
+router.get("/logout", isAdminLoggedIn, (req, res) => {
+  res.clearCookie("jwt");
+  res.redirect("http://localhost:3000/admin/login");
+});
+
+router.get("/update_campaign/:id", isAdminLoggedIn, (req, res) => {
   const id = req.params.id;
 
   db.query(
@@ -185,7 +259,7 @@ router.get("/update_campaign/:id", (req, res) => {
 
 router.post(
   "/add_campaigns",
-  isLoggedIn,
+  isAdminLoggedIn,
   campaignsAuthorization,
   validationRules(),
   (req, res) => {
@@ -223,11 +297,16 @@ router.post(
   }
 );
 
-router.post("/add_hospitals", isLoggedIn, (req, res) => {
+router.post("/add_hospitals", isAdminLoggedIn, (req, res) => {
+  console.log(req.body.location.trim());
+  const location = req.body.location.toString();
+  var trimmedLocation = location.replace(" ", "");
   const hospitalDetails = {
     hospitalName: req.body.hospitalName,
     hospitalContact: req.body.hospitalContact,
     hospitalAddress: req.body.hospitalAddress,
+    address: req.body.address,
+    location: trimmedLocation,
   };
 
   // const errors = validationResult(req);

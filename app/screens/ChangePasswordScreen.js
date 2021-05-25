@@ -24,11 +24,16 @@ function ChangePasswordScreen(props) {
     confirmPasswordError: "",
   });
   const checkOldPassword = (value) => {
-    if (
-      value == "" ||
-      value == undefined ||
-      value.length < 8 ||
-      value.length > 16
+    if (value.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        oldPwError: "*Password shouldn't contain whitespaces!",
+      });
+    } else if (
+      value.replaceAll(" ", "") == "" ||
+      value.replaceAll(" ", "") == undefined ||
+      value.replaceAll(" ", "").length < 8 ||
+      value.replaceAll(" ", "").length > 16
     ) {
       setErrors({
         ...errors,
@@ -41,11 +46,16 @@ function ChangePasswordScreen(props) {
   };
 
   const checkNewPassword = (value) => {
-    if (
-      value == "" ||
+    if (value.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        newPwError: "*Password shouldn't contain whitespaces!",
+      });
+    } else if (
+      value.replaceAll(" ", "") == "" ||
       value == undefined ||
-      value.length < 8 ||
-      value.length > 16
+      value.replaceAll(" ", "").length < 8 ||
+      value.replaceAll(" ", "").length > 16
     ) {
       setErrors({
         ...errors,
@@ -58,11 +68,16 @@ function ChangePasswordScreen(props) {
   };
 
   const checkConfirmPassword = (value) => {
-    if (
-      value == "" ||
+    if (value.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        confirmPwError: "*Password shouldn't contain whitespaces!",
+      });
+    } else if (
+      value.replaceAll(" ", "") == "" ||
       value == undefined ||
-      value.length < 8 ||
-      value.length > 16
+      value.replaceAll(" ", "").length < 8 ||
+      value.replaceAll(" ", "").length > 16
     ) {
       setErrors({
         ...errors,
@@ -78,7 +93,9 @@ function ChangePasswordScreen(props) {
     console.log(oldPassword, newPassword, confirmPassword);
     if (errors.newPwError || errors.oldPwError || errors.confirmPasswordError) {
       Alert.alert("Can't proceed with invalid inputs");
-    } else if (newPassword !== confirmPassword) {
+    } else if (
+      newPassword.replaceAll(" ", "") !== confirmPassword.replaceAll(" ", "")
+    ) {
       Alert.alert("Password and Confirm Password doesn't match");
     } else {
       fetch(`${baseUrl.url}/api/login_auth/password`, {
@@ -115,7 +132,9 @@ function ChangePasswordScreen(props) {
           }
         })
         .catch((error) => {
-          alert("Sorry, Something went wrong!");
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          );
         });
     }
   };

@@ -23,24 +23,19 @@
         <div class="form-group">
             <label for="firstName" class="text-dark">First Name</label>
             <input type="hidden" name="id" value="<%=user.userId%>">
-            <input type="text" name="firstName" value="<%=user.firstName%>" placeholder="First Name">
+            <input type="text" name="firstName" value="<%=user.firstName%>" placeholder="First Name" maxlength="20" minlength="2" required>
         </div>
         <div class="form-group">
             <label for="lastName" class="text-dark">Last Name</label>
-            <input type="text" name="lastName" value="<%=user.lastName%>" placeholder="Last Name">
+            <input type="text" name="lastName" value="<%=user.lastName%>" placeholder="Last Name" maxlength="20" minlength="2" required>
         </div>
         <div class="form-group">
             <label for="address" class="text-dark">Address</label>
-            <input type="text" name="address" value="<%=user.address%>" placeholder="Address">
+            <input type="text" name="address" value="<%=user.address%>" placeholder="Address" maxlength="40" minlength="2" required>
         </div>
         <div class="form-group">
             <label for="email" class="text-dark">Email</label>
-            <input type="text" name="email" value="<%=user.emailAddress%>" placeholder="Email Address">
-        </div>
-
-        <div class="form-group">
-            <label for="password" class="text-dark">Password</label>
-            <input type="text" name="password" value="<%=user.password%>" placeholder="Password">
+            <input type="email" name="email" value="<%=user.emailAddress%>" placeholder="Email Address" maxlength="40" required>
         </div>
 
         <div class="form-group">
@@ -53,6 +48,11 @@
             <div class="radio inline">
                 <input type="radio" id="radio-2" name="role" value="admin"<%= user.role=="admin"?'checked':''%>>
                 <label for="radio-2" class="radio-label">Admin</label>
+            </div>
+
+            <div class="radio inline">
+                <input type="radio" id="radio-3" name="role" value="donor"<%= user.role=="donor"?'checked':''%>>
+                <label for="radio-3" class="radio-label">Donor</label>
             </div>
         </div>
 

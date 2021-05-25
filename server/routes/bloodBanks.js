@@ -5,26 +5,32 @@ const router = express.Router();
 const isLoggedIn = require("../middleware/user-authentication");
 
 router.get("/", isLoggedIn.isLoggedIn, (req, res) => {
-  var location = req.user.address;
+  var location = req.user.userDistrict;
   try {
-    db.query("SELECT * FROM blood_hospitals", [location], (error, results) => {
-      const array1 = [];
-      for (var i = 0; i < results.length; i++) {
-        const obj = {};
-        obj.name = results[i].hospitalName;
-        obj.coordinates = {
-          latitude: parseFloat(results[i].location.split(",")[0]),
-          longitude: parseFloat(results[i].location.split(",")[1]),
-        };
-        array1.push(obj);
+    db.query(
+      "SELECT * FROM blood_hospitals where hospitalAddress=?",
+      [location],
+      (error, results) => {
+        db.query("Select * from blood_hospitals", (error, all) => {
+          const array1 = [];
+          for (var i = 0; i < all.length; i++) {
+            const obj = {};
+            obj.name = all[i].hospitalName;
+            obj.coordinates = {
+              latitude: parseFloat(all[i].location.split(",")[0]),
+              longitude: parseFloat(all[i].location.split(",")[1]),
+            };
+            array1.push(obj);
+          }
+          console.log(array1);
+          return res.send({
+            status: "success",
+            data: results,
+            locations: array1,
+          });
+        });
       }
-      console.log(array1);
-      return res.send({
-        status: "success",
-        data: results,
-        locations: array1,
-      });
-    });
+    );
   } catch (ex) {
     return res.send({
       status: "error",

@@ -28,7 +28,7 @@ function BloodBankList({ items }) {
       </View>
     );
   } else {
-    // console.log(items);
+    console.log(items);
     return (
       <View
         style={{
@@ -82,9 +82,7 @@ function BloodBankList({ items }) {
                 <Text style={styles.text}>
                   District: {item.hospitalAddress}
                 </Text>
-                <Text style={styles.text}>
-                  Location: {item.hospitalLocation}
-                </Text>
+                <Text style={styles.text}>Location: {item.address}</Text>
                 <Text style={styles.text}>Contact: {item.hospitalContact}</Text>
               </View>
               <View
@@ -96,7 +94,12 @@ function BloodBankList({ items }) {
                   alignSelf: "center",
                 }}
               >
-                <TouchableOpacity style={styles.callBtn}>
+                <TouchableOpacity
+                  style={styles.callBtn}
+                  onPress={() => {
+                    Linking.openURL(`tel:${item.hospitalContact}`);
+                  }}
+                >
                   <MaterialCommunityIcons
                     name="phone"
                     color={colors.white}

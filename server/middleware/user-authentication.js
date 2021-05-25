@@ -132,16 +132,17 @@ const isLoggedOut = async (req, res, next) => {
               .send({ status: "fail", data: { user: "User not found" } });
           }
           req.user = result[0];
-          axios
-            .get("http://localhost:3000/api/users")
-            .then((response) => {
-              res.render("index", { users: response.data.data.user });
-            })
-            .catch((error) => {
-              return res
-                .status(400)
-                .send({ status: "error", message: error.message });
-            });
+          res.redirect("http://localhost:3000/admin");
+          //axios
+          // .get("http://localhost:3000/api/users")
+          // .then((response) => {
+          //   res.render("index", { users: response.data.data.user });
+          // })
+          // .catch((error) => {
+          //   return res
+          //     .status(400)
+          //     .send({ status: "error", message: error.message });
+          // });
         }
       );
     } catch (err) {

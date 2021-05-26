@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import Constants from "expo-constants";
 import ProfileComponent from "../components/ProfileComponent";
@@ -21,6 +22,7 @@ function HomeScreen(props) {
   const [userProfile, setUserProfile] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const genToken = async () => {
     const token = await storage.getToken();
@@ -65,6 +67,32 @@ function HomeScreen(props) {
         <ScrollView
           style={{ width: "100%" }}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+                fetch(`${baseUrl.url}/api/profile/me`)
+                  .then((response) => response.json())
+                  .then((json) => {
+                    if (json.status == "success") {
+                      console.log(genToken());
+                      setUserProfile(json.userDetails);
+                      setLoading(false);
+                      setRefreshing(false);
+                    } else {
+                      Alert.alert("Something went wrong!");
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error.message);
+                    Alert.alert(
+                      "Your internet connection seems down! Please try again later."
+                    );
+                  });
+              }}
+            />
+          }
         >
           <View style={styles.homeProfile}>
             <ProfileComponent

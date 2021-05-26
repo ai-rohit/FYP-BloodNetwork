@@ -40,6 +40,65 @@ export const districts = [
   { label: "Ilam", value: "loc14" },
   { label: "Parsa", value: "loc15" },
   { label: "Arghakhanchi", value: "loc16" },
+  { label: "Bhojpur", value: "loc17" },
+  { label: "Dhankuta", value: "loc18" },
+  { label: "Jhapa", value: "loc19" },
+  { label: "Khotang", value: "loc20" },
+  { label: "Morang", value: "loc21" },
+  { label: "Okhaldhunga", value: "loc22" },
+  { label: "Panchthar", value: "loc23" },
+  { label: "Sankhuwasabha", value: "loc24" },
+  { label: "Sunsari", value: "loc25" },
+  { label: "Taplejung", value: "loc26" },
+  { label: "Tehrathum", value: "loc27" },
+  { label: "Udayapur", value: "loc28" },
+  { label: "Rautahat", value: "loc29" },
+  { label: "Sarlahi", value: "loc30" },
+  { label: "Dhanusha", value: "loc31" },
+  { label: "Siraha", value: "loc32" },
+  { label: "Mahottari", value: "loc33" },
+  { label: "Saptari", value: "loc34" },
+  { label: "Sindhuli", value: "loc35" },
+  { label: "Ramechhap", value: "loc36" },
+  { label: "Dolakha", value: "loc37" },
+  { label: "Dhading", value: "loc38" },
+  { label: "Nuwakot", value: "loc39" },
+  { label: "Rasuwa", value: "loc40" },
+  { label: "Sindhupalchok", value: "loc41" },
+  { label: "Makwanpur", value: "loc42" },
+  { label: "Baglung", value: "loc43" },
+  { label: "Gorkha", value: "loc44" },
+  { label: "Myagdi", value: "loc45" },
+  { label: "Nawalpur", value: "loc46" },
+  { label: "Parbat", value: "loc47" },
+  { label: "Syangja", value: "loc48" },
+  { label: "Tanahun", value: "loc49" },
+  { label: "Kapilvastu", value: "loc50" },
+  { label: "Parasi", value: "loc51" },
+  { label: "Rupandehi", value: "loc52" },
+  { label: "Gulmi", value: "loc53" },
+  { label: "Dang", value: "loc54" },
+  { label: "Pyuthan", value: "loc55" },
+  { label: "Rolpa", value: "loc56" },
+  { label: "Eastern Rukum", value: "loc57" },
+  { label: "Banke", value: "loc58" },
+  { label: "Bardiya", value: "loc59" },
+  { label: "Salyan", value: "loc60" },
+  { label: "Humla", value: "loc61" },
+  { label: "Jumla", value: "loc62" },
+  { label: "Kalikot", value: "loc63" },
+  { label: "Surkhet", value: "loc64" },
+  { label: "Dailekh", value: "loc65" },
+  { label: "Jajarkot", value: "loc66" },
+  { label: "Kailali", value: "loc67" },
+  { label: "Achham", value: "loc68" },
+  { label: "Doti", value: "loc69" },
+  { label: "Bajhang", value: "loc70" },
+  { label: "Bajura", value: "loc71" },
+  { label: "Kanchanpur", value: "loc72" },
+  { label: "Dadeldhura", value: "loc73" },
+  { label: "Baitadi", value: "loc74" },
+  { label: "Darchula", value: "loc75" },
 ];
 
 function LoginScreen({ navigation }) {
@@ -289,6 +348,7 @@ function LoginScreen({ navigation }) {
           }
         })
         .catch((error) => {
+          console.log(error.message);
           Alert.alert("Error Logging In! \n Couldn't Connect to Server");
         });
     }
@@ -1313,7 +1373,7 @@ function LoginScreen({ navigation }) {
                   What's Your District?
                 </Text>
                 <PickerComponent
-                  selectedItem={district}
+                  selectedItem={districts.districts}
                   onSelectedItem={(item) => setDistrict(item.label)}
                   title="Choose a District"
                   items={districts}

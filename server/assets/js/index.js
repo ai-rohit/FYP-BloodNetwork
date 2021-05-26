@@ -25,9 +25,10 @@
 // })
 
 const form = document.querySelector("form");
-
+const errors = document.querySelector(".all.error");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  errors.textContent = "";
   const email = form.email.value;
   const password = form.password.value;
   var allCookies = document.cookie;
@@ -47,10 +48,8 @@ form.addEventListener("submit", async (e) => {
       if (responseJson.status == "success") {
         window.location.replace("http://localhost:3000/admin");
       } else {
-        console.log(responseJson);
+        errors.textContent = "*" + responseJson.message;
       }
     })
-    .catch((error) => {
-      console.log(error.message);
-    });
+    .catch((error) => {});
 });

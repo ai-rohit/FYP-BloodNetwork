@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Blood Network</title>
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="icon" href="http://localhost:3000/uploads/logo.png">
   </head>
   <body>
     <div class="center">
@@ -14,10 +15,14 @@
           <span></span>
           <label>Email</label>
         </div>
+        
         <div class="txt_field">
-          <input type="password" name="password" required>
+          <input type="password" name="password" maxlength="16" required>
           <span></span>
           <label>Password</label>
+        </div>
+        <div class="all error" style="color:red; margin-top: -20px; margin-left: 20px;">
+          
         </div>
         <input type="submit" value="Login">
       </form>

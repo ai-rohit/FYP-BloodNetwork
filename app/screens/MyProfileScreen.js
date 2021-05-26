@@ -61,11 +61,12 @@ function MyProfileScreen(props) {
             Alert.alert("Something went wrong");
           }
         })
-        .catch((error) =>
+        .catch((error) => {
+          console.log(error);
           Alert.alert(
             "Your internet connection seems down! Please try again later."
-          )
-        );
+          );
+        });
     });
     return unsubscribe;
   }, [props.navigation]);
@@ -139,9 +140,9 @@ function MyProfileScreen(props) {
       });
   };
 
-  const handleDeleteImage = async () => {
-    Alert.alert("Delete Image", "Do you want to delete your photo?");
-  };
+  // const handleDeleteImage = async () => {
+  //   Alert.alert("Delete Image", "Do you want to delete your photo?");
+  // };
 
   if (loading === true) {
     return <ActivityIndicator />;
@@ -209,7 +210,7 @@ function MyProfileScreen(props) {
                       />
                     </Text>
                   ) : null}
-                  {imageUri === "images.png" ? (
+                  {/* {imageUri === "images.png" ? (
                     <Text
                       onPress={() => {
                         handleDeleteImage();
@@ -221,7 +222,7 @@ function MyProfileScreen(props) {
                         color="grey"
                       />
                     </Text>
-                  ) : null}
+                  ) : null} */}
                 </View>
               </View>
             </View>
@@ -327,8 +328,27 @@ function MyProfileScreen(props) {
                 </View>
               </>
             ) : (
-              <View>
-                <Text>You are not registered as donor</Text>
+              <View
+                style={[
+                  styles.donorDetails,
+                  {
+                    paddingVertical: 10,
+                    flexDirection: "row",
+                    borderRadius: 5,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                ]}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    alignSelf: "center",
+                  }}
+                >
+                  User is not registered as donor
+                </Text>
               </View>
             )}
             <TouchableOpacity

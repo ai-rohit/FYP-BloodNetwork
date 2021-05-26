@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Constants from "expo-constants";
 import { Text, StyleSheet, View, Dimensions, Image } from "react-native";
 
@@ -7,6 +7,8 @@ import Svg, { Path } from "react-native-svg";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as ScreenOrientation from "expo-screen-orientation";
+import baseUrl from "../config/baseUrl";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
@@ -18,6 +20,36 @@ function MoreScreen(props) {
   //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
   //   });
   // }, [navigation]);
+  // const [userDetails, setUserDetails] = useState();
+  // const [loading, setLoading] = useState(false);
+  // const [imageUri, setImageUri] = useState();
+
+  // useEffect(() => {
+  //   const unsubscribe = props.navigation.addListener("focus", () => {
+  //     fetch(`${baseUrl.url}/api/profile/me`)
+  //       .then((response) => response.json())
+  //       .then((json) => {
+  //         if (json.status === "success") {
+  //           setUserDetails(json.userDetails);
+  //           setImageUri(json.userDetails.user.profileImage);
+  //           setLoading(false);
+  //           console.log(userDetails);
+  //         } else {
+  //           Alert.alert("Something went wrong");
+  //         }
+  //       })
+  //       .catch((error) =>
+  //         Alert.alert(
+  //           "Your internet connection seems down! Please try again later."
+  //         )
+  //       );
+  //   });
+  //   return unsubscribe;
+  // }, [props.navigation]);
+
+  // if (userDetails == undefined) {
+  //   return <ActivityIndicator />;
+  // } else {
   return (
     <>
       <View style={styles.container}>
@@ -32,10 +64,10 @@ function MoreScreen(props) {
             <View style={{ marginTop: 20 }}>
               <Image
                 style={styles.image}
-                source={require("../assets/images.png")}
+                source={require("../assets/logo.png")}
               />
-              <Text style={styles.txt}>Rohit Shrestha</Text>
-              <Text style={styles.txt}>Newroad, Pokhara</Text>
+              <Text style={styles.txt}>Blood Network Application</Text>
+              {/* <Text style={styles.txt}>Newroad, Pokhara</Text> */}
             </View>
             <Svg
               height="60%"
@@ -204,9 +236,9 @@ const styles = StyleSheet.create({
   },
   txt: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: 24,
     color: colors.white,
-    fontWeight: "600",
+    fontWeight: "800",
     marginTop: 5,
   },
   customStyles: {

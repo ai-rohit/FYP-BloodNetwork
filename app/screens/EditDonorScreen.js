@@ -54,50 +54,88 @@ function EditUserScreen(props) {
   };
 
   const handleUpdateDonor = () => {
-    console.log(donorData);
-    fetch(`${baseUrl.url}/api/donor`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ donorData: donorData }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          Popup.show({
-            type: "Success",
-            title: "Donor Updated successfully!",
-            button: true,
-            textBody: "You have successfully updated the donor details",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-              props.navigation.navigate("Settings");
-            },
-          });
-        } else if (responseJson.status === "fail") {
-          Alert.alert(responseJson.data[Object.keys(responseJson.data)[0]]);
-        } else {
-          Popup.show({
-            type: "Warning",
-            title: "Something went wrong!",
-            button: true,
-            textBody: "Couldn't update the detail of donor",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-              props.navigation.navigate("Settings");
-            },
-          });
-        }
+    if (
+      donorData.firstName == "" ||
+      donorData.firstName == undefined ||
+      donorData.lastName == "" ||
+      donorData.lastName == undefined ||
+      donorData.address == "" ||
+      donorData.address == undefined ||
+      donorData.bloodType == "" ||
+      donorData.bloodType == undefined ||
+      donorData.donorDistrict == "" ||
+      donorData.donorDistrict == undefined ||
+      donorData.donorProvince == undefined ||
+      donorData.donorProvince == "" ||
+      donorData.donorContact == "" ||
+      donorData.donorContact == undefined
+    ) {
+      Alert.alert(
+        "Some input fields might be missing or empty! Please try again!"
+      );
+    } else if (
+      donorData.firstName.indexOf(" ") >= 0 ||
+      donorData.lastName.indexOf(" ") >= 0 ||
+      donorData.donorContact.indexOf(" ") >= 0
+    ) {
+      Alert.alert("Can't have white space");
+    } else if (
+      donorData.firstName.length < 2 ||
+      donorData.firstName.length > 25 ||
+      donorData.lastName.length > 25 ||
+      donorData.lastName.length < 2 ||
+      donorData.address.replaceAll(" ", "").length > 25 ||
+      donorData.address.replaceAll(" ", "").length < 2 ||
+      donorData.donorContact.length != 10
+    ) {
+      Alert.alert(
+        "Invalid inputs, Check the length of the inputs before trying!"
+      );
+    } else {
+      fetch(`${baseUrl.url}/api/donor`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ donorData: donorData }),
       })
-      .catch((error) => {
-        Alert.alert(
-          "Your internet connection seems down! Please try again later."
-        );
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            Popup.show({
+              type: "Success",
+              title: "Donor Updated successfully!",
+              button: true,
+              textBody: "You have successfully updated the donor details",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+                props.navigation.navigate("Profile");
+              },
+            });
+          } else if (responseJson.status === "fail") {
+            Alert.alert(responseJson.data[Object.keys(responseJson.data)[0]]);
+          } else {
+            Popup.show({
+              type: "Warning",
+              title: "Something went wrong!",
+              button: true,
+              textBody: "Couldn't update the detail of donor",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+                props.navigation.navigate("Settings");
+              },
+            });
+          }
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          );
+        });
+    }
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -229,8 +267,8 @@ function EditUserScreen(props) {
         onChangeText={(value) => checkDonorContact(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Mobile Number"
-        keyboardType="default"
-        //maxLength={6}
+        keyboardType="numeric"
+        maxLength={10}
       />
       <Text
         style={{

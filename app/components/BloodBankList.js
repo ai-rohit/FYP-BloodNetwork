@@ -14,7 +14,7 @@ import {
   ScrollView,
 } from "react-native";
 import Constants from "expo-constants";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { color } from "react-native-reanimated";
@@ -23,8 +23,38 @@ var width = Dimensions.get("window").width;
 function BloodBankList({ items }) {
   if (items.length < 1 || items == undefined) {
     return (
-      <View>
-        <Text>No Blood Banks Around You</Text>
+      <View
+        style={[
+          styles.hospitalContainer,
+          { flex: 1, alignSelf: "center", justifyContent: "center" },
+        ]}
+      >
+        <Entypo
+          name="emoji-sad"
+          size={50}
+          color={colors.blood}
+          style={{ alignSelf: "center", marginBottom: 20 }}
+        />
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: 20,
+            color: colors.blood,
+            fontWeight: "bold",
+          }}
+        >
+          No Blood Banks Record For
+        </Text>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: 20,
+            color: colors.blood,
+            fontWeight: "bold",
+          }}
+        >
+          Your District
+        </Text>
       </View>
     );
   } else {
@@ -42,6 +72,11 @@ function BloodBankList({ items }) {
         <FlatList
           data={items}
           horizontal={true}
+          // ListEmptyComponent={() => (
+          //   <View>
+          //     <Text>Hello</Text>
+          //   </View>
+          // )}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.bankId.toString()}
           snapToInterval={width * 0.8}

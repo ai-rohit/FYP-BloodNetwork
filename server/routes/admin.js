@@ -11,6 +11,7 @@ const {
 const { body, validationResult } = require("express-validator");
 const validationRules = require("../validations/campaignvalidation");
 const { campaignsAuthorization } = require("../middleware/authorization");
+
 const router = express.Router();
 
 router.get("/login", isLoggedOut, (req, res) => {
@@ -32,78 +33,81 @@ router.post(
       .withMessage("*Password seems to be missing"),
   ],
   (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+      const email = req.body.email;
+      const password = req.body.password;
 
-    const errors = validationResult(req);
+      const errors = validationResult(req);
 
-    const error = {};
-    errors.array().forEach((err) => {
-      error[err.param] = err.msg;
-    });
-    console.log(error);
-    if (!errors.isEmpty()) {
-      return res.json({
-        status: "fail",
-        data: error,
+      const error = {};
+      errors.array().forEach((err) => {
+        error[err.param] = err.msg;
       });
-    }
-    db.query(
-      "SELECT * FROM user_details WHERE emailAddress = ?",
-      [email],
-      async (error, results) => {
-        if (error) {
-          return res.send({
-            status: error,
-            message: error.message,
-          });
-        } else {
-          if (results.length > 0) {
-            if (results[0].role !== "admin") {
-              return res.send({
-                status: "fail",
-                message: "User access denied",
-              });
-            }
 
-            if (await bcrypt.compare(password, results[0].password)) {
-              const token = jwt.sign(
-                { userId: results[0].userId },
-                "bld_network_jwtPrivateKey",
-                { expiresIn: "30d" }
-              );
-              const cookieOptions = {
-                expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-                httpOnly: true,
-              };
-              res.cookie("jwt", token, cookieOptions);
-              return res.json({
-                status: "success",
-                user: {},
-              });
+      if (!errors.isEmpty()) {
+        return res.json({
+          status: "fail",
+          message: errors.array()[0].msg,
+        });
+      }
+      db.query(
+        "SELECT * FROM user_details WHERE emailAddress = ?",
+        [email],
+        async (error, results) => {
+          if (error) {
+            return res.send({
+              status: error,
+              message: error.message,
+            });
+          } else {
+            if (results.length > 0) {
+              if (results[0].role !== "admin") {
+                return res.send({
+                  status: "fail",
+                  message: "User access denied",
+                });
+              }
+
+              if (await bcrypt.compare(password, results[0].password)) {
+                const token = jwt.sign(
+                  { userId: results[0].userId },
+                  "bld_network_jwtPrivateKey",
+                  { expiresIn: "30d" }
+                );
+                const cookieOptions = {
+                  expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+                  httpOnly: true,
+                };
+                res.cookie("jwt", token, cookieOptions);
+                return res.json({
+                  status: "success",
+                  user: {},
+                });
+              } else {
+                return res.send({
+                  status: "fail",
+                  message: "Password and email doesn't match",
+                });
+              }
+              // else{
+              //     return res.status(401).send({status: "fail", data:{user:'Unauthorized user'}})
+
+              // }
             } else {
               return res.send({
                 status: "fail",
-                data: {
-                  password: "Password and email doesn't match",
-                },
+                message: "User not registered",
               });
             }
-            // else{
-            //     return res.status(401).send({status: "fail", data:{user:'Unauthorized user'}})
-
-            // }
-          } else {
-            return res.send({
-              status: "fail",
-              data: {
-                email: "User not registered",
-              },
-            });
           }
         }
-      }
-    );
+      );
+    } catch (ex) {
+      return res.json({
+        status: "error",
+        message: "Something went wrong",
+      });
+    }
   }
 );
 

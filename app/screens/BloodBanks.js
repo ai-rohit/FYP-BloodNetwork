@@ -19,7 +19,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 function BloodBanks(props) {
   const [nearbyBloodBanks, setNearByBloodBanks] = useState([]);
   const [locations, setLocations] = useState();
-
+  const [bloodBanks, setBloodBanks] = useState([]);
   // const getUserLocation = async ()=>{
   //     const {granted} = await Location.requestPermissionsAsync();
   //     if(!granted) return;

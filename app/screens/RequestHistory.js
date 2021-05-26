@@ -79,33 +79,42 @@ function RequestHistory(props) {
   }, [props.navigation]);
 
   const handleDonated = (requestId, donationId) => {
-    fetch(
-      `${baseUrl.url}/api/bloodRequest/donated/${requestId}/${donationId}`,
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          donatedDate: date,
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status == false) {
-          Alert.alert(responseJson.message);
-        } else if (responseJson.status == true) {
-          getReqHistory();
-          Alert.alert("Action Completed");
+    var now = moment(new Date());
+    var end = moment(date);
+    var duration = moment.duration(now.diff(end));
+    var day = duration.asDays();
+    console.log("day", day);
+    if (day < 0) {
+      Alert.alert("You can't choose day after today!");
+    } else {
+      fetch(
+        `${baseUrl.url}/api/bloodRequest/donated/${requestId}/${donationId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            donatedDate: date,
+          }),
         }
-      })
-      .catch((error) => {
-        Alert.alert(
-          "Your internet connection seems down! Please try again later."
-        );
-      });
+      )
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status == false) {
+            Alert.alert(responseJson.message);
+          } else if (responseJson.status == true) {
+            getReqHistory();
+            Alert.alert("Action Completed");
+          }
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          );
+        });
+    }
   };
 
   const handleNotDonated = (requestId) => {

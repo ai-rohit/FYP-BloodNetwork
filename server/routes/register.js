@@ -56,7 +56,7 @@ router.post("/", userValidationRules(), (req, res) => {
           });
 
           async function main() {
-            const url = `http://2ed90519560d.ngrok.io/api/register/confirmation/${jwtToken}`;
+            const url = `http://c2e0f4542f33.ngrok.io/api/register/confirmation/${jwtToken}`;
 
             // create reusable transporter object using the default SMTP transport
 

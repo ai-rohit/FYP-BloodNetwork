@@ -57,34 +57,34 @@ function EditUserScreen(props) {
         />
       </TouchableOpacity>
 
-      {/* {!donor == "not a donor" ? ( */}
-      <TouchableOpacity
-        style={[
-          styles.donorDetails,
-          {
-            paddingVertical: 10,
-            flexDirection: "row",
-            borderRadius: 5,
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 10,
-          },
-        ]}
-        onPress={() =>
-          props.navigation.navigate("EditDonor", { detail: donor })
-        }
-      >
-        <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
-          Edit Donor Details
-        </Text>
-        <MaterialCommunityIcons
-          name="chevron-right"
-          size={20}
-          color="grey"
-          style={{ marginRight: 10 }}
-        />
-      </TouchableOpacity>
-      {/* ) : null} */}
+      {user.role == "donor" ? (
+        <TouchableOpacity
+          style={[
+            styles.donorDetails,
+            {
+              paddingVertical: 10,
+              flexDirection: "row",
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 10,
+            },
+          ]}
+          onPress={() =>
+            props.navigation.navigate("EditDonor", { detail: donor })
+          }
+        >
+          <Text style={{ marginLeft: 20, fontSize: 16, fontWeight: "500" }}>
+            Edit Donor Details
+          </Text>
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={20}
+            color="grey"
+            style={{ marginRight: 10 }}
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }

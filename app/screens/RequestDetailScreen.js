@@ -100,11 +100,17 @@ function RequestDetailScreen({ route, navigation }) {
   };
 
   const checkContact = (val) => {
-    if (!val) {
+    if (!val || val == "" || val == undefined) {
       setErrors({
         ...errors,
         contactError: true,
         contactErrorMsg: "Contact Number can't be empty",
+      });
+    } else if (val.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        contactError: true,
+        contactErrorMsg: "Cannot have white spaces in contact number!",
       });
     } else if (val.length < 9 || val.length > 10) {
       setErrors({
@@ -119,13 +125,16 @@ function RequestDetailScreen({ route, navigation }) {
   };
 
   const checkResponse = (val) => {
-    if (!val) {
+    if (!val || val == "" || val == undefined) {
       setErrors({
         ...errors,
         responseError: true,
         responseErrorMsg: "Response can't be empty",
       });
-    } else if (val.length < 30 || val.length > 200) {
+    } else if (
+      val.replaceAll(" ", "").length < 30 ||
+      val.replaceAll(" ", "").length > 200
+    ) {
       setErrors({
         ...errors,
         responseError: true,

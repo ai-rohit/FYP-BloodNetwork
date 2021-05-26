@@ -13,6 +13,7 @@ import donationType from "../config/donationType";
 import colors from "../config/colors";
 import baseUrl from "../config/baseUrl";
 import { Root, Popup } from "popup-ui";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function EditRequestScreen(props) {
   const { request } = props.route.params;
@@ -46,45 +47,85 @@ function EditRequestScreen(props) {
   };
 
   const onUpdate = () => {
-    fetch(`${baseUrl.url}/api/bloodRequest`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        request: requestDetails,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          Popup.show({
-            type: "Success",
-            title: "Request updated",
-            button: true,
-            textBody: "Details of request have been updated successfully",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-              props.navigation.navigate("RequestStatus");
-            },
-          });
-        } else if (responseJson.status === "fail") {
-          Alert.alert("Couldn't update the request");
-        } else {
-          Alert.alert("Something went wrong");
-        }
+    if (
+      requestDetails.receiverName == "" ||
+      requestDetails.receiverNumber == "" ||
+      requestDetails.requirementDays == "" ||
+      requestDetails.receiverAddress == "" ||
+      requestDetails.donationType == "" ||
+      requestDetails.donationDetails == "" ||
+      requestDetails.receiverName == undefined ||
+      requestDetails.receiverNumber == undefined ||
+      requestDetails.requirementDays == undefined ||
+      requestDetails.receiverAddress == undefined ||
+      requestDetails.donationType == undefined ||
+      requestDetails.donationDetails == undefined
+    ) {
+      Alert.alert("Cannot Update with empty detail!");
+    } else if (
+      requestDetails.receiverName.replaceAll(" ", "").length < 5 ||
+      requestDetails.receiverName.replaceAll(" ", "").length > 50 ||
+      requestDetails.receiverNumber.length < 9 ||
+      requestDetails.receiverNumber.length > 10 ||
+      requestDetails.receiverAddress.replaceAll(" ", "") < 2 ||
+      requestDetails.receiverAddress.replaceAll(" ", "") > 70 ||
+      requestDetails.donationDetails.replaceAll(" ", "") < 30 ||
+      requestDetails.donationDetails.replaceAll(" ", "") > 100
+    ) {
+      Alert.alert("Some inputs seem to be invalid! Please try again");
+    } else {
+      fetch(`${baseUrl.url}/api/bloodRequest`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          request: requestDetails,
+        }),
       })
-      .catch((error) =>
-        Alert.alert(
-          "Your internet connection seems down! Please try again later."
-        )
-      );
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            Popup.show({
+              type: "Success",
+              title: "Request updated",
+              button: true,
+              textBody: "Details of request have been updated successfully",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+                props.navigation.navigate("RequestStatus");
+              },
+            });
+          } else if (responseJson.status === "fail") {
+            Alert.alert("Couldn't update the request");
+          } else {
+            Alert.alert("Something went wrong");
+          }
+        })
+        .catch((error) =>
+          Alert.alert(
+            "Your internet connection seems down! Please try again later."
+          )
+        );
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text
+        style={{
+          color: "grey",
+          alignSelf: "flex-start",
+          marginLeft: 15,
+          marginVertical: 20,
+        }}
+      >
+        <MaterialCommunityIcons name="information-outline" size={25} />
+        {"  "}
+        Edit Your Request Details Below
+      </Text>
       <Text
         style={{
           alignSelf: "flex-start",
@@ -191,8 +232,8 @@ function EditRequestScreen(props) {
         onChangeText={(value) => checkReceiverNumber(value)}
         style={[styles.textInput, { borderWidth: 2 }]}
         placeholder="Mobile Number"
-        keyboardType="default"
-        //maxLength={6}
+        keyboardType="numeric"
+        maxLength={10}
       />
       <Text
         style={{

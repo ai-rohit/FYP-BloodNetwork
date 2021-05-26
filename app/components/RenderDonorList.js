@@ -23,25 +23,27 @@ import baseUrl from "../config/baseUrl";
 import PickerComponent from "./PickerComponent";
 import AppButton from "./AppButton";
 import { Popup } from "popup-ui";
+import donationTypes from "../config/donationType";
+import blood from "../config/blood";
 
-const donationTypes = [
-  {
-    label: "Whole Blood",
-    value: "dt1",
-  },
-  {
-    label: "Red Cells",
-    value: "dt2",
-  },
-  {
-    label: "Plasma",
-    value: "dt3",
-  },
-  {
-    label: "Platelets",
-    value: "dt4",
-  },
-];
+// const donationTypes = [
+//   {
+//     label: "Whole Blood",
+//     value: "dt1",
+//   },
+//   {
+//     label: "Red Cells",
+//     value: "dt2",
+//   },
+//   {
+//     label: "Plasma",
+//     value: "dt3",
+//   },
+//   {
+//     label: "Platelets",
+//     value: "dt4",
+//   },
+// ];
 
 const bloodTypes = [
   {
@@ -87,7 +89,8 @@ function RenderDonorList({
     errorAddress: false,
     errorReqDays: false,
     errorMobNum: false,
-    errorDescription: false,
+    errorDonationDetails: false,
+
     mobNumMsg: "",
   });
 
@@ -105,7 +108,10 @@ function RenderDonorList({
   const checkReceiverName = (val) => {
     if (!val) {
       setErrors({ ...errors, errorFullName: true });
-    } else if (val.length < 2 || val.length > 50) {
+    } else if (
+      val.replaceAll(" ", "").length < 5 ||
+      val.replaceAll(" ", "").length > 50
+    ) {
       setErrors({ ...errors, errorFullName: true });
     } else {
       setErrors({ ...errors, errorFullName: false });
@@ -115,7 +121,10 @@ function RenderDonorList({
   const checkReceiverAddress = (val) => {
     if (!val) {
       setErrors({ ...errors, errorAddress: true });
-    } else if (val.length < 2 || val.length > 50) {
+    } else if (
+      val.replaceAll(" ", "").length < 2 ||
+      val.replaceAll(" ", "").length > 50
+    ) {
       setErrors({ ...errors, errorAddress: true });
     } else {
       setErrors({ ...errors, errorAddress: false });
@@ -130,6 +139,12 @@ function RenderDonorList({
         errorMobNum: true,
         mobNumMsg: "*Contact Number can't be empty",
       });
+    } else if (val.indexOf(" ") >= 0) {
+      setErrors({
+        ...errors,
+        errorMobNum: true,
+        mobNumMsg: "*Invalid Contact Number",
+      });
     } else if (val.length < 9 || val.length > 10) {
       setErrors({
         ...errors,
@@ -142,56 +157,96 @@ function RenderDonorList({
     }
   };
 
+  const checkDonationDetail = (val) => {
+    if (!val) {
+      setErrors({ ...errors, errorDonationDetails: true });
+    } else if (
+      val.replaceAll(" ", "").length < 30 ||
+      val.replaceAll(" ", "").length > 100
+    ) {
+      setErrors({ ...errors, errorDonationDetails: true });
+    } else {
+      setErrors({ ...errors, errorDonationDetails: false });
+      setDonationDetails(val);
+    }
+  };
+
   const handleRequestButton = () => {
-    fetch(`${baseUrl.url}/api/bloodRequest`, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        receiverName: receiverName,
-        receiverAddress: receiverAddress,
-        requirementDays: requirementDays,
-        receiverNumber: receiverNumber,
-        donationDetails: donationDetails,
-        donationType: donationType,
-        bloodType: bloodType,
-        donorId: donorNum,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          clearAllState();
-          // Alert.alert("Blood Request", "The request is being sent", [
-          //   {
-          //     text: "OK",
-          //     onPress: () => {
-          //       setIsRequestModalVisible(false);
-          //     },
-          //   },
-          // ]);
-          setIsRequestModalVisible(false);
-          Popup.show({
-            type: "Success",
-            title: "Blood Request",
-            button: true,
-            textBody: "Your request for blood is being sent to the user",
-            buttontext: "Ok",
-            callback: () => {
-              Popup.hide();
-            },
-          });
-        } else {
-          Alert.alert("The request was not sent to the donor!");
-        }
+    if (
+      errors.errorFullName ||
+      errors.errorMobNum ||
+      errors.errorAddress ||
+      errors.errorDonationDetails
+    ) {
+      Alert.alert("Cannot send request with incorrect details");
+    } else if (
+      receiverName == "" ||
+      receiverNumber == "" ||
+      receiverAddress == "" ||
+      requirementDays == "" ||
+      donationDetails == "" ||
+      donationType == "" ||
+      bloodType == "" ||
+      receiverName == undefined ||
+      receiverNumber == undefined ||
+      receiverAddress == undefined ||
+      requirementDays == undefined ||
+      donationDetails == undefined ||
+      donationType == undefined ||
+      bloodType == undefined
+    ) {
+      Alert.alert("Some fields seems to be missing! Please try again.");
+    } else {
+      fetch(`${baseUrl.url}/api/bloodRequest`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          receiverName: receiverName,
+          receiverAddress: receiverAddress,
+          requirementDays: requirementDays,
+          receiverNumber: receiverNumber,
+          donationDetails: donationDetails,
+          donationType: donationType,
+          bloodType: bloodType,
+          donorId: donorNum,
+        }),
       })
-      .catch((error) => {
-        Alert.alert(
-          "Failed to send request! Check your internet connection and try again"
-        );
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.status === "success") {
+            clearAllState();
+            // Alert.alert("Blood Request", "The request is being sent", [
+            //   {
+            //     text: "OK",
+            //     onPress: () => {
+            //       setIsRequestModalVisible(false);
+            //     },
+            //   },
+            // ]);
+            setIsRequestModalVisible(false);
+            Popup.show({
+              type: "Success",
+              title: "Blood Request",
+              button: true,
+              textBody: "Your request for blood is being sent to the user",
+              buttontext: "Ok",
+              callback: () => {
+                Popup.hide();
+              },
+            });
+          } else {
+            Alert.alert("The request was not sent to the donor!");
+          }
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Failed to send request! Check your internet connection and try again"
+          );
+        });
+    }
   };
   return (
     <View style={styles.donorContainer}>
@@ -507,7 +562,7 @@ function RenderDonorList({
                   maxLength={200}
                   clearButtonMode="always"
                   onChangeText={(donationDetails) =>
-                    setDonationDetails(donationDetails)
+                    checkDonationDetail(donationDetails)
                   }
                   style={{
                     alignSelf: "center",
@@ -519,6 +574,17 @@ function RenderDonorList({
                     marginVertical: 5,
                   }}
                 />
+                {errors.errorDonationDetails ? (
+                  <Text
+                    style={{
+                      alignSelf: "flex-start",
+                      color: "red",
+                      marginLeft: 20,
+                    }}
+                  >
+                    *Donation detail needs to be betweenn 30 to 100 characters
+                  </Text>
+                ) : null}
                 <Text
                   style={{
                     color: colors.blood,
@@ -532,7 +598,7 @@ function RenderDonorList({
                 </Text>
                 <PickerComponent
                   title="Choose Donation Type"
-                  items={donationTypes}
+                  items={donationTypes.donationType}
                   selectedItem={donationType}
                   onSelectedItem={(item) => setDonationType(item.label)}
                   style={{
@@ -556,7 +622,7 @@ function RenderDonorList({
                 </Text>
                 <PickerComponent
                   title="Choose Blood Group"
-                  items={bloodTypes}
+                  items={blood.bloodType}
                   selectedItem={bloodType}
                   onSelectedItem={(item) => setBloodType(item.label)}
                   style={{
